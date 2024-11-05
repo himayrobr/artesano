@@ -1,0 +1,12 @@
+{
+  "name": "artesano",
+  "version": "1.0.0",
+  "description": "Objetivo del Proyecto\r Desarrollar una aplicación de compra y venta de artesanías, utilizando React-Vite para el frontend, Node.js y Express.js para el backend, MongoDB para la base de datos, y CSS para el estilo.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
