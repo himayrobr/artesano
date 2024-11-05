@@ -1,3 +1,24 @@
+variables de entorno
+
+EXPRESS_HOST="localhost"
+EXPRESS_PORT=5000
+MONGO_URI="mongodb+srv://topetusam:campus2023@mongo-learn-101.ij8au6n.mongodb.net/"
+MONGO_DB="artesanias"
+JWT_SECRET=your_jwt_secret
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+FACEBOOK_APP_ID=your_facebook_app_id
+FACEBOOK_APP_SECRET=your_facebook_app_secret
+DISCORD_CLIENT_ID=your_discord_client_id
+DISCORD_CLIENT_SECRET=your_discord_client_secret
+
+por favor imformar sobre cualquier cambio o error de haberlo
+
+importante ver el archivo apiconfig.js en el frontend para hacer el fecht
+
+ y en el app.js
+
+
 Objetivo del Proyecto
 Desarrollar una aplicación de compra y venta de artesanías, utilizando React-Vite para el frontend, Node.js y Express.js para el backend, MongoDB para la base de datos, y CSS para el estilo.
 
