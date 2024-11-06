@@ -5,6 +5,8 @@ const connect = require('./backend/helpers/connect'); // Asegúrate de que este 
 
 const cors = require('cors'); 
 
+const userRouter = require('./backend/routes/userRouter');
+
 // Conexión a la base de datos
 connect();
 
@@ -13,6 +15,9 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors()); 
+
+app.use('/', userRouter);
+
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'dist', 'client')));
