@@ -1,22 +1,39 @@
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
 
-
-const updateUserProfile = async (req, res) => {
-  const { _id } = req.params;
-  const { nombre, contraseña, fotoPerfil, direccion, telefono } = req.body;
+// Controlador para actualizar datos específicos del usuario
+const actualizarUsuario = async (req, res) => {
   try {
-    const updates = { nombre, fotoPerfil, direccion, telefono };
+    const userId = new mongoose.Types.ObjectId(req.params.id); // Asegúrate de usar 'new' para instanciar ObjectId
+    const { nombre, contraseña, fotoPerfil, direccion, telefono } = req.body;
+
+    // Solo los campos permitidos para actualización
+    const datosActualizados = { nombre, fotoPerfil, direccion, telefono };
+
+    // Cifrado de contraseña si es proporcionada
     if (contraseña) {
       const salt = await bcrypt.genSalt(10);
-      updates.contraseña = await bcrypt.hash(contraseña, salt);
+      datosActualizados.contraseña = await bcrypt.hash(contraseña, salt);
     }
-    const user = await User.findByIdAndUpdate(_id, updates, { new: true });
-    if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
-    res.json({ message: 'Perfil actualizado', user });
+
+    const usuarioActualizado = await User.findByIdAndUpdate(
+      userId,
+      { $set: datosActualizados },
+      { new: true, runValidators: true }
+    );
+
+    if (!usuarioActualizado) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json({
+      mensaje: 'Usuario actualizado correctamente',
+      usuario: usuarioActualizado,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error al actualizar", error: error.message });
+    res.status(500).json({ mensaje: 'Error al actualizar el usuario', error });
   }
 };
 
-module.exports = { updateUserProfile };
+module.exports = { actualizarUsuario };

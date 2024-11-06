@@ -1,7 +1,8 @@
 const express = require('express');
-const { updateUserProfile } = require('../controllers/userController');
+const { actualizarUsuario } = require('../controllers/userController');
 
 const router = express.Router();
-router.put('/editar-perfil/:id', updateUserProfile);
+
+router.put('/usuarios/:id', actualizarUsuario);
 
 module.exports = router;
