@@ -56,5 +56,26 @@ const obtenerUsuarioPorId = async (req, res) => {
   }
 };
 
+const eliminarUsuarioPorId = async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ mensaje: 'ID de usuario no válido' });
+    }
 
-module.exports = { actualizarUsuario, obtenerUsuarioPorId };
+    const userId = new mongoose.Types.ObjectId(req.params.id);
+    const usuario = await User.findByIdAndDelete(userId);
+
+    if (!usuario) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json({
+      mensaje: 'Usuario eliminado con éxito',
+      usuario
+    });
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al eliminar el usuario', error });
+  }
+};
+
+module.exports = { actualizarUsuario, obtenerUsuarioPorId, eliminarUsuarioPorId };
