@@ -1,12 +1,15 @@
 import React from 'react';
+import '../src/styles/App.css';
+import Ruraq from '../src/storage/img/ruraq maki.svg';
 
-const App = () => {
+const LoadingPage = () => {
     return (
-        <div>
-            <h1>Hola, mundo!</h1>
-            {/* Aquí puedes añadir más contenido o componentes */}
-        </div>
+        <main>
+            <div className="main__load">
+                <img src={Ruraq}alt="Loading..." />
+            </div>
+        </main>
     );
 };
 
-export default App;
+export default LoadingPage;
