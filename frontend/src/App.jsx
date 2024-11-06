@@ -1,15 +1,12 @@
 import React from 'react';
-import '../src/styles/App.css';
-import Ruraq from '../src/storage/img/ruraq maki.svg';
+import AppRouter from './router/AppRouter'; 
 
-const LoadingPage = () => {
-    return (
-        <main>
-            <div className="main__load">
-                <img src={Ruraq}alt="Loading..." />
-            </div>
-        </main>
-    );
-};
+function App() {
+  return (
+    <div className="App">
+      <AppRouter />
+    </div>
+  );
+}
 
-export default LoadingPage;
+export default App;
