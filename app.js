@@ -1,9 +1,10 @@
 const express = require("express");
 const path = require("path");
 require('dotenv').config();
-const connect = require('./backend/helpers/connect'); // Asegúrate de que este archivo maneje la conexión a la base de datos.
-
+const connect = require('./backend/helpers/connect'); 
 const cors = require('cors'); 
+
+const workshopRoutes = require('./backend/routes/workshopRoutes');
 
 // Conexión a la base de datos
 connect();
@@ -13,6 +14,9 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors()); 
+
+app.use('/', workshopRoutes);
+
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'dist', 'client')));
