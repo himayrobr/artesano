@@ -7,6 +7,7 @@ const cors = require('cors');
 
 const userRouter = require('./backend/routes/userRouter');
 const orderRouter = require('./backend/routes/orderUsRouter');
+const couponRouter = require('./backend/routes/cuponUsRouter')
 
 // Conexión a la base de datos
 connect();
@@ -17,7 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(cors()); 
 
-app.use('/', userRouter, orderRouter);
+app.use('/', userRouter, orderRouter, couponRouter );
 
 
 if (process.env.NODE_ENV === 'production') {
