@@ -78,4 +78,44 @@ const eliminarUsuarioPorId = async (req, res) => {
   }
 };
 
-module.exports = { actualizarUsuario, obtenerUsuarioPorId, eliminarUsuarioPorId };
+const obtenerTalleresInscritos = async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ mensaje: 'ID de usuario no válido' });
+    }
+    const usuarioId = new mongoose.Types.ObjectId(req.params.usuarioId);
+    const usuarioConTalleres = await User.aggregate([
+      {
+        $match: { _id: usuarioId }, 
+      },
+      {
+        $lookup: {
+          from: 'Workshop',
+          localField: 'talleresInscritos',
+          foreignField: '_id',
+          as: 'talleresInfo',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          nombre: 1,
+          talleresInfo: 1,
+        },
+      },
+    ]);
+
+    if (!usuarioConTalleres || usuarioConTalleres.length === 0) {
+      return res.status(404).json({ mensaje: 'No se encontraron talleres para este usuario' });
+    }
+
+    res.status(200).json({
+      mensaje: 'Talleres inscritos encontrados',
+      usuario: usuarioConTalleres[0],
+    });
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al buscar los talleres', error });
+  }
+};
+
+module.exports = { actualizarUsuario, obtenerUsuarioPorId, eliminarUsuarioPorId, obtenerTalleresInscritos };
