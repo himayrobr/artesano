@@ -211,7 +211,7 @@ function Home() {
         <Link to="/">
           <img src={shoppingCartImg} alt="Carrito de compras" />
         </Link>
-        <Link to="/">
+        <Link to="/Perfil">
           <img src={generalSettingsImg} alt="Configuración general" />
         </Link>
       </footer>
