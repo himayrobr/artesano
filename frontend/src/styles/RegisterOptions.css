@@ -1,0 +1,32 @@
+/* RegisterOptions.css */
+
+.register-options-container {
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .register-button {
+    display: block;
+    width: 80%;
+    padding: 0.8rem;
+    margin: 0.5rem auto;
+    font-size: 1rem;
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .back-to-login {
+    margin-top: 1rem;
+    color: #000;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-decoration: underline;
+  }
+  
