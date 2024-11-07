@@ -19,6 +19,22 @@ import settingsImg from '../storage/img/settings.svg';
 import commentsImg from '../storage/img/comments.svg';
 import customerServiceImg from '../storage/img/customerService.svg';
 
+
+import Location from '../storage/img/location.svg'
+import Taller from '../storage/img/Vector(2).png';
+import Textileria from '../storage/img/workshopCategory.svg';
+import Ceramica from '../storage/img/ceramicCategory.svg';
+import Orfebreria from '../storage/img/goldsmithCategory.svg';
+import Tallaenpiedra from '../storage/img/stoneWorkshopCategory.svg';
+import Tallaenmadera from '../storage/img/woodWorkshopCategory.svg';
+import Bordado from '../storage/img/embroideryCategory.svg';
+import Joyeria from '../storage/img/jewelryCategory.svg';
+import Hojalateria from '../storage/img/sheetMetalCategory.svg';
+import Estampado from '../storage/img/stampedCategory.svg';
+import Pintura from '../storage/img/paintingTraditionalCategory.svg';
+
+
+
 // Importar lógica del componente
 import { useHomeLogic } from '../data/HomeLogic';
 
@@ -119,7 +135,65 @@ function Home() {
       </header>
 
       <main>
-        {/* Aquí puedes agregar el contenido principal */}
+      <section className="categoria-taller">
+      <div className="ubicacion">
+      <img src={Location} alt="Location" id='Location'/>
+      <p>Ubicación de entrega actual</p>
+      </div>
+
+      <h2>Categorías</h2>
+      <div className="categorias">
+        {/* Cada div representa una categoría */}
+        <div className="categoria">
+          <img src={Textileria} alt="Textilería" />
+          <p>Textilería</p>
+        </div>
+        <div className="categoria">
+          <img src={Ceramica} alt="Cerámica" />
+          <p>Cerámica</p>
+        </div>
+        <div className="categoria">
+          <img src={Orfebreria} alt="Orfebrería" />
+          <p>Orfebrería</p>
+        </div>
+        <div className="categoria">
+          <img src={Tallaenpiedra} alt="Talla en piedra" />
+          <p>Talla en piedra</p>
+        </div>
+        <div className="categoria">
+          <img src={Tallaenmadera} alt="Talla en madera" />
+          <p>Talla en madera</p>
+        </div>
+      </div>
+      <div className="categorias">
+        <div className="categoria">
+          <img src={Bordado} alt="Bordado" />
+          <p>Bordado</p>
+        </div>
+        <div className="categoria">
+          <img src={Joyeria} alt="Joyería" />
+          <p>Joyería</p>
+        </div>
+        <div className="categoria">
+          <img src={Hojalateria} alt="Hojalatería" />
+          <p>Hojalatería</p>
+        </div>
+        <div className="categoria">
+          <img src={Estampado} alt="Estampado" />
+          <p>Estampado</p>
+        </div>
+        <div className="categoria">
+          <img src={Pintura} alt="Pintura tradicional" />
+          <p>Pintura tradicional</p>
+        </div>
+      </div>
+            
+      <h2 className='titulo'>Talleres del mes</h2>
+      <p>¡Aprende cómo hacerlos en estos talleres educativos!</p>
+      <div className="taller">
+        <img src={Taller} alt="Taller del mes" id='imagen' />
+      </div>
+    </section>
       </main>
 
       <footer>
