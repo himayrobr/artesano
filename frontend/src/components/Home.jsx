@@ -199,13 +199,13 @@ function Home() {
 
 
       <footer>
-        <Link to="/">
+        <Link to="/Store">
           <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />
         </Link>
         <Link to="/">
           <img src={couponsImg} alt="Cupones" />
         </Link>
-        <Link to="/">
+        <Link to="/Home">
           <img src={categoriesImg} alt="Categorías" />
         </Link>
         <Link to="/">
