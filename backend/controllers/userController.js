@@ -33,7 +33,6 @@ const actualizarUsuario = async (req, res) => {
   }
 };
 
-
 const obtenerUsuarioPorId = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -118,4 +117,44 @@ const obtenerTalleresInscritos = async (req, res) => {
   }
 };
 
-module.exports = { actualizarUsuario, obtenerUsuarioPorId, eliminarUsuarioPorId, obtenerTalleresInscritos };
+const obtenerFavoritos = async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ mensaje: 'ID de usuario no válido' });
+    }
+    const usuarioId = new mongoose.Types.ObjectId(req.params.id);
+    const usuarioConTalleres = await User.aggregate([
+      {
+        $match: { _id: usuarioId }, 
+      },
+      {
+        $lookup: {
+          from: 'Product',
+          localField: 'favoritos',
+          foreignField: '_id',
+          as: 'Favoritos',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          nombre: 1,
+          Favoritos: 1,
+        },
+      },
+    ]);
+
+    if (!usuarioConTalleres || usuarioConTalleres.length === 0) {
+      return res.status(404).json({ mensaje: 'Este usuario no tiene productos favoritos' });
+    }
+
+    res.status(200).json({
+      mensaje: 'Favoritos encontrados',
+      usuario: usuarioConTalleres[0],
+    });
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al buscar los favoritos', error });
+  }
+};
+
+module.exports = { actualizarUsuario, obtenerUsuarioPorId, eliminarUsuarioPorId, obtenerTalleresInscritos, obtenerFavoritos };
