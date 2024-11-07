@@ -135,66 +135,67 @@ function Home() {
       </header>
 
       <main>
-      <section className="categoria-taller">
-      <div className="ubicacion">
-      <img src={Location} alt="Location" id='Location'/>
-      <p>Ubicación de entrega actual</p>
-      </div>
+        <section className="categoria-taller">
+          <div className="ubicacion">
+            <img src={Location} alt="Location" id='Location'/>
+            <p>Ubicación de entrega actual</p>
+          </div>
 
-      <h2>Categorías</h2>
-      <div className="categorias">
-        {/* Cada div representa una categoría */}
-        <div className="categoria">
-          <img src={Textileria} alt="Textilería" />
-          <p>Textilería</p>
-        </div>
-        <div className="categoria">
-          <img src={Ceramica} alt="Cerámica" />
-          <p>Cerámica</p>
-        </div>
-        <div className="categoria">
-          <img src={Orfebreria} alt="Orfebrería" />
-          <p>Orfebrería</p>
-        </div>
-        <div className="categoria">
-          <img src={Tallaenpiedra} alt="Talla en piedra" />
-          <p>Talla en piedra</p>
-        </div>
-        <div className="categoria">
-          <img src={Tallaenmadera} alt="Talla en madera" />
-          <p>Talla en madera</p>
-        </div>
-      </div>
-      <div className="categorias">
-        <div className="categoria">
-          <img src={Bordado} alt="Bordado" />
-          <p>Bordado</p>
-        </div>
-        <div className="categoria">
-          <img src={Joyeria} alt="Joyería" />
-          <p>Joyería</p>
-        </div>
-        <div className="categoria">
-          <img src={Hojalateria} alt="Hojalatería" />
-          <p>Hojalatería</p>
-        </div>
-        <div className="categoria">
-          <img src={Estampado} alt="Estampado" />
-          <p>Estampado</p>
-        </div>
-        <div className="categoria">
-          <img src={Pintura} alt="Pintura tradicional" />
-          <p>Pintura tradicional</p>
-        </div>
-      </div>
+          <h2>Categorías</h2>
+          <div className="categorias">
+            {/* Cada div representa una categoría */}
+            <Link to="/categoria/textileria" className="categoria">
+              <img src={Textileria} alt="Textilería" />
+              <p>Textilería</p>
+            </Link>
+            <Link to="/categoria/ceramica" className="categoria">
+              <img src={Ceramica} alt="Cerámica" />
+              <p>Cerámica</p>
+            </Link>
+            <Link to="/categoria/orfebreria" className="categoria">
+              <img src={Orfebreria} alt="Orfebrería" />
+              <p>Orfebrería</p>
+            </Link>
+            <Link to="/categoria/tallaenpiedra" className="categoria">
+              <img src={Tallaenpiedra} alt="Talla en piedra" />
+              <p>Talla en piedra</p>
+            </Link>
+            <Link to="/categoria/tallaenmadera" className="categoria">
+              <img src={Tallaenmadera} alt="Talla en madera" />
+              <p>Talla en madera</p>
+            </Link>
+          </div>
+          <div className="categorias">
+            <Link to="/categoria/bordado" className="categoria">
+              <img src={Bordado} alt="Bordado" />
+              <p>Bordado</p>
+            </Link>
+            <Link to="/categoria/joyeria" className="categoria">
+              <img src={Joyeria} alt="Joyería" />
+              <p>Joyería</p>
+            </Link>
+            <Link to="/categoria/hojalateria" className="categoria">
+              <img src={Hojalateria} alt="Hojalatería" />
+              <p>Hojalatería</p>
+            </Link>
+            <Link to="/categoria/estampado" className="categoria">
+              <img src={Estampado} alt="Estampado" />
+              <p>Estampado</p>
+            </Link>
+            <Link to="/categoria/pintura" className="categoria">
+              <img src={Pintura} alt="Pintura tradicional" />
+              <p>Pintura tradicional</p>
+            </Link>
+          </div>
             
-      <h2 className='titulo'>Talleres del mes</h2>
-      <p>¡Aprende cómo hacerlos en estos talleres educativos!</p>
-      <div className="taller">
-        <img src={Taller} alt="Taller del mes" id='imagen' />
-      </div>
-    </section>
+          <h2 className='titulo'>Talleres del mes</h2>
+          <p>¡Aprende cómo hacerlos en estos talleres educativos!</p>
+          <div className="taller">
+            <img src={Taller} alt="Taller del mes" id='imagen' />
+          </div>
+        </section>
       </main>
+
 
       <footer>
         <Link to="/">

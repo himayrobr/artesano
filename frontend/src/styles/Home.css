@@ -206,7 +206,11 @@ body.mobile-nav-open {
     padding: 10px 0;
     justify-content: center;
 }
-
+.categoria{
+    color: black;
+    font-family: 'Bellota-Regular';
+    text-decoration: none;
+}
 
 .categoria p{
     font-size: 14px;
