@@ -7,6 +7,7 @@ import Register from './components/Register';
 import RegisterByEmail from './components/RegisterByEmail';
 import RegisterByPhone from './components/RegisterByPhone';
 
+
 const App = () => {
   return (
     <Router>
