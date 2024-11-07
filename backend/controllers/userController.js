@@ -83,7 +83,7 @@ const obtenerTalleresInscritos = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ mensaje: 'ID de usuario no válido' });
     }
-    const usuarioId = new mongoose.Types.ObjectId(req.params.usuarioId);
+    const usuarioId = new mongoose.Types.ObjectId(req.params.id);
     const usuarioConTalleres = await User.aggregate([
       {
         $match: { _id: usuarioId }, 
