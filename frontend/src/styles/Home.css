@@ -198,6 +198,19 @@ body.mobile-nav-open {
     align-items: center;
     gap: 10px;
 }
+.tituloCategoria{
+    font-size: 17px;
+    color: #000;
+    text-align: start;
+    font-family: 'Bellota-Regular';
+    margin-left: 5vw;
+}
+#diseño{
+    width: 20px;
+    position: relative;
+    right: 47vw;
+    top: 5vh;
+}
 .categorias {
     display: flex;
     gap: 15px;

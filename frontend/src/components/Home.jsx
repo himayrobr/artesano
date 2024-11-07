@@ -22,6 +22,7 @@ import customerServiceImg from '../storage/img/customerService.svg';
 
 import Location from '../storage/img/location.svg'
 import Taller from '../storage/img/Vector(2).png';
+import Diseño from '../storage/img/diseño.svg';
 import Textileria from '../storage/img/workshopCategory.svg';
 import Ceramica from '../storage/img/ceramicCategory.svg';
 import Orfebreria from '../storage/img/goldsmithCategory.svg';
@@ -140,8 +141,8 @@ function Home() {
             <img src={Location} alt="Location" id='Location'/>
             <p>Ubicación de entrega actual</p>
           </div>
-
-          <h2>Categorías</h2>
+            <img src={Diseño} id='diseño' />
+          <h2 className='tituloCategoria'>Categorías</h2>
           <div className="categorias">
             {/* Cada div representa una categoría */}
             <Link to="/categoria/textileria" className="categoria">
