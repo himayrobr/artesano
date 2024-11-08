@@ -135,7 +135,7 @@ function Home() {
         </div>
       </header>
 
-      <main>
+      <main className='main'>
         <section className="categoria-taller">
           <div className="ubicacion">
             <img src={Location} alt="Location" id='Location'/>

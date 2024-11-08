@@ -141,7 +141,14 @@
     background-repeat: space;
     background-size: contain;
 }
-
+.main{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background: #fff;
+    padding-bottom: 60px; 
+}
 .section {
     display: flex;
     flex-direction: column;
@@ -153,6 +160,8 @@
 .content{
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 900px;
 }
 .tituloStore {
     display: flex;

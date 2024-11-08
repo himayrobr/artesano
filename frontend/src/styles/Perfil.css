@@ -7,24 +7,24 @@
     font-family: "Bellota-Regular";
 }
 
-body.mobile-nav-open {
-        min-height: 100vh;
-        overflow-y: auto;
-    }
-
 /* Estilos generales */
-.mobile-header, .footer, main{
+body.mobile-nav-open {
+    min-height: 100vh;
+    overflow-y: scroll;
+}
+
+/* Estilos para todos los dispositivos */
+.mobile-header, .footer, main {
     width: 100%;
 }
 
-/* Mobile header */
 .mobile-header {
     background: #000;
     height: 70px;
     padding: 0 1px;
 }
 
-/* Para mejorar la disposición en pantallas pequeñas */
+/* Menú móvil */
 .mobile-nav-toggle {
     display: flex;
     height: 100%;
@@ -37,9 +37,10 @@ body.mobile-nav-open {
 .mobile-nav-toggle h3 {
     padding-right: 15px;
 }
-#checkbox{
+#checkbox {
     margin-left: 10px;
 }
+
 /* Campo de búsqueda */
 .search {
     width: 85%;
@@ -78,7 +79,6 @@ body.mobile-nav-open {
     left: 55px;
     z-index: 1;
 }
-
 .result ul {
     padding: 0;
     margin: 0;
@@ -87,47 +87,14 @@ body.mobile-nav-open {
     color: #fff;
     padding: 1rem 2.1rem;
 }
-.result ul li:hover{
+.result ul li:hover {
     background: #757575;
     cursor: pointer;
-}
-.mobile-nav-toggle{
-    position: relative;
-}
-.mobile-nav-toggle img:hover {
-    cursor: pointer;
-}
-
-.mobile-top-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 100px;
-}
-
-.mobile-top-bar .mobile-nav-toggle.close {
-    width: 100%;
-}
-.mobile-top-bar .mobile-nav-toggle.close img{
-    width: 70px;
-    height: 70px;
-    border-radius: 100%;
-    object-fit: contain;
-    margin-left: 15px;
-}
-.mobile-top-bar .mobile-nav-toggle.close h3{
-    color: #fff;
-    
-}
-.mobile-top-bar .mobile-nav-toggle.close:hover {
-    cursor: pointer
 }
 
 /* Estilo del menú lateral */
 .navigation {
-    -moz-transition: transform 0.3s ease;
-    -o-transition: transform 0.3s ease;
-    -webkit-transition: transform 0.3s ease;
+    transition: transform 0.3s ease;
     background: #010101e2;
     height: 100%;
     overflow-y: auto;
@@ -136,19 +103,12 @@ body.mobile-nav-open {
     top: 0;
     left: -100%;
     width: 20%;
-    z-index: 2;  /* Menú detrás de los campos de entrada */
+    z-index: 2;
     transform: translateX(-100%);
-    transition: left 0.3s ease;
-
 }
-
 .navigation.open {
     transform: translateX(0);
     left: 0;
-}
-/* Contenedor del campo de búsqueda */
-.search {
-    position: relative;
 }
 
 .navigation__option li {
@@ -165,7 +125,6 @@ body.mobile-nav-open {
     color: #fff;
     font-size: 15px;
 }
-
 .navigation__option li a img {
     width: 50px;
     height: 50px;
@@ -175,104 +134,110 @@ body.mobile-nav-open {
 .navigation__option li a img:hover {
     width: 80px;
 }
-.navigation__division {
-    height: 25px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-    background-image: url(../storage/img/Rectangle52.svg);
-    background-repeat: space;
-    background-size: contain;
-}
+
+/* Contenedor principal */
 .main {
     display: flex;
     width: 100%;
     min-height: 100vh;
+    flex-direction: column;
 }
 
+/* Profile container */
 .profile-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .profile-header {
+}
+
+.profile-header {
     text-align: center;
     margin-bottom: 20px;
-  }
-  
-  .profile-photo {
+}
+
+.profile-photo {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-  }
-  
-  .profile-info, .payment-methods {
+}
+
+.profile-info, .payment-methods {
     width: 100%;
     max-width: 400px;
     margin-bottom: 20px;
-  }
-  
-  .profile-field {
+}
+
+/* Estilo de los campos de perfil */
+.profile-field {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
-  }
-  
-  .profile-field label {
+}
+
+.profile-field label {
     width: 100px;
     font-weight: bold;
-  }
-  
-  .profile-field input {
+}
+
+.profile-field input {
     flex: 1;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-right: 5px;
-  }
-  
-  .cell-number {
+}
+
+.cell-number {
     display: flex;
-  }
-  
-  .cell-number input:first-child {
+}
+
+.cell-number input:first-child {
     width: 40px;
     margin-right: 5px;
-  }
-  
-  .edit-button {
+}
+
+/* Botón de edición */
+.edit-button {
     background: none;
     border: none;
     cursor: pointer;
     font-size: 18px;
-  }
-  #editar{
+}
+
+#editar {
     width: 20px;
-  }
-  .payment-methods h3 {
-    margin-bottom: 10px;
-  }
-  .payment-methods input {
-    padding: 8px;
+}
+
+.payment-methods h3 {
+    position: relative;
+    top: -20px;
+    font-size: 15px;
+}
+
+.payment-methods input {
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-right: 5px;
-  }
-  .add-payment {
+    position: relative;
+    top: -20px;
+}
+
+.add-payment {
     display: flex;
     margin-top: 10px;
-    padding: 8px;
+    padding: 5px;
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #3D3D3D;
     color: white;
     cursor: pointer;
-  }
-  
-  /* Superposición del modal */
-  .payment-form-modal-overlay {
+    position: relative;
+    top: -20px;
+}
+
+/* Superposición del modal */
+.payment-form-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -283,38 +248,37 @@ body.mobile-nav-open {
     align-items: center;
     justify-content: center;
     z-index: 1000;
-  }
-  
-  /* Estilo del modal */
-  .payment-form-modal {
+}
+
+/* Estilo del modal */
+.payment-form-modal {
     background: white;
     padding: 20px;
     width: 90%;
     max-width: 400px;
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    position: relative;
-  }
-  
-  /* Estilos de formulario en el modal */
-  .payment-form label {
+}
+
+/* Estilos de formulario en el modal */
+.payment-form label {
     display: block;
     margin-bottom: 10px;
     color: #333;
     font-weight: bold;
-  }
-  
-  .payment-form input,
-  .payment-form select {
+}
+
+.payment-form input,
+.payment-form select {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
     border: 1px solid #ddd;
     border-radius: 5px;
     outline: none;
-  }
-  
-  .payment-form button {
+}
+
+.payment-form button {
     padding: 10px;
     width: 100%;
     margin-top: 10px;
@@ -322,22 +286,22 @@ body.mobile-nav-open {
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
-  }
-  
-  /* Botón de guardar */
-  .payment-form button[type="submit"] {
+}
+
+/* Botón de guardar */
+.payment-form button[type="submit"] {
     background-color: #3D3D3D;
     color: white;
-  }
-  
-  /* Botón de cancelar */
-  .payment-form button[type="button"] {
+}
+
+/* Botón de cancelar */
+.payment-form button[type="button"] {
     background-color: #f1f1f1;
     color: #333;
-  }
+}
 
-  
-  footer {
+/* Estilo del pie de página */
+footer {
     width: 100%;
     height: 60px;
     background: #000;
@@ -348,20 +312,42 @@ body.mobile-nav-open {
     justify-content: space-around;
     z-index: 1;
 }
-footer img{
+
+footer img {
     width: 50px;
     height: 50px;
     transition: 0.3s;
 }
+
 footer a img:hover {
     transform: scale(1.5);
 }
-@media (max-width: 768px) {
-    /* Estilos para tablets y dispositivos móviles */
+
+/* Media Queries */
+
+/* Dispositivos grandes (PC y pantallas grandes) */
+@media (min-width: 1200px) {
     .mobile-header, .navigation, .footer, .result {
         width: 100%;
     }
 
+    .search {
+        left: 10px;
+        width: 50%;
+    }
+
+    .navigation {
+        width: 25%;
+    }
+
+    .navigation__option li a img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* Tablets y pantallas medianas */
+@media (max-width: 1024px) {
     .search {
         left: 5px;
         width: 90%;
@@ -372,16 +358,41 @@ footer a img:hover {
     }
 
     .navigation {
+        width: 60%;
+    }
+
+    .mobile-nav-toggle img {
+        width: 30px;
+    }
+}
+
+/* Smartphones pequeños */
+@media (max-width: 768px) {
+    .search {
+        width: 85%;
+        left: 5px;
+    }
+
+    .result {
+        left: 5px;
+        width: 85%;
+    }
+
+    .navigation {
         width: 70%;
     }
 
     .mobile-nav-toggle img {
         width: 25px;
     }
+
+    footer img {
+        width: 40px;
+    }
 }
 
+/* Pantallas muy pequeñas */
 @media (max-width: 480px) {
-    /* Ajustes adicionales para pantallas muy pequeñas */
     .search input {
         margin-right: 10px;
     }
@@ -392,5 +403,9 @@ footer a img:hover {
 
     footer img {
         width: 35px;
+    }
+
+    .mobile-header {
+        height: 60px;
     }
 }

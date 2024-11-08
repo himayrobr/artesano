@@ -94,7 +94,7 @@ function Store() {
   };
 
   return (
-    <div className="scroll-container">
+    <div className="main">
       <header>
         <div className="mobile-header">
           <div className="mobile-nav-toggle">
@@ -182,7 +182,7 @@ function Store() {
         </div>
       </header>
 
-      <main>
+      <main className='scroll-container'>
         <section className="section">
           <div className="content">
             <img src={Diseño} id="diseño" alt="Diseño" />
@@ -229,7 +229,6 @@ function Store() {
           </div>
         </section>
       </main>
-
       <footer>
         <Link to="/Store">
           <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />

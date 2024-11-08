@@ -61,8 +61,8 @@ function Perfil() {
   };
 
   return (
-    <div>
-     <header>
+      <div className="main">     
+      <header>
         <div className="mobile-header">
           <div className="mobile-nav-toggle" >
           <img src={menuImg} id='checkbox' alt="Menú" onClick={toggleMenu}/>
