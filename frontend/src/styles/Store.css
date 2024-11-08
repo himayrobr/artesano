@@ -184,7 +184,56 @@
     position: relative;
     bottom: 50px;
   }
+  /* Cuadro de Selección dentro del modal */
+.modal select {
+    width: 100%;
+    padding: 12px 18px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    color: #333;
+    margin: 15px 0;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+  }
   
+  /* Efecto al hacer hover en el cuadro de selección */
+  .modal select:hover {
+    border-color: #e7d406;
+    background-color: #eaf4e2;
+  }
+  
+  /* Efecto cuando el cuadro de selección está activo */
+  .modal select:focus {
+    border-color: #e7d406;
+    background-color: #eaf4e2;
+    outline: none;
+  }
+  
+  /* Estilos para las opciones dentro del cuadro de selección */
+  .modal select option {
+    padding: 12px 18px;
+    background-color: #fff;
+    color: #333;
+    font-size: 16px;
+  }
+  
+  .modal select option:hover {
+    background-color: #f1f1f1;
+    color: #333;
+  }
+  .modal button{
+    background-color: #191919;
+    border: none;
+    width: 120px;
+    height: 30px;
+    color: white;
+    transition: 0.5s;
+  }
+  .modal button:hover{
+    background-color: #e7d406;
+    color: #fff;
+  }
   .grid-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -194,9 +243,10 @@
   }
   
   .card {
-    background-color: #fff;
+    background-color: #1b1a1a;
     border: 1px solid #ccc;
     border-radius: 8px;
+    color: white;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
