@@ -231,14 +231,20 @@ function Store() {
       </main>
 
       <footer>
-        <Link to="/">
-          <img src={workshopsAndCraftsImg} alt="Talleres y artesanías" />
+        <Link to="/Store">
+          <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />
         </Link>
         <Link to="/">
+          <img src={couponsImg} alt="Cupones" />
+        </Link>
+        <Link to="/Home">
           <img src={categoriesImg} alt="Categorías" />
         </Link>
         <Link to="/">
           <img src={shoppingCartImg} alt="Carrito de compras" />
+        </Link>
+        <Link to="/Perfil">
+          <img src={generalSettingsImg} alt="Configuración general" />
         </Link>
       </footer>
     </div>
