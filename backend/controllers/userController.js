@@ -158,7 +158,6 @@ const obtenerFavoritos = async (req, res) => {
   }
 };
 
-
 const agregarFavorito = async (req, res) => {
   try {
     const { userId, productId } = req.params;
@@ -191,4 +190,31 @@ const agregarFavorito = async (req, res) => {
   }
 };
 
-module.exports = { actualizarUsuario, obtenerUsuarioPorId, eliminarUsuarioPorId, obtenerTalleresInscritos, obtenerFavoritos, agregarFavorito };
+const eliminarDeFavoritos = async (req, res) => {
+  try {
+    const { idUsuario, idProducto } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(idUsuario) || !mongoose.Types.ObjectId.isValid(idProducto)) {
+      return res.status(400).json({ mensaje: 'ID de usuario o producto no válido' });
+    }
+
+    const usuarioActualizado = await User.findByIdAndUpdate(
+      idUsuario,
+      { $pull: { favoritos: idProducto } },
+      { new: true } 
+    );
+
+    if (!usuarioActualizado) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json({
+      mensaje: 'Producto eliminado de favoritos',
+      usuario: usuarioActualizado,
+    });
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al eliminar el producto de favoritos', error });
+  }
+};
+
+module.exports = { actualizarUsuario, obtenerUsuarioPorId, eliminarUsuarioPorId, obtenerTalleresInscritos, obtenerFavoritos, agregarFavorito, eliminarDeFavoritos };

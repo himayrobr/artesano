@@ -1,5 +1,5 @@
 const express = require('express');
-const { actualizarUsuario, obtenerUsuarioPorId, eliminarUsuarioPorId, obtenerTalleresInscritos, obtenerFavoritos, agregarFavorito } = require('../controllers/userController.js');
+const { actualizarUsuario, obtenerUsuarioPorId, eliminarUsuarioPorId, obtenerTalleresInscritos, obtenerFavoritos, agregarFavorito, eliminarDeFavoritos } = require('../controllers/userController.js');
 
 const router = express.Router();
 
@@ -9,6 +9,7 @@ router.get('/usuarios/talleres/:id', obtenerTalleresInscritos);
 router.get('/usuarios/favoritos/:id', obtenerFavoritos);
 router.delete('/usuarios/:id', eliminarUsuarioPorId);
 router.post('/usuarios/:userId/favoritos/:productId', agregarFavorito);
+router.delete('/usuarios/:idUsuario/favoritos/:idProducto', eliminarDeFavoritos);
 
 
 module.exports = router;
