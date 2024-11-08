@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
     direccion: String,
     telefono: String,
     tipo: { type: String, default: 'Comprador', immutable: true },
-    favoritos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Producto' }],
+    favoritos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
     compras: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Compra' }],
     talleresInscritos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Taller' }],
     cupones: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Cupon' }]

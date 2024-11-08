@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
+const Product = require('../models/productUsModel');
 
 const actualizarUsuario = async (req, res) => {
   try {
@@ -157,4 +158,37 @@ const obtenerFavoritos = async (req, res) => {
   }
 };
 
-module.exports = { actualizarUsuario, obtenerUsuarioPorId, eliminarUsuarioPorId, obtenerTalleresInscritos, obtenerFavoritos };
+
+const agregarFavorito = async (req, res) => {
+  try {
+    const { userId, productId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({ mensaje: 'ID de usuario o producto no válido' });
+    }
+    const producto = await Product.findById(productId);
+    if (!producto) {
+      return res.status(404).json({ mensaje: 'Producto no encontrado' });
+    }
+
+    const usuarioActualizado = await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { favoritos: productId } }, 
+      { new: true }
+    ).populate('favoritos'); 
+
+    if (!usuarioActualizado) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json({
+      mensaje: 'Producto agregado a favoritos',
+      usuario: usuarioActualizado,
+    });
+  } catch (error) {
+    console.error("Error al agregar producto a favoritos:", error);
+    res.status(500).json({ mensaje: 'Error al agregar producto a favoritos', error });
+  }
+};
+
+module.exports = { actualizarUsuario, obtenerUsuarioPorId, eliminarUsuarioPorId, obtenerTalleresInscritos, obtenerFavoritos, agregarFavorito };
