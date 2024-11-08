@@ -15,6 +15,7 @@ const generateToken = (user) => {
 // Registro con correo electrónico
 exports.registerByEmail = async (req, res) => {
   const { username, email, password } = req.body;
+  console.log("Datos de registro recibidos:", req.body); // Para verificar los datos
   try {
     let user = await User.findOne({ email });
     if (user) {
@@ -22,11 +23,12 @@ exports.registerByEmail = async (req, res) => {
     }
 
     user = new User({ username, email, password });
-    await user.save();
+    await user.save(); // Aquí se guarda el usuario
 
     const token = generateToken(user);
     res.status(201).json({ message: "Usuario registrado exitosamente.", token });
   } catch (error) {
+    console.error("Error en el registro:", error); // Muestra el error en consola
     res.status(500).json({ message: "Error en el registro." });
   }
 };
@@ -34,18 +36,28 @@ exports.registerByEmail = async (req, res) => {
 // Registro con número de teléfono
 exports.registerByPhone = async (req, res) => {
   const { username, phone, password } = req.body;
+  console.log("Datos de registro por teléfono recibidos:", req.body); // Para verificar los datos
+
   try {
     let user = await User.findOne({ phone });
     if (user) {
       return res.status(400).json({ message: "El número de teléfono ya está registrado." });
     }
 
-    user = new User({ username, phone, password });
-    await user.save();
+    
+    const newUser = new User({
+      username,
+      phone,
+      password,
+      email: req.body.email || undefined, 
+    });
 
-    const token = generateToken(user);
+    await newUser.save(); // Aquí se guarda el usuario
+
+    const token = generateToken(newUser);
     res.status(201).json({ message: "Usuario registrado exitosamente.", token });
   } catch (error) {
+    console.error("Error en el registro:", error); // Muestra el error en consola
     res.status(500).json({ message: "Error en el registro." });
   }
 };
@@ -135,7 +147,47 @@ passport.serializeUser((user, done) => {
   done(null, { id: user.id, displayName: user.displayName });
 });
 
-// Deserializar el usuario
+// Deserializar el usuario// Registro con correo electrónico
+exports.registerByEmail = async (req, res) => {
+  const { username, email, password } = req.body;
+  console.log("Datos de registro recibidos:", req.body); // Para verificar los datos
+  try {
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: "El correo ya está registrado." });
+    }
+
+    user = new User({ username, email, password });
+    await user.save(); // Aquí se guarda el usuario
+
+    const token = generateToken(user);
+    res.status(201).json({ message: "Usuario registrado exitosamente.", token });
+  } catch (error) {
+    console.error("Error en el registro:", error); // Muestra el error en consola
+    res.status(500).json({ message: "Error en el registro." });
+  }
+};
+
+// Registro con número de teléfono
+exports.registerByPhone = async (req, res) => {
+  const { username, phone, password } = req.body;
+  console.log("Datos de registro por teléfono recibidos:", req.body); // Para verificar los datos
+  try {
+    let user = await User.findOne({ phone });
+    if (user) {
+      return res.status(400).json({ message: "El número de teléfono ya está registrado." });
+    }
+
+    user = new User({ username, phone, password });
+    await user.save(); // Aquí se guarda el usuario
+
+    const token = generateToken(user);
+    res.status(201).json({ message: "Usuario registrado exitosamente.", token });
+  } catch (error) {
+    console.error("Error en el registro:", error); // Muestra el error en consola
+    res.status(500).json({ message: "Error en el registro." });
+  }
+};
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);

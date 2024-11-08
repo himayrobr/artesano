@@ -21,7 +21,9 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || "http://localhost:5173",  // Se puede usar una variable de entorno para esto
-    credentials: true,
+    credentials: true,  // Esto es importante para que las cookies se envíen correctamente
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Content-Type,Authorization",
   })
 );
 
@@ -33,6 +35,11 @@ app.use(session({
   secret: process.env.SESSION_SECRET || "default_session_secret",  // Si no tienes esta variable, pon un valor por defecto
   resave: false,
   saveUninitialized: false,
+  cookie: {
+    httpOnly: true,  // Esto asegura que las cookies sean solo accesibles por el servidor
+    secure: process.env.NODE_ENV === 'production',  // Solo en producción
+    maxAge: 1000 * 60 * 60 * 24,  // Duración de la sesión: 1 día
+  },
 }));
 
 // Inicializar Passport y usar sesiones
@@ -50,11 +57,8 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// Configuración del puerto y host
-const PORT = process.env.EXPRESS_PORT || 5000;
-const HOST = process.env.EXPRESS_HOST || 'localhost';
-
-// Inicio del servidor
-app.listen(PORT, HOST, () => {
-  console.log(`Servidor corriendo en http://${HOST}:${PORT}`);
+// Iniciar el servidor
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });

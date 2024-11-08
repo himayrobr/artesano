@@ -25,8 +25,14 @@ const RegisterByEmail = () => {
       return;
     }
 
+    console.log("Datos enviados:", {
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+    });
+
     try {
-      const response = await fetch(`${endpoints.register}/email`, {
+      const response = await fetch(endpoints.registerByEmail, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -35,6 +41,8 @@ const RegisterByEmail = () => {
           password: formData.password,
         }),
       });
+
+      console.log("Respuesta del servidor:", response);
       if (response.ok) {
         navigate('/'); // Redirige a la página de inicio de sesión o la página principal
       } else {
