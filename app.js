@@ -5,6 +5,7 @@ const connect = require('./backend/helpers/connect');
 const cors = require('cors'); 
 
 const workshopRoutes = require('./backend/routes/workshopRoutes');
+const productRoutes = require('./backend/routes/productRoutes');
 
 // Conexión a la base de datos
 connect();
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(cors()); 
 
 app.use('/', workshopRoutes);
+app.use('/', productRoutes);
 
 
 
