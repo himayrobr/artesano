@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
 const Product = require('../models/productUsModel');
+const Taller = require('../models/workshopUsModel')
 
 const actualizarUsuario = async (req, res) => {
   try {
@@ -217,4 +218,54 @@ const eliminarDeFavoritos = async (req, res) => {
   }
 };
 
-module.exports = { actualizarUsuario, obtenerUsuarioPorId, eliminarUsuarioPorId, obtenerTalleresInscritos, obtenerFavoritos, agregarFavorito, eliminarDeFavoritos };
+const agregarTaller = async (req, res) => {
+  try {
+    const { idUsuario, idTaller } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(idUsuario) || !mongoose.Types.ObjectId.isValid(idTaller)) {
+      return res.status(400).json({ mensaje: 'ID de usuario o taller no válido' });
+    }
+
+    const usuarioActualizado = await User.findByIdAndUpdate(
+      idUsuario,
+      { $addToSet: { talleresInscritos: idTaller } },  
+      { new: true }
+    );
+
+    if (!usuarioActualizado) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json({
+      mensaje: 'Taller agregado a talleres inscritos',
+      usuario: usuarioActualizado,
+    });
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al agregar el taller a talleres inscritos', error });
+  }
+};
+
+const eliminarTaller = async (req, res) => {
+  try {
+    const { idUsuario, idTaller } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(idUsuario) || !mongoose.Types.ObjectId.isValid(idTaller)) {
+      return res.status(400).json({ mensaje: 'ID de usuario o taller no válido' });
+    }
+    const usuarioActualizado = await User.findByIdAndUpdate(
+      idUsuario,
+      { $pull: { talleresInscritos: idTaller } },  
+      { new: true }
+    );
+    if (!usuarioActualizado) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+    res.status(200).json({
+      mensaje: 'Taller eliminado de talleres inscritos',
+      usuario: usuarioActualizado,
+    });
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al eliminar el taller de talleres inscritos', error });
+  }
+};
+
+module.exports = { actualizarUsuario, obtenerUsuarioPorId, eliminarUsuarioPorId, obtenerTalleresInscritos, obtenerFavoritos, agregarFavorito, eliminarDeFavoritos, agregarTaller, eliminarTaller };
