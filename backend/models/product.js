@@ -9,6 +9,6 @@ const productSchema = new Schema({
   fotos: { type: [String], required: true },
   stock: { type: Number, required: true },
   artesanoId: { type: Schema.Types.ObjectId, ref: 'User', required: true }
-}, { collection: 'product' }); // Especificamos 'product' como nombre de la colección
+}, { collection: 'Product' }); // Especificamos 'product' como nombre de la colección
 
 module.exports = mongoose.model('Product', productSchema);
