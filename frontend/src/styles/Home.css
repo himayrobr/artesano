@@ -12,7 +12,7 @@ body.mobile-nav-open {
 }
 
 /* Estilos generales */
-.mobile-header, .footer, main {
+.mobile-header, .footer {
     width: 100%;
 }
 
@@ -246,14 +246,11 @@ body.mobile-nav-open {
 }
 .categoria img:hover{
     background-color: #3D3D3D;
-    width: 65px;
-    height: 65px;
 }
-/* Main content */
-main {
+.main {
     position: relative;
     background: #fff;
-    padding-bottom: 60px; /* Para dar espacio al footer */
+    padding-bottom: 60px; 
 }
 
 /* Footer */
