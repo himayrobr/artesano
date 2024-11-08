@@ -20,7 +20,7 @@ mongoose.connect(process.env.MONGO_URI, {
 // Middleware de CORS
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:3000",  // Se puede usar una variable de entorno para esto
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173",  // Se puede usar una variable de entorno para esto
     credentials: true,
   })
 );

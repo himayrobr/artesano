@@ -13,7 +13,8 @@ userSchema.statics.findOneOrCreate = async function (profile) {
     $or: [
       { googleId: profile.googleId },
       { discordId: profile.discordId },
-      { facebookId: profile.facebookId }
+      { facebookId: profile.facebookId },
+      { email: profile.email } // Agrega esta condición para evitar duplicados de email
     ]
   });
 

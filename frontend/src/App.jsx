@@ -6,7 +6,7 @@ import RegisterOptions from './components/RegisterOptions';
 import Register from './components/Register';
 import RegisterByEmail from './components/RegisterByEmail';
 import RegisterByPhone from './components/RegisterByPhone';
-
+import Home from './components/Home'; // Importa el nuevo componente Home
 
 const App = () => {
   return (
@@ -17,6 +17,7 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/registro/correo" element={<RegisterByEmail />} />
         <Route path="/registro/celular" element={<RegisterByPhone />} />
+        <Route path="/home" element={<Home />} /> {/* Nueva ruta para Home */}
       </Routes>
     </Router>
   );

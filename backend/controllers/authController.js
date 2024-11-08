@@ -1,8 +1,54 @@
 const passport = require("passport");
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const DiscordStrategy = require("passport-discord").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
+
+// Genera un token JWT
+const generateToken = (user) => {
+  return jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
+};
+
+// Registro con correo electrónico
+exports.registerByEmail = async (req, res) => {
+  const { username, email, password } = req.body;
+  try {
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: "El correo ya está registrado." });
+    }
+
+    user = new User({ username, email, password });
+    await user.save();
+
+    const token = generateToken(user);
+    res.status(201).json({ message: "Usuario registrado exitosamente.", token });
+  } catch (error) {
+    res.status(500).json({ message: "Error en el registro." });
+  }
+};
+
+// Registro con número de teléfono
+exports.registerByPhone = async (req, res) => {
+  const { username, phone, password } = req.body;
+  try {
+    let user = await User.findOne({ phone });
+    if (user) {
+      return res.status(400).json({ message: "El número de teléfono ya está registrado." });
+    }
+
+    user = new User({ username, phone, password });
+    await user.save();
+
+    const token = generateToken(user);
+    res.status(201).json({ message: "Usuario registrado exitosamente.", token });
+  } catch (error) {
+    res.status(500).json({ message: "Error en el registro." });
+  }
+};
 
 // Configuración de Google Strategy
 passport.use(
@@ -14,10 +60,7 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        // Busca el usuario por su ID de Google
         let user = await User.findOne({ googleId: profile.id });
-        
-        // Si no existe, crea uno nuevo
         if (!user) {
           user = await User.create({
             googleId: profile.id,
@@ -45,7 +88,6 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         let user = await User.findOne({ discordId: profile.id });
-
         if (!user) {
           user = await User.create({
             discordId: profile.id,
@@ -73,7 +115,6 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         let user = await User.findOne({ facebookId: profile.id });
-
         if (!user) {
           user = await User.create({
             facebookId: profile.id,
@@ -105,8 +146,6 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // Exporta los métodos para los handlers en authRoutes.js
-module.exports = {
-  loginWithGoogle: passport.authenticate("google", { scope: ["profile", "email"] }),
-  loginWithDiscord: passport.authenticate("discord"),
-  loginWithFacebook: passport.authenticate("facebook"),
-};
+exports.loginWithGoogle = passport.authenticate("google", { scope: ["profile", "email"] });
+exports.loginWithDiscord = passport.authenticate("discord");
+exports.loginWithFacebook = passport.authenticate("facebook");
