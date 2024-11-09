@@ -12,3 +12,5 @@ const productSchema = new Schema({
 }, { collection: 'Product' }); // Especificamos 'product' como nombre de la colección
 
 module.exports = mongoose.model('Product', productSchema);
+
+//

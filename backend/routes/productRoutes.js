@@ -22,3 +22,6 @@ router.delete('/products/:id', productController.deleteProduct);
 router.get('/products/search', productController.searchProducts);
 
 module.exports = router;
+
+
+//
