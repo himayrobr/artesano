@@ -1,9 +1,14 @@
 const express = require("express");
 const path = require("path");
 require('dotenv').config();
-const connect = require('./backend/helpers/connect'); // Asegúrate de que este archivo maneje la conexión a la base de datos.
-
+const connect = require('./backend/helpers/connect'); 
 const cors = require('cors'); 
+
+const workshopRoutes = require('./backend/routes/workshopRoutes');
+const productRoutes = require('./backend/routes/productRoutes');
+const userRouter = require('./backend/routes/userRoutes');
+const orderRouter = require('./backend/routes/orderRoutes');
+const couponRouter = require('./backend/routes/couponRoutes');
 
 // Conexión a la base de datos
 connect();
@@ -14,12 +19,20 @@ const app = express();
 app.use(express.json());
 app.use(cors()); 
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'dist', 'client')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'client', 'index.html'));
-  });
-}
+app.use('/workshops', workshopRoutes);
+app.use('/products', productRoutes);
+app.use('/users', userRoutes );
+app.use('/orders', orderRouter );
+app.use('/coupons', couponRouter );
+
+
+
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(express.static(path.join(__dirname, 'dist', 'client')));
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'dist', 'client', 'index.html'));
+//   });
+// }
 
 // Configuración del puerto y host
 const PORT = process.env.EXPRESS_PORT || 5000;

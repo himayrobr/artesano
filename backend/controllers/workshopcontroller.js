@@ -1,4 +1,4 @@
-const Workshop = require('../models/workshop.js');
+const Workshop = require('../models/workshopModel.js');
 
 // Crear un nuevo taller
 exports.createWorkshop = async (req, res) => {
