@@ -24,6 +24,6 @@ const orderSchema = new mongoose.Schema({
     enum: ['pendiente', 'enviado', 'entregado', 'cancelado'],
     default: 'pendiente'
   }
-});
+}, { collection: 'Order' });
 
 module.exports = mongoose.model('Order', orderSchema);

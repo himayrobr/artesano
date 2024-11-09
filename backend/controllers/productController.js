@@ -105,4 +105,4 @@ exports.searchProducts = async (req, res) => {
   }
 };
 
-//
+module

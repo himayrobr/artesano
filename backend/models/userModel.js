@@ -11,6 +11,6 @@ const userSchema = new mongoose.Schema({
   talleresInscritos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Workshop' }],
   historialCompras: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
   cupones: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Coupon' }],
-});
+}, { collection: 'User' });
 
 module.exports = mongoose.model('User', userSchema);

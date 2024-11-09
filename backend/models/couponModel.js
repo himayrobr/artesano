@@ -27,7 +27,7 @@ const descuentoSchema = new Schema({
     ref: 'User', 
     required: true,
   },
-});
+}, { collection: 'Coupon' });
 
 const Descuento = mongoose.model('Coupon', descuentoSchema, 'Coupon');
 

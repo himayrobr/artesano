@@ -6,8 +6,8 @@ const cors = require('cors');
 
 const workshopRoutes = require('./backend/routes/workshopRoutes');
 const productRoutes = require('./backend/routes/productRoutes');
-const userRouter = require('./backend/routes/userRoutes');
-const orderRouter = require('./backend/routes/orderRoutes');
+const userRoutes = require('./backend/routes/userRoutes');
+const orderRoutes = require('./backend/routes/orderRoutes');
 const couponRouter = require('./backend/routes/couponRoutes');
 
 // Conexión a la base de datos
@@ -22,7 +22,7 @@ app.use(cors());
 app.use('/workshops', workshopRoutes);
 app.use('/products', productRoutes);
 app.use('/users', userRoutes );
-app.use('/orders', orderRouter );
+app.use('/orders', orderRoutes );
 app.use('/coupons', couponRouter );
 
 

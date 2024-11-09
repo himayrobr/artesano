@@ -4,10 +4,10 @@ const workshopController = require('../controllers/workshopController');
 const router = express.Router();
 
 router.post('/orders', workshopController.createWorkshop);
-router.put('/workshops/:id', workshopController.updateWorkshop);
-router.delete('/workshops/:id', workshopController.deleteWorkshop);
-router.get('/workshops/search', workshopController.searchWorkshops);
-router.get('/workshops', workshopController.getAllWorkshops);
+router.put('/:id', workshopController.updateWorkshop);
+router.delete('/:id', workshopController.deleteWorkshop);
+router.get('/search', workshopController.searchWorkshops);
+router.get('/', workshopController.getAllWorkshops);
 
 
 module.exports = router;
