@@ -29,16 +29,16 @@ import orderBy from 'lodash/orderBy';
 
 
 const talleres = [
-  { nombre: "Arte Abedail Aller Escalante", ubicacion: "Cusco", imagen: imagen1, ruta: "/arte-abedail" },
-  { nombre: "Asoc. de artesanos Tinkuy", ubicacion: "Huánuco", imagen: imagen2, ruta: "/tinkuy" },
+  { nombre: "Arte Abedail Aller Escalante", ubicacion: "Cusco", imagen: imagen1, ruta: "/ArteAbedall" },
+  { nombre: "Asoc. de artesanos Tinkuy", ubicacion: "Huánuco", imagen: imagen2, ruta: "/AsociacionArtesano" },
 ];
 const talleres2 = [
-  { nombre: "Retablos Jesús Urbano", ubicacion: "Ayacucho", imagen: imagen3, ruta: "/jesus-urbano" },
+  { nombre: "Retablos Jesús Urbano", ubicacion: "Ayacucho", imagen: imagen3, ruta: "/Retablo" },
   { nombre: "Taller Awaq Ayllus", ubicacion: "Ayacucho", imagen: imagen4, ruta: "/TallerAwaq" },
 ];
 const talleres3 = [
-  { nombre: "Taller Sanabria Núñez", ubicacion: "Junín", imagen: imagen5, ruta: "/sanabria-nunez" },
-  { nombre: "Lastenia Canayo", ubicacion: "Ucayali", imagen: imagen6, ruta: "/lastenia-canayo" },
+  { nombre: "Taller Sanabria Núñez", ubicacion: "Junín", imagen: imagen5, ruta: "/TallerSanabria" },
+  { nombre: "Lastenia Canayo", ubicacion: "Ucayali", imagen: imagen6, ruta: "/Lastenia" },
 ];
 
 

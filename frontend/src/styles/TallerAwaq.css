@@ -59,9 +59,11 @@ h1 {
     background-color: #333;
     padding: 10px;
 }
-.search {
+.search1 input, text{
     position: relative;
     display: flex;
+    background-color: #7f7d7d;
+    color:black
 }
 
 #filter {
@@ -168,6 +170,8 @@ h1 {
 
 .producto-card h3 {
     font-size: 0.9rem;
+    color: white;
+    text-decoration: none;
 }
 
 .producto-card p {
