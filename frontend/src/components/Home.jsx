@@ -145,7 +145,7 @@ function Home() {
           <h2 className='tituloCategoria'>Categorías</h2>
           <div className="categorias">
             {/* Cada div representa una categoría */}
-            <Link to="/categoria/textileria" className="categoria">
+            <Link to="/Textileria" className="categoria">
               <img src={Textileria} alt="Textilería" />
               <p>Textilería</p>
             </Link>

@@ -2,6 +2,9 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from '../components/Home.jsx';
+import Textileria from '../components/Textileria.jsx';
+
+
 import LoadingPage from '../components/LoadingPage.jsx';
 import Perfil from '../components/Perfil.jsx';
 import Store from '../components/Store.jsx';
@@ -16,6 +19,7 @@ const AppRouter = () => (
     <Routes>
         <Route path="/" element={<LoadingPage />} />
         <Route path="/Home" element={<Home />} />
+        <Route path="/Textileria" element={<Textileria />} />
         <Route path="/Perfil" element={<Perfil />} />
         <Route path="/Store" element={<Store />} />
         <Route path="/TallerAwaq" element={<TallerAwaq />} />
