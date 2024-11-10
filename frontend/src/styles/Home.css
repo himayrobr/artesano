@@ -55,7 +55,7 @@ body.mobile-nav-open {
 }
 .search input {
     width: 100%;
-    background: #3D3D3D;
+    background: #f3f2f2;
     border: none;
     outline: none;
     height: 40px;
@@ -247,6 +247,10 @@ body.mobile-nav-open {
 .categoria img:hover{
     background-color: #3D3D3D;
 }
+.categoria1.selected img {
+    background-color: #1b1b1b; 
+    border: 2px solid #000000;  
+}
 .main {
     position: relative;
     background: #fff;
@@ -322,5 +326,6 @@ footer a img:hover {
     }
     .search input{
         margin-right: 20px;
+        background-color: #f0f0f0;
     }
 }
