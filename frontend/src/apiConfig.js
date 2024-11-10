@@ -4,6 +4,8 @@ export const endpoints = {
   register: `${API_BASE_URL}/users/register`,
   login: `${API_BASE_URL}/users/login`,
   logout: `${API_BASE_URL}/users/logout`,
+  getCategoryUrl: (categoria) => `${API_BASE_URL}products/categoria/${categoria}`,
+
 };
 
 export default API_BASE_URL;

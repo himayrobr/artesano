@@ -145,45 +145,45 @@ function Home() {
           <h2 className='tituloCategoria'>Categorías</h2>
           <div className="categorias">
             {/* Cada div representa una categoría */}
-            <Link to="/Textileria" className="categoria">
+            <Link to="/categoria/Textilería" className="categoria">
               <img src={Textileria} alt="Textilería" />
               <p>Textilería</p>
             </Link>
-            <Link to="/Ceramica" className="categoria">
+            <Link to="/categoria/Cerámica" className="categoria">
               <img src={Ceramica} alt="Cerámica" />
               <p>Cerámica</p>
             </Link>
-            <Link to="/Orfeteria" className="categoria">
+            <Link to="/categoria/Orfebrería" className="categoria">
               <img src={Orfebreria} alt="Orfebrería" />
               <p>Orfebrería</p>
             </Link>
-            <Link to="/TallaPiedra" className="categoria">
+            <Link to="/categoria/Talla en piedra" className="categoria">
               <img src={Tallaenpiedra} alt="Talla en piedra" />
               <p>Talla en piedra</p>
             </Link>
-            <Link to="/tallaMadera" className="categoria">
+            <Link to="/categoria/Talla en madera" className="categoria">
               <img src={Tallaenmadera} alt="Talla en madera" />
               <p>Talla en madera</p>
             </Link>
           </div>
           <div className="categorias">
-            <Link to="/Bordado" className="categoria">
+            <Link to="/categoria/Bordado" className="categoria">
               <img src={Bordado} alt="Bordado" />
               <p>Bordado</p>
             </Link>
-            <Link to="/Joyeria" className="categoria">
+            <Link to="/categoria/Joyería" className="categoria">
               <img src={Joyeria} alt="Joyería" />
               <p>Joyería</p>
             </Link>
-            <Link to="/Hojaleteria" className="categoria">
+            <Link to="/categoria/Hojalatería" className="categoria">
               <img src={Hojalateria} alt="Hojalatería" />
               <p>Hojalatería</p>
             </Link>
-            <Link to="/Estampado" className="categoria">
+            <Link to="/categoria/Estampado" className="categoria">
               <img src={Estampado} alt="Estampado" />
               <p>Estampado</p>
             </Link>
-            <Link to="/Pintura" className="categoria">
+            <Link to="/categoria/Pintura tradicional" className="categoria">
               <img src={Pintura} alt="Pintura tradicional" />
               <p>Pintura tradicional</p>
             </Link>
