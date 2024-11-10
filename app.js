@@ -13,7 +13,8 @@ const orderRoutes = require('./backend/routes/orderRoutes');
 const couponRoutes = require('./backend/routes/couponRoutes');
 const cartRoutes = require('./backend/routes/cartRoutes');
 const storeRoutes = require('./backend/routes/storeRouter');
-//claro ineidy 
+
+// Conexión a la base de datos
 connect();
 //easy cherry
 // Inicialización de Express
@@ -38,29 +39,15 @@ app.use('/products', productRoutes);
 app.use('/users', userRoutes );
 app.use('/orders', orderRoutes );
 app.use('/coupons', couponRoutes );
-app.use('/cart', cartRoutes);
+app.use('/cart', cartRoutes );
 
-// Middleware de sesiones para Passport (autenticación)
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "default_session_secret",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 1000 * 60 * 60 * 24,
-    },
-  })
-);
 
-// Inicializar Passport y usar sesiones
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Rutas de autenticación
-const authRoutes = require("./backend/routes/authRoutes");
-app.use("/auth", authRoutes);
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(express.static(path.join(__dirname, 'dist', 'client')));
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'dist', 'client', 'index.html'));
+//   });
+// }
 
 // Configuración del puerto y servidor
 const PORT = process.env.PORT || 5000;
