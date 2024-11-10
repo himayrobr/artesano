@@ -51,6 +51,23 @@ exports.getProductById = async (req, res) => {
   }
 };
 
+// Obtener productos por categoría
+exports.getProductsByCategory = async (req, res) => {
+  try {
+    const { categoria } = req.params;
+    const products = await Product.find({ categoria }).populate('artesanoId', 'nombre');
+    
+    if (products.length === 0) {
+      return res.status(404).json({ message: 'No se encontraron productos para esta categoría' });
+    }
+    
+    res.status(200).json(products);
+  } catch (error) {
+    console.error('Error al obtener productos por categoría:', error);
+    res.status(500).json({ message: 'Error al obtener productos por categoría', error });
+  }
+};
+
 // Actualizar un producto
 exports.updateProduct = async (req, res) => {
   try {

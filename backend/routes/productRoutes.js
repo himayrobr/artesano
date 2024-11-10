@@ -13,6 +13,9 @@ router.get('/', productController.getAllProducts);
 // Obtener un producto por ID
 router.get('/:id', productController.getProductById);
 
+// Obtener productos por Categoria
+router.get('/categoria/:categoria', productController.getProductsByCategory);
+
 // Actualizar un producto
 router.put('/:id', productController.updateProduct);
 
@@ -21,5 +24,6 @@ router.delete('/:id', productController.deleteProduct);
 
 // Buscar productos
 router.get('/search', productController.searchProducts);
+
 
 module.exports = router;
