@@ -8,7 +8,9 @@ const workshopRoutes = require('./backend/routes/workshopRoutes');
 const productRoutes = require('./backend/routes/productRoutes');
 const userRoutes = require('./backend/routes/userRoutes');
 const orderRoutes = require('./backend/routes/orderRoutes');
-const couponRouter = require('./backend/routes/couponRoutes');
+const couponRoutes = require('./backend/routes/couponRoutes');
+const cartRoutes = require('./backend/routes/cartRoutes');
+
 
 // Conexión a la base de datos
 connect();
@@ -23,8 +25,8 @@ app.use('/workshops', workshopRoutes);
 app.use('/products', productRoutes);
 app.use('/users', userRoutes );
 app.use('/orders', orderRoutes );
-app.use('/coupons', couponRouter );
-
+app.use('/coupons', couponRoutes );
+app.use('/cart', cartRoutes );
 
 
 // if (process.env.NODE_ENV === 'production') {
