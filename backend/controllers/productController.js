@@ -102,24 +102,22 @@ exports.deleteProduct = async (req, res) => {
 };
 
 // Buscar productos por criterios (e.g., nombre, categoría)
-exports.searchProducts = async (req, res) => {
+exports.findProductsMatchingTitleOrDescription = async (req, res) => {
   try {
-    const { nombre, categoria } = req.query;
-    let query = {};
+    const { q } = req.query; // Using 'q' for both fields
+    const query = {};
 
-    if (nombre) {
-      query.nombre = new RegExp(nombre, 'i'); // Búsqueda insensible a mayúsculas
-    }
-    if (categoria) {
-      query.categoria = categoria;
+    if (q) {
+      const regex = new RegExp(q, 'i'); // Case-insensitive match
+      query.$or = [{ nombre: regex }, { descripcion: regex }];
     }
 
-    const products = await Product.find(query).populate('artesanoId', 'nombre');
+    const products = await Product.find(query);
     res.status(200).json(products);
   } catch (error) {
-    console.error('Error al buscar productos:', error);
-    res.status(500).json({ message: 'Error al buscar productos', error });
+    res.status(500).json({ error });
   }
 };
+
 
 module

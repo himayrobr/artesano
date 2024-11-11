@@ -7,11 +7,15 @@ const router = express.Router();
 // Crear un nuevo producto
 router.post('/', productController.createProduct);
 
-// Obtener todos los productos
-router.get('/', productController.getAllProducts);
+// Buscar productos
+router.get('/search', productController.findProductsMatchingTitleOrDescription);
 
 // Obtener un producto por ID
 router.get('/:id', productController.getProductById);
+
+// Obtener todos los productos
+router.get('/', productController.getAllProducts);
+
 
 // Obtener productos por Categoria
 router.get('/categoria/:categoria', productController.getProductsByCategory);
@@ -22,8 +26,6 @@ router.put('/:id', productController.updateProduct);
 // Eliminar un producto
 router.delete('/:id', productController.deleteProduct);
 
-// Buscar productos
-router.get('/search', productController.searchProducts);
 
 
 module.exports = router;
