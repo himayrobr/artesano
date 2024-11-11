@@ -86,10 +86,17 @@ body.mobile-nav-open {
     color: #fff;
     padding: 1rem 2.1rem;
 }
+
+.result ul li a {
+    text-decoration: none;
+    color: inherit; /* hereda el color definido en el contenedor .result */
+}
+
 .result ul li:hover{
     background: #757575;
     cursor: pointer;
 }
+
 .mobile-nav-toggle{
     position: relative;
 }
