@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';  
 import { Link } from 'react-router-dom';
+import { endpoints } from '../apiConfig';
 import '../styles/Home.css';
 
-// Importar imágenes
+// Import images
 import menuImg from '../storage/img/menu.svg';
 import seekerImg from '../storage/img/seeker.svg';
 import favoritesImg from '../storage/img/favorites.svg';
@@ -19,7 +20,6 @@ import settingsImg from '../storage/img/settings.svg';
 import commentsImg from '../storage/img/comments.svg';
 import customerServiceImg from '../storage/img/customerService.svg';
 
-
 import Location from '../storage/img/location.svg'
 import Taller from '../storage/img/Vector(2).png';
 import Diseño from '../storage/img/diseño.svg';
@@ -34,23 +34,63 @@ import Hojalateria from '../storage/img/sheetMetalCategory.svg';
 import Estampado from '../storage/img/stampedCategory.svg';
 import Pintura from '../storage/img/paintingTraditionalCategory.svg';
 
-
-
-// Importar lógica del componente
-import { useHomeLogic } from '../data/HomeLogic';
-
-function Home() {
-  const { menuOpen, searchTerm, filteredResults, toggleMenu, handleSearch } = useHomeLogic();
-
-  // Define menuRef
+const Home = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const menuRef = useRef(null);
+
+  // Function to toggle menu
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  // Function to perform search
+  const handleSearch = async (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    if (value.trim()) {
+      setIsLoading(true);
+      try {
+        const response = await fetch(endpoints.search(value));
+        if (!response.ok) {
+          throw new Error('Error en la búsqueda');
+        }
+        const data = await response.json();
+        setSearchResults(data);
+      } catch (error) {
+        console.error('Error al buscar:', error);
+        setSearchResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []); // Close the useEffect hook properly
 
   return (
     <div>
       <header>
         <div className="mobile-header">
           <div className="mobile-nav-toggle" >
-          <img src={menuImg} id='checkbox' alt="Menú" onClick={toggleMenu}/>
+            <img src={menuImg} id='checkbox' alt="Menú" onClick={toggleMenu}/>
             <div className="search">
               <img src={seekerImg} alt="Buscar" />
               <input
@@ -59,30 +99,44 @@ function Home() {
                 value={searchTerm}
                 onChange={handleSearch}
               />
+              {/* Contenedor de resultados */}
+              {isLoading && (
+                <div className="result">
+                  <p>Buscando...</p>
+                </div>
+              )}
+              {searchResults.length > 0 && (
+                <div className="result">
+                  <ul>
+                    {searchResults.map((item) => (
+                      <li key={item._id}>
+                        <Link to={`/producto/${item._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                          {/* Mostrar la primera imagen del array de fotos */}
+                          {item.fotos && item.fotos[0] && (
+                            <img src={item.fotos[0]} alt={item.nombre} className="product-thumbnail" />
+                          )}
+                          <span style={{ marginLeft: '50px' }}>{item.nombre} - ${item.precio}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
-            {filteredResults.length > 0 && (
-              <div className="result">
-                <ul>
-                  {filteredResults.map((item) => (
-                    <li key={item._id_}>{item.name}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
         </div>
 
-        {/* Menú lateral */}
+        {/* Sidebar menu */}
         <div className={`navigation ${menuOpen ? 'open' : ''}`} ref={menuRef}>
           <div className="mobile-top-bar">
-            {/* Botón de cerrar menú */}
+            {/* Close menu button */}
             <span className="mobile-nav-toggle close" onClick={toggleMenu}>
               <img src={profileImg} alt="Perfil" />
               <h3>SaraMartin9</h3>
             </span>
           </div>
           
-          {/* Menú de navegación */}
+          {/* Navigation menu */}
           <div className="main-navigation">
             <ul className="navigation__option">
               <li>
@@ -141,10 +195,10 @@ function Home() {
             <img src={Location} alt="Location" id='Location'/>
             <p>Ubicación de entrega actual</p>
           </div>
-            <img src={Diseño} id='diseño' />
+          <img src={Diseño} id='diseño' />
           <h2 className='tituloCategoria'>Categorías</h2>
           <div className="categorias">
-            {/* Cada div representa una categoría */}
+            {/* Each div represents a category */}
             <Link to="/categoria/Textilería" className="categoria">
               <img src={Textileria} alt="Textilería" />
               <p>Textilería</p>
@@ -183,12 +237,12 @@ function Home() {
               <img src={Estampado} alt="Estampado" />
               <p>Estampado</p>
             </Link>
-            <Link to="/categoria/Pintura tradicional" className="categoria">
-              <img src={Pintura} alt="Pintura tradicional" />
-              <p>Pintura tradicional</p>
+            <Link to="/categoria/Pintura" className="categoria">
+              <img src={Pintura} alt="Pintura" />
+              <p>Pintura</p>
             </Link>
           </div>
-            
+
           <h2 className='titulo'>Talleres del mes</h2>
           <p>¡Aprende cómo hacerlos en estos talleres educativos!</p>
           <div className="taller">
@@ -196,8 +250,7 @@ function Home() {
           </div>
         </section>
       </main>
-
-
+      
       <footer>
         <Link to="/Store">
           <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />

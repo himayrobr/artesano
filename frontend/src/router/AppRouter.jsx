@@ -14,7 +14,7 @@ const AppRouter = () => (
         <Route path="/Perfil" element={<Perfil />} />
         <Route path="/Store" element={<Store />} />
         <Route path="/categoria/:categoriaId" element={<Categoria />} />
-
+        <Route path="/search/" element={<search />} />
     </Routes>
 );
 
