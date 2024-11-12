@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Store.css';
 import menuImg from '../storage/img/menu.svg';
@@ -27,20 +27,18 @@ import imagen6 from '../storage/img/Rectangle 25.png';
 import { useHomeLogic } from '../data/StoreLogic.js';
 import orderBy from 'lodash/orderBy';
 
-const talleres = [
-  { nombre: "Arte Abedail Aller Escalante", ubicacion: "Cusco", imagen: imagen1 },
-  { nombre: "Asoc. de artesanos Tinkuy", ubicacion: "Huánuco", imagen: imagen2 },
-];
-const talleres2 = [
-  { nombre: "Retablos Jesús Urbano", ubicacion: "Ayacucho", imagen: imagen3 },
-  { nombre: "Taller Awaq Ayllus", ubicacion: "Ayacucho", imagen: imagen4 },
-];
-const talleres3 = [
-  { nombre: "Taller Sanabria Núñez", ubicacion: "Junín", imagen: imagen5 },
-  { nombre: "Lastenia Canayo", ubicacion: "Ucayali", imagen: imagen6 },
-];
+// Se añade el hook para consumir la API
+const fetchStores = async () => {
+  try {
+    const response = await fetch('http://localhost:5000/store/stores'); // Cambia la URL según sea necesario
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error al obtener los datos de las tiendas:', error);
+  }
+};
 
-function Card({ nombre, ubicacion, imagen }) {
+function Card({ nombre, ubicacion, imagen, ruta }) {
   return (
     <div className="card">
       <div className="card-content">
@@ -58,7 +56,19 @@ function Store() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filterInput, setFilterInput] = useState('');
   const [orderByValue, setOrderByValue] = useState('nombre');
-  const [sortedTalleres, setSortedTalleres] = useState([...talleres, ...talleres2, ...talleres3]);
+  const [sortedTalleres, setSortedTalleres] = useState([]);
+  const [talleresData, setTalleresData] = useState([]); // Estado para almacenar los datos obtenidos de la API
+
+  // Fetch data on component mount
+  useEffect(() => {
+    const loadStores = async () => {
+      const stores = await fetchStores();
+      setTalleresData(stores); // Almacenamos los datos en el estado
+      setSortedTalleres(stores); // Al principio, los talleres no estarán ordenados
+    };
+
+    loadStores();
+  }, []);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -81,13 +91,13 @@ function Store() {
 
     switch (orderValue) {
       case 'nombre':
-        sortedArray = orderBy(sortedTalleres, ['nombre'], ['asc']);
+        sortedArray = orderBy(talleresData, ['nombre'], ['asc']);
         break;
       case 'ubicacion':
-        sortedArray = orderBy(sortedTalleres, ['ubicacion'], ['asc']);
+        sortedArray = orderBy(talleresData, ['ubicacion'], ['asc']);
         break;
       default:
-        sortedArray = sortedTalleres;
+        sortedArray = talleresData;
     }
 
     setSortedTalleres(sortedArray);
@@ -217,35 +227,19 @@ function Store() {
 
             {/* Mostrar los talleres ordenados */}
             <div className="grid-container">
-              {sortedTalleres.map((taller, index) => (
+              {sortedTalleres.map((taller) => (
                 <Card
-                  key={index}
+                  key={taller._id}  // Usar el _id como clave
                   nombre={taller.nombre}
-                  ubicacion={taller.ubicacion}
-                  imagen={taller.imagen}
+                  ubicacion={taller.ciudad}
+                  imagen={taller.foto}
+                  ruta={`/store/${taller._id}`}  // Redirige a la tienda específica
                 />
               ))}
             </div>
           </div>
         </section>
       </main>
-      <footer>
-        <Link to="/Store">
-          <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />
-        </Link>
-        <Link to="/">
-          <img src={couponsImg} alt="Cupones" />
-        </Link>
-        <Link to="/Home">
-          <img src={categoriesImg} alt="Categorías" />
-        </Link>
-        <Link to="/">
-          <img src={shoppingCartImg} alt="Carrito de compras" />
-        </Link>
-        <Link to="/Perfil">
-          <img src={generalSettingsImg} alt="Configuración general" />
-        </Link>
-      </footer>
     </div>
   );
 }

@@ -8,7 +8,10 @@ const workshopRoutes = require('./backend/routes/workshopRoutes');
 const productRoutes = require('./backend/routes/productRoutes');
 const userRoutes = require('./backend/routes/userRoutes');
 const orderRoutes = require('./backend/routes/orderRoutes');
-const couponRouter = require('./backend/routes/couponRoutes');
+const couponRoutes = require('./backend/routes/couponRoutes');
+const cartRoutes = require('./backend/routes/cartRoutes');
+const storeRoutes = require('./backend/routes/storeRouter');
+
 
 // Conexión a la base de datos
 connect();
@@ -19,6 +22,7 @@ const app = express();
 app.use(express.json());
 app.use(cors()); 
 
+app.use('/store', storeRoutes)
 app.use('/workshops', workshopRoutes);
 app.use('/products', productRoutes);
 app.use('/users', userRoutes );
