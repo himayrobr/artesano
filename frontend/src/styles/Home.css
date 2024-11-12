@@ -151,6 +151,7 @@ body.mobile-nav-open {
 .navigation.open {
     transform: translateX(0);
     left: 0;
+    width: 60%;
 }
 /* Contenedor del campo de búsqueda */
 .search {
