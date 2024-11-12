@@ -1,4 +1,3 @@
-// RegisterByEmail.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/RegisterByEmail.css';
@@ -12,46 +11,26 @@ const RegisterByEmail = () => {
     confirmEmail: '',
     password: '',
     confirmPassword: '',
+    sex: '',
+    birthDate: '',
   });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (formData.email !== formData.confirmEmail || formData.password !== formData.confirmPassword) {
       alert("Los campos de confirmación no coinciden.");
       return;
     }
 
-    console.log("Datos enviados:", {
-      username: formData.username,
-      email: formData.email,
-      password: formData.password,
-    });
+    // Guardamos los datos en el localStorage para mantener la información
+    localStorage.setItem('registrationData', JSON.stringify(formData));
 
-    try {
-      const response = await fetch(endpoints.registerByEmail, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-
-      console.log("Respuesta del servidor:", response);
-      if (response.ok) {
-        navigate('/'); // Redirige a la página de inicio de sesión o la página principal
-      } else {
-        const data = await response.json();
-        alert(data.message);
-      }
-    } catch (error) {
-      console.error('Error en el registro:', error);
-    }
+    // Redirigir a la página de Política de Privacidad
+    navigate('/politica-privacidad');
   };
 
   return (
@@ -63,7 +42,19 @@ const RegisterByEmail = () => {
         <input type="email" name="confirmEmail" placeholder="Confirma tu correo" onChange={handleChange} required />
         <input type="password" name="password" placeholder="Contraseña" onChange={handleChange} required />
         <input type="password" name="confirmPassword" placeholder="Confirma tu contraseña" onChange={handleChange} required />
-        <button type="submit" className="submit-button">Registrarse</button>
+        
+        <label>Sexo:</label>
+        <select name="sex" onChange={handleChange} required>
+          <option value="">Selecciona</option>
+          <option value="male">Masculino</option>
+          <option value="female">Femenino</option>
+          <option value="other">Otro</option>
+        </select>
+
+        <label>Fecha de nacimiento:</label>
+        <input type="date" name="birthDate" onChange={handleChange} required />
+
+        <button type="submit" className="submit-button">Continuar</button>
       </form>
     </div>
   );

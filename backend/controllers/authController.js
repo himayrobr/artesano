@@ -14,28 +14,40 @@ const generateToken = (user) => {
 
 // Registro con correo electrónico
 exports.registerByEmail = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, photo, address, phone, type, favorites, workshopsEnrolled } = req.body;
   console.log("Datos de registro recibidos:", req.body); // Para verificar los datos
+
   try {
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ message: "El correo ya está registrado." });
     }
 
-    user = new User({ username, email, password });
-    await user.save(); // Aquí se guarda el usuario
+    // Crear usuario con los campos nuevos
+    user = new User({
+      username,
+      email,
+      password,
+      photo,
+      address,
+      phone,
+      type,
+      favorites,
+      workshopsEnrolled,
+    });
+    await user.save(); // Guardar el usuario
 
     const token = generateToken(user);
     res.status(201).json({ message: "Usuario registrado exitosamente.", token });
   } catch (error) {
-    console.error("Error en el registro:", error); // Muestra el error en consola
+    console.error("Error en el registro:", error);
     res.status(500).json({ message: "Error en el registro." });
   }
 };
 
 // Registro con número de teléfono
 exports.registerByPhone = async (req, res) => {
-  const { username, phone, password } = req.body;
+  const { username, phone, password, email, photo, address, type, favorites, workshopsEnrolled } = req.body;
   console.log("Datos de registro por teléfono recibidos:", req.body); // Para verificar los datos
 
   try {
@@ -44,20 +56,24 @@ exports.registerByPhone = async (req, res) => {
       return res.status(400).json({ message: "El número de teléfono ya está registrado." });
     }
 
-    
-    const newUser = new User({
+    // Crear usuario con los campos nuevos
+    user = new User({
       username,
       phone,
       password,
-      email: req.body.email || undefined, 
+      email,
+      photo,
+      address,
+      type,
+      favorites,
+      workshopsEnrolled,
     });
+    await user.save(); // Guardar el usuario
 
-    await newUser.save(); // Aquí se guarda el usuario
-
-    const token = generateToken(newUser);
+    const token = generateToken(user);
     res.status(201).json({ message: "Usuario registrado exitosamente.", token });
   } catch (error) {
-    console.error("Error en el registro:", error); // Muestra el error en consola
+    console.error("Error en el registro:", error);
     res.status(500).json({ message: "Error en el registro." });
   }
 };
@@ -122,18 +138,22 @@ passport.use(
       clientID: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
       callbackURL: "/auth/facebook/callback",
-      profileFields: ["id", "displayName", "photos", "email"],
+      profileFields: ["id", "displayName", "photos", "email"], // Pedir el email aquí
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
         let user = await User.findOne({ facebookId: profile.id });
+
+        // Si el usuario no existe, creamos uno nuevo
         if (!user) {
           user = await User.create({
             facebookId: profile.id,
-            email: profile.emails ? profile.emails[0].value : null,
+            email: profile.emails && profile.emails[0] ? profile.emails[0].value : null, // Verificamos si 'email' está disponible
             displayName: profile.displayName,
           });
         }
+
+        // Si ya existe, lo retornamos
         return done(null, user);
       } catch (error) {
         return done(error, null);
@@ -141,7 +161,6 @@ passport.use(
     }
   )
 );
-
 // Serializar el usuario
 passport.serializeUser((user, done) => {
   done(null, { id: user.id, displayName: user.displayName });

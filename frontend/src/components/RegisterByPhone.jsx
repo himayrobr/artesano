@@ -25,25 +25,18 @@ const RegisterByPhone = () => {
       return;
     }
 
-    try {
-      const response = await fetch(endpoints.registerByPhone, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username: formData.username,
-          phone: formData.phone,
-          password: formData.password,
-        }),
-      });
-      if (response.ok) {
-        navigate('/'); // Redirige a la página de inicio de sesión o la página principal
-      } else {
-        const data = await response.json();
-        alert(data.message);
-      }
-    } catch (error) {
-      console.error('Error en el registro:', error);
-    }
+    // Guardar datos temporales en localStorage para ser usados en PolicyPrivacy
+    localStorage.setItem(
+      'registrationData',
+      JSON.stringify({
+        username: formData.username,
+        phone: formData.phone,
+        password: formData.password,
+      })
+    );
+
+    // Redirigir a PolicyPrivacy para completar el registro
+    navigate('/politica-privacidad');
   };
 
   return (
@@ -55,7 +48,7 @@ const RegisterByPhone = () => {
         <input type="tel" name="confirmPhone" placeholder="Confirma tu celular" onChange={handleChange} required />
         <input type="password" name="password" placeholder="Contraseña" onChange={handleChange} required />
         <input type="password" name="confirmPassword" placeholder="Confirma tu contraseña" onChange={handleChange} required />
-        <button type="submit" className="submit-button">Registrarse</button>
+        <button type="submit" className="submit-button">Continuar</button>
       </form>
     </div>
   );

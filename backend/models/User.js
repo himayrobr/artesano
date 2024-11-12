@@ -9,8 +9,17 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true, sparse: true, default: null },
   phone: { type: String, unique: true, sparse: true },
   displayName: String,
-  username: String,  // Agregar el campo de nombre de usuario
+  username: { type: String, required: false },
   password: { type: String },
+  photo: { type: String, required: false, default: null },
+  address: { type: String, required: false, default: null },
+  type: { type: String, required: false, default: 'comprador' },
+  favorites: { type: [String], default: [] },
+  workshopsEnrolled: { type: [String], default: [] },
+  
+  // Nuevos campos para aceptación de términos y consentimiento
+  acceptedTerms: { type: Boolean, default: false },
+  marketingConsent: { type: Boolean, default: false },
 }, {
   collection: 'User'
 });
@@ -23,6 +32,7 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
+// Método estático para encontrar o crear un usuario
 userSchema.statics.findOneOrCreate = async function (profile) {
   const user = await this.findOne({
     $or: [
@@ -45,8 +55,15 @@ userSchema.statics.findOneOrCreate = async function (profile) {
     email: profile.email || null,
     phone: profile.phone,
     displayName: profile.displayName,
-    username: profile.username,  // Asegúrate de agregar el nombre de usuario aquí
+    username: profile.username,
     password: profile.password,
+    photo: profile.photo || null,
+    address: profile.address || null,
+    type: profile.type || 'comprador',
+    favorites: profile.favorites || [],
+    workshopsEnrolled: profile.workshopsEnrolled || [],
+    acceptedTerms: profile.acceptedTerms || false,  // Añadido
+    marketingConsent: profile.marketingConsent || false,  // Añadido
   });
 
   return newUser;

@@ -1,6 +1,6 @@
 // Home.jsx
 import React from 'react';
-import '../styles/Home.css';
+import '../styles/Login.css';
 
 const Home = () => {
   return (

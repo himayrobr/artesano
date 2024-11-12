@@ -31,8 +31,10 @@ passport.use(
       try {
         const user = await User.findOneOrCreate({
           googleId: profile.id,
-          email: profile.emails[0].value,
-          displayName: profile.displayName,
+          nombre: profile.displayName,  // Nombre completo
+          correo: profile.emails[0].value,  // Correo
+          fotoPerfil: profile.photos[0]?.value || null,  // Foto de perfil
+          tipo: 'comprador',  // Asumiendo que es un comprador por defecto
         });
         return done(null, user);
       } catch (err) {
@@ -49,14 +51,16 @@ passport.use(
       clientID: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
       callbackURL: "http://localhost:5000/auth/facebook/callback",
-      profileFields: ["id", "displayName", "email"],
+      profileFields: ["id", "displayName", "email", "photos"],  // Añadir photos para foto de perfil
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
         const user = await User.findOneOrCreate({
           facebookId: profile.id,
-          email: profile.emails ? profile.emails[0].value : null,
-          displayName: profile.displayName,
+          nombre: profile.displayName,  // Nombre completo de Facebook
+          correo: profile.emails ? profile.emails[0].value : null,  // Correo de Facebook
+          fotoPerfil: profile.photos ? profile.photos[0].value : null,  // Foto de perfil de Facebook
+          tipo: 'comprador',  // Asumiendo que es un comprador por defecto
         });
         return done(null, user);
       } catch (err) {
@@ -79,8 +83,10 @@ passport.use(
       try {
         const user = await User.findOneOrCreate({
           discordId: profile.id,
-          email: profile.email,
-          displayName: profile.username,
+          nombre: profile.username,  // Nombre de usuario de Discord
+          correo: profile.email,  // Correo de Discord
+          fotoPerfil: profile.avatar ? `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png` : null,  // Foto de perfil de Discord
+          tipo: 'comprador',  // Asumiendo que es un comprador por defecto
         });
         return done(null, user);
       } catch (err) {

@@ -1,4 +1,3 @@
-// Login.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
@@ -27,10 +26,15 @@ const Login = () => {
     }
   };
 
+  const handleRuraqLoginClick = () => {
+    navigate('/ruraq-login'); // Redirige a la página de login de Ruraq Maki
+  };
+
   return (
     <div className="login-container">
       <div className="form-container">
         <h2 className="title">Inicia sesión y continúa viendo tus artesanías favoritas</h2>
+
         <button className="auth-button facebook" onClick={() => handleAuth('facebook')}>
           <i className="fab fa-facebook"></i> Inicia sesión con Facebook
         </button>
@@ -40,9 +44,10 @@ const Login = () => {
         <button className="auth-button discord" onClick={() => handleAuth('discord')}>
           <i className="fab fa-discord"></i> Inicia sesión con Discord
         </button>
-        <button className="auth-button rurak-maki">
+        <button className="auth-button rurak-maki" onClick={handleRuraqLoginClick}>
           <i className="fas fa-user"></i> Inicia sesión con tu cuenta de Ruraq Maki
         </button>
+
         <p className="register-link">
           ¿No tienes cuenta?{' '}
           <span onClick={handleRegisterClick} style={{ cursor: 'pointer', color: '#0000EE', textDecoration: 'underline' }}>
