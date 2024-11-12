@@ -1,0 +1,124 @@
+@import url(../styles/variables.css);
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Bellota-Bold';
+}
+
+.ajustes-container {
+    width: 100%;
+    font-family: 'Bellota-Bold';
+    background-color: white;
+    min-height: 100vh;
+}
+
+.ajustes-header {
+    width: 100%;
+    height: 10vh;
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.ajustes-header h1 {
+    margin-top: -60px;
+}
+
+.RetrocederC {
+    margin-right: 1990px;
+    width: 37px;
+}
+
+.ajustes-section {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    width: 95%;
+    margin-left: 2vw;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.Global {
+    font-size: 20px;
+}
+
+.ajustes-section h2 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.ajustes-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+.ajustes-item span {
+    color: #888;
+}
+
+.ajustes-link {
+    display: block;
+    padding: 8px 0;
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+}
+
+.ajustes-link:hover {
+    text-decoration: underline;
+}
+
+/* Switch styling */
+.switch {
+    font-size: 17px;
+    position: relative;
+    display: inline-block;
+    width: 3.5em;
+    height: 2em;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(182, 182, 182);
+    transition: 0.4s;
+    border-radius: 10px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 1.4em;
+    width: 1.4em;
+    border-radius: 8px;
+    left: 0.3em;
+    bottom: 0.3em;
+    background-color: rgb(255, 255, 255);
+    transition: 0.4s;
+}
+
+.switch input:checked + .slider {
+    background-color: #21cc4c;
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(1.5em);
+}
