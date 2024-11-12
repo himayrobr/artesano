@@ -10,6 +10,7 @@ import Store from '../components/Store.jsx';
 import Categoria from '../components/Categoria.jsx';
 import Ajustes from '../components/Ajustes.jsx';
 import ConfirmacionCompra from '../components/ConfirmacionCompra.jsx';
+import Cart from '../components/Cart.jsx'
 
 const AppRouter = () => (
     <Routes>
@@ -21,6 +22,7 @@ const AppRouter = () => (
         <Route path="/search/" element={<search />} />
         <Route path="/Ajustes" element={<Ajustes />} />
         <Route path="/ConfirmacionCompra" element={<ConfirmacionCompra />} />
+        <Route path="/cart" element={<Cart />} />
     </Routes>
 );
 

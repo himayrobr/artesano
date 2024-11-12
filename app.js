@@ -13,6 +13,10 @@ const cartRoutes = require('./backend/routes/cartRoutes');
 const storeRoutes = require('./backend/routes/storeRouter');
 
 
+
+
+
+
 // Conexión a la base de datos
 connect();
 
@@ -28,7 +32,8 @@ app.use('/products', productRoutes);
 app.use('/users', userRoutes );
 app.use('/orders', orderRoutes );
 app.use('/coupons', couponRoutes );
-app.use('/cart', cartRoutes );
+app.use('/cart', cartRoutes);
+
 
 
 // if (process.env.NODE_ENV === 'production') {
