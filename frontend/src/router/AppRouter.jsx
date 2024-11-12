@@ -9,6 +9,7 @@ import LoadingPage from '../components/LoadingPage.jsx';
 import Perfil from '../components/Perfil.jsx';
 import Store from '../components/Store.jsx';
 import Categoria from '../components/Categoria.jsx';
+import Ajustes from '../components/Ajustes.jsx';
 
 const AppRouter = () => (
     <Routes>
@@ -18,6 +19,7 @@ const AppRouter = () => (
         <Route path="/Store" element={<Store />} />
         <Route path="/categoria/:categoriaId" element={<Categoria />} />
         <Route path="/search/" element={<search />} />
+        <Route path="/Ajustes" element={<Ajustes />} />
     </Routes>
 );
 
