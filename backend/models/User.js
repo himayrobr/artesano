@@ -1,14 +1,18 @@
+// backend/models/User.js
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt'); // Asegúrate de instalar bcrypt
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
   googleId: { type: String, unique: true, sparse: true },
   discordId: { type: String, unique: true, sparse: true },
   facebookId: { type: String, unique: true, sparse: true },
-  email: { type: String, unique: true, sparse: true, default: null }, // Permitir que sea null
-  phone: { type: String, unique: true, sparse: true }, // Teléfono único
+  email: { type: String, unique: true, sparse: true, default: null },
+  phone: { type: String, unique: true, sparse: true },
   displayName: String,
-  password: { type: String }, // Asegúrate de que el campo de contraseña esté presente
+  username: String,  // Agregar el campo de nombre de usuario
+  password: { type: String },
+}, {
+  collection: 'User'
 });
 
 // Encriptar la contraseña antes de guardarla
@@ -25,24 +29,24 @@ userSchema.statics.findOneOrCreate = async function (profile) {
       { googleId: profile.googleId },
       { discordId: profile.discordId },
       { facebookId: profile.facebookId },
-      { email: profile.email }, // Agregar esta condición para evitar duplicados de email
-      { phone: profile.phone }, // Asegura que el teléfono también sea único
+      { email: profile.email },
+      { phone: profile.phone },
     ]
   });
 
   if (user) {
-    return user; // Si ya existe, devuelve el usuario
+    return user;
   }
 
-  // Si no existe, crea uno nuevo
   const newUser = await this.create({
     googleId: profile.googleId,
     discordId: profile.discordId,
     facebookId: profile.facebookId,
-    email: profile.email || null, // Si no se proporciona un email, se asigna null
+    email: profile.email || null,
     phone: profile.phone,
     displayName: profile.displayName,
-    password: profile.password, // Agrega la contraseña si es necesario
+    username: profile.username,  // Asegúrate de agregar el nombre de usuario aquí
+    password: profile.password,
   });
 
   return newUser;
