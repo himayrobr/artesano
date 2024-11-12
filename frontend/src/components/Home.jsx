@@ -167,7 +167,7 @@ const Home = () => {
             <div className="navigation__division"></div>
             <ul className="navigation__option">
               <li>
-                <Link to="/">
+                <Link to="/Ajustes">
                   <img src={settingsImg} alt="Ajustes" />
                   <strong>Ajustes</strong>
                 </Link>

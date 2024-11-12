@@ -1,22 +1,23 @@
 @import url(../styles/variables.css);
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     font-family: 'Bellota-Bold';
-}   
-html, body {
-    overflow-y: auto; /* Allow scrolling */
-    -webkit-overflow-scrolling: touch;
+}
+
+.scrollable-container {
+    height: 100vh; /* Full viewport height */
+    overflow-y: auto; /* Allow vertical scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 .confirmacion-compra-container {
     width: 100%;
-    min-height: 100vh;
+    min-height: 100%;
     margin: auto;
     padding: 20px;
     text-align: center;
-    font-family: Arial, sans-serif;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -28,7 +29,6 @@ html, body {
 }
 
 h1 {
-    font-family: 'Bellota-Bold';
     font-size: 24px;
     color: #333;
     margin-top: 10px;
@@ -45,7 +45,6 @@ p {
     color: #555;
     font-size: 16px;
     margin: 15px 0;
-    font-family: 'Bellota-Bold';
 }
 
 .boton-compras {
@@ -57,7 +56,7 @@ p {
     margin-top: 10px;
     border-radius: 5px;
     cursor: pointer;
-    transition: 1s;
+    transition: 0.3s;
     text-decoration: none;
 }
 
@@ -75,9 +74,6 @@ input[type="email"] {
     background-color: #f5f5f5;
     border: none;
     border-radius: 5px;
-    font-family: 'Bellota-Bold';
-    position: relative;
-    z-index: 10; 
 }
 
 .boton-inicio {
@@ -89,7 +85,6 @@ input[type="email"] {
     text-decoration: none;
     margin-top: 20px;
     font-size: 16px;
-    font-family: 'Bellota-Bold';
 }
 
 .boton-inicio:hover {
