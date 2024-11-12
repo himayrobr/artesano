@@ -16,7 +16,9 @@ function Ajustes() {
     return (
         <div className="ajustes-container">
             <header className="ajustes-header">
+                <Link to='/Home'>
                 <img src={Return} className="RetrocederC" alt="Back" />
+                </Link>
                 <h1>Ajustes</h1>
             </header>
 
