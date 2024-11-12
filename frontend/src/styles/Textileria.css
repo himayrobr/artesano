@@ -1,0 +1,489 @@
+@import url(../styles/variables.css);
+
+.scroll-section * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Bellota-Regular";
+}
+
+/* Elimina overflow-y: scroll de body */
+.scroll-section body {
+    margin: 0;
+    padding: 0;
+
+}
+
+/* Contenedor que puede tener scroll */
+.scroll-container {
+    height: 100vh; 
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column; 
+}
+
+
+/* El contenedor de búsqueda y resultados de búsqueda */
+.result {
+    width: 85%;
+    max-height: 12.5rem;
+    background: #3D3D3D;
+    border-radius: 5px;
+    overflow-y: auto;  /* Desplazamiento cuando el contenido exceda el alto */
+    position: absolute;
+    top: 50px;
+    left: 55px;
+    z-index: 1;
+}
+
+.result ul {
+    padding: 0;
+    margin: 0;
+}
+
+.result ul li {
+    color: #fff;
+    padding: 1rem 2.1rem;
+}
+
+.result ul li:hover {
+    background: #757575;
+    cursor: pointer;
+}
+
+.mobile-nav-toggle {
+    position: relative;
+}
+.mobile-nav-toggle img:hover {
+    cursor: pointer;
+}
+
+.mobile-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100px;
+}
+
+.mobile-top-bar .mobile-nav-toggle.close {
+    width: 100%;
+}
+.mobile-top-bar .mobile-nav-toggle.close img {
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    object-fit: contain;
+    margin-left: 15px;
+}
+.mobile-top-bar .mobile-nav-toggle.close h3 {
+    color: #fff;
+}
+.mobile-top-bar .mobile-nav-toggle.close:hover {
+    cursor: pointer;
+}
+
+/* Estilo del menú lateral */
+.navigation {
+    -moz-transition: transform 0.3s ease;
+    -o-transition: transform 0.3s ease;
+    -webkit-transition: transform 0.3s ease;
+    background: #010101e2;
+    height: 100%;
+    overflow-y: auto;
+    padding-bottom: 100px;
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 20%;
+    z-index: 2;  /* Menú detrás de los campos de entrada */
+    transform: translateX(-100%);
+    transition: left 0.3s ease;
+
+}
+
+.navigation.open {
+    transform: translateX(0);
+    left: 0;
+}
+/* Contenedor del campo de búsqueda */
+.search {
+    position: relative;
+}
+
+.navigation__option li {
+    list-style: none;
+    margin-bottom: 15px;
+}
+
+.navigation__option li a {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 15px;
+}
+
+.navigation__option li a img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    transition: 0.5s;
+}
+.navigation__option li a img:hover {
+    width: 80px;
+}
+.navigation__division {
+    height: 25px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    background-image: url(../storage/img/Rectangle52.svg);
+    background-repeat: space;
+    background-size: contain;
+}
+.main2{
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    background-color: whitesmoke;
+    padding-bottom: 60px; 
+    overflow-y: auto;
+}
+.conten-todo{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 134vh;
+}
+.header {
+    width: 100%;
+    height: 12vh;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+}
+
+.retur {
+    width: 40px;
+    position: relative;
+    cursor: pointer;
+    top: 0;
+}
+
+.rombo {
+    margin-left: 32vw;
+    width: 70px;
+    z-index: -1;
+}
+
+.content-rombo {
+    font-size: 20px;
+    margin-right: 90px;
+    z-index: 1;
+    transform: translate(-80px, -10px);
+    color: black;
+}
+
+.titulo1 {
+    position: absolute;
+    left: 26%;
+    background-color: #121111;
+    color: white;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 5px;
+    width: 45vw;
+    height: 5vh;
+    z-index: 1;
+}
+
+.categorias1 {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 50vh;
+    align-items: center;
+    overflow: hidden;
+    gap: 15px;
+    justify-content: center;
+}
+
+.contenedor-categoria1 {
+    display: flex;
+    height: auto;
+    overflow-x: auto;
+    width: 80%;
+}
+
+.categoria1 {
+    color: black;
+    width: 90px;
+    height: 90px;
+    margin-top: 3px;
+    font-family: 'Bellota-Regular';
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 2vw;
+    cursor: pointer;
+}
+
+.categoria1 img {
+    width: 50px;
+    height: 50px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    padding: 5px;
+    transition: 0.5s;
+}
+
+.categoria1 img:hover {
+    background-color: #3D3D3D;
+
+}
+.categoria1.selected img {
+    background-color: #1b1b1b; 
+    border: 2px solid #000000;  
+}
+
+.categoria1 p {
+    font-size: 12px;
+    text-align: center;
+}
+
+.return {
+    position: absolute;
+    width: 40px;
+    filter: invert();
+}
+
+.taller-awaq-header {
+    position: relative;
+}
+
+.portada-image {
+    width: 100%;
+    height: auto;
+}
+
+h1 {
+    margin-top: -50px;
+    font-size: 2rem;
+    color: white;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+}
+
+.subtitulo {
+    color: white;
+    font-size: 1rem;
+    background-color: #333;
+    padding: 10px;
+}
+
+.search2 input, text {
+    width: 70vw;
+    font-size: 1.2rem;
+    height: 5vh;
+    border-radius: 10px;
+    position: relative;
+    display: flex;
+    background-color: #c6c5c5;
+    color: rgb(34, 34, 34);
+    border: none;
+}
+
+.search2 ::after {
+    border: none;
+    height: 5vh;
+}
+.Buscar {
+    position: absolute;
+    width: 20px;
+}
+#filter {
+    width: 25px;
+    align-self: flex-end;
+    position: relative;
+    margin-left: 80vw;
+    margin-top: 2vh;
+}
+
+/* Modal Select Box */
+.modal select {
+    width: 100%;
+    padding: 12px 18px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 16px;
+    color: #333;
+    margin: 15px 0;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.modal select:hover {
+    border-color: #e7d406;
+    background-color: #eaf4e2;
+}
+
+.modal select:focus {
+    border-color: #e7d406;
+    background-color: #eaf4e2;
+    outline: none;
+}
+
+.modal select option {
+    padding: 12px 18px;
+    background-color: #fff;
+    color: #333;
+    font-size: 16px;
+}
+
+.modal select option:hover {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+.modal button {
+    background-color: #191919;
+    border: none;
+    width: 120px;
+    height: 30px;
+    color: white;
+    transition: 0.5s;
+}
+
+.modal button:hover {
+    background-color: #e7d406;
+    color: #fff;
+}
+
+.producto-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas por defecto */
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+    padding: 20px 0;
+}
+
+.producto-card {
+    background-color: #000;
+    color: white;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+.producto-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.producto-card h3 {
+    font-size: 0.9rem;
+    color: white;
+    text-decoration: none;
+}
+
+.producto-card p {
+    font-size: 0.8rem;
+}
+
+/* Back Link */
+.back-link {
+    display: inline-block;
+    margin: 15px 0;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Media Queries para móviles y pantallas pequeñas */
+@media (max-width: 1280px) {
+    .producto-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en dispositivos grandes como el Galaxy S21 Ultra */
+    }
+}
+
+@media (max-width: 1024px) {
+    .producto-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en dispositivos como iPads y otros tablets */
+    }
+
+    .producto-card {
+        width: 100%; /* Permite que las tarjetas ocupen todo el ancho */
+    }
+}
+
+@media (max-width: 768px) {
+    .producto-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en pantallas pequeñas de móviles */
+    }
+
+    .producto-card {
+        width: 100%;
+    }
+
+    .portada-image {
+        width: 100%;
+        height: auto;
+    }
+
+    .titulo1 {
+        bottom: 0;
+        margin-top: -30px;
+    }
+    .categorias1{
+        padding: 50px;
+        width: 100%;
+        height: 20vh;
+    }
+    .contenedor-categoria1{
+        width: 100%;
+        height: 20vh;
+        margin-top: 8vh;
+    }
+    .search2 ::after {
+        border: none;
+        height: 5vh;
+    }
+}
+
+@media (max-width: 576px) {
+    .producto-grid {
+        grid-template-columns: 1fr; /* Una columna en pantallas más pequeñas (como móviles muy compactos) */
+    }
+
+    .producto-card {
+        width: 100%;
+    }
+
+    .titulo1 {
+        bottom: 0;
+        margin-top: -20px;
+        font-size: 10px;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    .subtitulo {
+        font-size: 0.8rem;
+    }
+
+    .portada-image {
+        width: 100%;
+        height: 50vh;
+    }
+}
