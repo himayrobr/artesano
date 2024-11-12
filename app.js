@@ -10,6 +10,7 @@ const userRoutes = require('./backend/routes/userRoutes');
 const orderRoutes = require('./backend/routes/orderRoutes');
 const couponRoutes = require('./backend/routes/couponRoutes');
 const cartRoutes = require('./backend/routes/cartRoutes');
+const storeRoutes = require('./backend/routes/storeRouter');
 
 
 // Conexión a la base de datos
@@ -21,6 +22,7 @@ const app = express();
 app.use(express.json());
 app.use(cors()); 
 
+app.use('/store', storeRoutes)
 app.use('/workshops', workshopRoutes);
 app.use('/products', productRoutes);
 app.use('/users', userRoutes );
