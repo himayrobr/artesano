@@ -19,8 +19,8 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column; 
-  }
-  
+}
+
 
 /* El contenedor de búsqueda y resultados de búsqueda */
 .result {
@@ -171,16 +171,16 @@
     justify-content: flex-start;
     font-size: 18px;
     bottom: 10px;
-  }
-  
-  #diseño {
+}
+
+#diseño {
     width: 25px;
     align-self: flex-end;
     position: relative;
     margin-right: 42vw;
-  }
-  
-  .parrafo {
+}
+
+.parrafo {
     text-align: left;
     font-size: 15px;
     margin: 5px 10px;
@@ -188,38 +188,38 @@
   }
   
   #filter {
-    width: 25px;
-    align-self: flex-end;
-    position: relative;
-    bottom: 50px;
-  }
-  /* Cuadro de Selección dentro del modal */
-.modal select {
-    width: 100%;
-    padding: 12px 18px;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    font-size: 16px;
-    color: #333;
-    margin: 15px 0;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
-  }
-  
-  /* Efecto al hacer hover en el cuadro de selección */
-  .modal select:hover {
+      width: 25px;
+      align-self: flex-end;
+      position: relative;
+      bottom: 50px;
+    }
+    /* Cuadro de Selección dentro del modal */
+    .modal select {
+        width: 100%;
+        padding: 12px 18px;
+        border: 2px solid #ccc;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        font-size: 16px;
+        color: #333;
+        margin: 15px 0;
+        transition: border-color 0.3s ease, background-color 0.3s ease;
+    }
+    
+    /* Efecto al hacer hover en el cuadro de selección */
+    .modal select:hover {
     border-color: #e7d406;
     background-color: #eaf4e2;
   }
   
   /* Efecto cuando el cuadro de selección está activo */
   .modal select:focus {
-    border-color: #e7d406;
-    background-color: #eaf4e2;
-    outline: none;
-  }
-  
-  /* Estilos para las opciones dentro del cuadro de selección */
+      border-color: #e7d406;
+      background-color: #eaf4e2;
+      outline: none;
+    }
+    
+    /* Estilos para las opciones dentro del cuadro de selección */
   .modal select option {
     padding: 12px 18px;
     background-color: #fff;
@@ -228,43 +228,49 @@
   }
   
   .modal select option:hover {
-    background-color: #f1f1f1;
-    color: #333;
-  }
-  .modal button{
-    background-color: #191919;
-    border: none;
-    width: 120px;
-    height: 30px;
-    color: white;
-    transition: 0.5s;
-  }
-  .modal button:hover{
-    background-color: #e7d406;
-    color: #fff;
-  }
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    width: 100%;
-    padding: 20px 0;
-  }
-  
-  .card {
-    background-color: #1b1a1a;
+      background-color: #f1f1f1;
+      color: #333;
+    }
+    .modal button{
+        background-color: #191919;
+        border: none;
+        width: 120px;
+        height: 30px;
+        color: white;
+        transition: 0.5s;
+    }
+    .modal button:hover{
+        background-color: #e7d406;
+        color: #fff;
+    }
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        width: 100%;
+        padding: 20px 0;
+    }
+    
+    .card {
+        background-color: #1b1a1a;
     border: 1px solid #ccc;
     border-radius: 8px;
     color: white;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-  
-  .card-content {
-    padding: 15px;
-    text-align: center;
+
+.card-content h3 {
+    color: white;
+    padding: 1px;
+    text-align:center;
+    text-decoration: none;
   }
-  
+  .card-content p{
+    color: white;
+    text-align: center;
+    text-decoration: none;
+  }
   .card-img {
     width: 100%;
     height: auto;

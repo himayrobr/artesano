@@ -27,27 +27,32 @@ import imagen6 from '../storage/img/Rectangle 25.png';
 import { useHomeLogic } from '../data/StoreLogic.js';
 import orderBy from 'lodash/orderBy';
 
+
 const talleres = [
-  { nombre: "Arte Abedail Aller Escalante", ubicacion: "Cusco", imagen: imagen1 },
-  { nombre: "Asoc. de artesanos Tinkuy", ubicacion: "Huánuco", imagen: imagen2 },
+  { nombre: "Arte Abedail Aller Escalante", ubicacion: "Cusco", imagen: imagen1, ruta: "/ArteAbedall" },
+  { nombre: "Asoc. de artesanos Tinkuy", ubicacion: "Huánuco", imagen: imagen2, ruta: "/AsociacionArtesano" },
 ];
 const talleres2 = [
-  { nombre: "Retablos Jesús Urbano", ubicacion: "Ayacucho", imagen: imagen3 },
-  { nombre: "Taller Awaq Ayllus", ubicacion: "Ayacucho", imagen: imagen4 },
+  { nombre: "Retablos Jesús Urbano", ubicacion: "Ayacucho", imagen: imagen3, ruta: "/Retablo" },
+  { nombre: "Taller Awaq Ayllus", ubicacion: "Ayacucho", imagen: imagen4, ruta: "/TallerAwaq" },
 ];
 const talleres3 = [
-  { nombre: "Taller Sanabria Núñez", ubicacion: "Junín", imagen: imagen5 },
-  { nombre: "Lastenia Canayo", ubicacion: "Ucayali", imagen: imagen6 },
+  { nombre: "Taller Sanabria Núñez", ubicacion: "Junín", imagen: imagen5, ruta: "/TallerSanabria" },
+  { nombre: "Lastenia Canayo", ubicacion: "Ucayali", imagen: imagen6, ruta: "/Lastenia" },
 ];
 
-function Card({ nombre, ubicacion, imagen }) {
+
+
+function Card({ nombre, ubicacion, imagen, ruta }) {
   return (
     <div className="card">
-      <div className="card-content">
-        <h3>{nombre}</h3>
-        <p>{ubicacion}</p>
-      </div>
-      <img src={imagen} alt={nombre} className="card-img" />
+      <Link to={ruta}>
+        <div className="card-content">
+          <h3>{nombre}</h3>
+          <p>{ubicacion}</p>
+        </div>
+        <img src={imagen} alt={nombre} className="card-img" />
+      </Link>
     </div>
   );
 }
@@ -215,7 +220,6 @@ function Store() {
               </div>
             )}
 
-            {/* Mostrar los talleres ordenados */}
             <div className="grid-container">
               {sortedTalleres.map((taller, index) => (
                 <Card
@@ -223,6 +227,7 @@ function Store() {
                   nombre={taller.nombre}
                   ubicacion={taller.ubicacion}
                   imagen={taller.imagen}
+                  ruta={taller.ruta}
                 />
               ))}
             </div>

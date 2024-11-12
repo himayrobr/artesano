@@ -1,0 +1,28 @@
+@font-face {
+    font-family: "Bellota-Bold";
+    src: url(../storage/font/bellota/Bellota-Bold.ttf);
+}
+@font-face {
+    font-family: "BellotaText-Bold";
+    src: url(../storage/font/bellota/BellotaText-Bold.ttf);
+}
+@font-face {
+    font-family: "Bellota-BoldItalic";
+    src: url(../storage/font/bellota/Bellota-BoldItalic.ttf);
+}
+@font-face {
+    font-family: "Bellota-Italic";
+    src: url(../storage/font/bellota/Bellota-Italic.ttf);
+}
+@font-face {
+    font-family: "Bellota-Light";
+    src: url(../storage/font/bellota/Bellota-Light.ttf);
+}
+@font-face {
+    font-family: "Bellota-LightItalic";
+    src: url(../storage/font/bellota/Bellota-LightItalic.ttf);
+}
+@font-face {
+    font-family: "Bellota-Regular";
+    src: url(../storage/font/bellota/Bellota-Regular.ttf);
+}
