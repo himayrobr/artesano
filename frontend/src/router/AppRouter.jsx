@@ -24,7 +24,7 @@ import Orfeteria from '../components/Orfeteria.jsx';
 import Pintura from '../components/Pintura.jsx';
 import TallaMadera from '../components/TallaMadera.jsx';
 import TallaPiedra from '../components/TallaPiedra.jsx';
-
+import ConfirmacionCompra from '../components/ConfirmacionCompra.jsx';
 
 
 
@@ -54,6 +54,7 @@ const AppRouter = () => (
         <Route path="/Lastenia" element={<Lastenia />} />
         <Route path="/Retablo" element={<Retablo />} />
         <Route path="/TallerSanabria" element={<TallerSanabria />} />
+        <Route path="/ConfirmacionCompra" element={<ConfirmacionCompra />} />
     </Routes>
 );
 
