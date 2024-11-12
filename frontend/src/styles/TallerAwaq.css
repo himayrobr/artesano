@@ -21,13 +21,15 @@
     font-family: '';
 }
 .titulo1{
+    top: 0;
+    margin-top: 0.1px;
+    font-size: 1rem;
     position: absolute;
+    background-color: #212120;
     left: 26%;
-    background-color: #121111;
     color: white;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-    padding: 5px;
     width: 45vw;
     height: 5vh;
     z-index: 1;
