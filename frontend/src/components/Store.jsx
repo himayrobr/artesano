@@ -27,8 +27,6 @@ import imagen6 from '../storage/img/Rectangle 25.png';
 import { useHomeLogic } from '../data/StoreLogic.js';
 import orderBy from 'lodash/orderBy';
 
-//ineidy no olvide hacer cimmi¡¡
-
 // Se añade el hook para consumir la API
 const fetchStores = async () => {
   try {
