@@ -1,0 +1,55 @@
+/* Registro.css */
+.registro-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('ruta-de-imagen-de-fondo.jpg');
+    background-size: cover;
+    color: #333;
+  }
+  
+  .form-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    width: 300px;
+  }
+  
+  .title {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+  
+  .auth-button {
+    width: 100%;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    color: #333;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .auth-button:hover {
+    background-color: #eee;
+  }
+  
+  .login-link {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .login-link a {
+    color: #333;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  

@@ -20,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "concurrently": "^6.0.2",
@@ -30,7 +31,7 @@
     "express-session": "^1.18.1",
     "express-validator": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.7.3",
+    "mongoose": "^8.8.1",
     "passport": "^0.7.0",
     "passport-discord": "^0.1.4",
     "passport-facebook": "^3.0.0",
