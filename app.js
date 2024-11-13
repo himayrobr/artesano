@@ -11,7 +11,6 @@ const productRoutes = require('./backend/routes/productRoutes');
 const userRoutes = require('./backend/routes/userRoutes');
 const orderRoutes = require('./backend/routes/orderRoutes');
 const couponRoutes = require('./backend/routes/couponRoutes');
-const cartRoutes = require('./backend/routes/cartRoutes');
 const storeRoutes = require('./backend/routes/storeRouter');
 //claro ineidy 
 connect();
@@ -38,7 +37,7 @@ app.use('/products', productRoutes);
 app.use('/users', userRoutes );
 app.use('/orders', orderRoutes );
 app.use('/coupons', couponRoutes );
-app.use('/cart', cartRoutes);
+
 
 // Middleware de sesiones para Passport (autenticación)
 app.use(

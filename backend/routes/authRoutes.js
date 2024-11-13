@@ -47,3 +47,4 @@ router.post("/register/email", registerByEmail);
 router.post("/register/phone", registerByPhone);
 
 module.exports = router;
+

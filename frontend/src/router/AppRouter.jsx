@@ -12,6 +12,7 @@ import RegisterByEmail from '../components/RegisterByEmail.jsx';
 import RegisterByPhone from '../components/RegisterByPhone.jsx';
 import RuraqLogin from '../components/RuraqLogin.jsx';
 import PrivacyPolicy from '../components/PrivacyPolicy.jsx';
+import Cart from '../components/Cart';
 
 // Puedes agregar un componente de inicio aquí si lo deseas
 const AppRouter = () => (
@@ -33,6 +34,7 @@ const AppRouter = () => (
     {/* Otras rutas */}
     <Route path="/loading" element={<LoadingPage />} />
     <Route path="/textileria" element={<Textileria />} />
+    <Route path="/cart" element={<Cart />} />
   </Routes>
 );
 
