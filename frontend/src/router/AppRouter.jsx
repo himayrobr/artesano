@@ -16,6 +16,7 @@ import TallerAwaq from '../components/TallerAwaq.jsx';
 import Ajustes from '../components/Ajustes.jsx';
 import Comentarios from '../components/Comentarios.jsx';
 import AtencionCliente from '../components/AtencionCliente.jsx';
+import Cart from '../components/Cart';
 
 // Puedes agregar un componente de inicio aquí si lo deseas
 const AppRouter = () => (
@@ -41,6 +42,7 @@ const AppRouter = () => (
     <Route path="/Ajustes" element={<Ajustes /> } />
     <Route path="/Comentarios" element={<Comentarios /> } />  
     <Route path="/AtencionCliente" element={<AtencionCliente />} />
+    <Route path="/cart" element={<Cart />} />
   </Routes>
 );
 
