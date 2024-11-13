@@ -113,7 +113,7 @@ function Perfil() {
                 </Link>
               </li>
               <li>
-                <Link to="/">
+                <Link to="/TallerEducativo">
                   <img src={workshopImg} alt="Talleres" />
                   <strong>Talleres</strong>
                 </Link>
