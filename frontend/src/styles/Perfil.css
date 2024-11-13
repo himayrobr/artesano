@@ -171,12 +171,12 @@ body.mobile-nav-open {
 /* Estilo de los campos de perfil */
 .profile-field {
     display: flex;
-    align-items: center;
-    margin-bottom: 15px;
+    align-items: center; 
 }
 
 .profile-field label {
     width: 100px;
+    height: 10px;
     font-weight: bold;
 }
 
@@ -185,7 +185,8 @@ body.mobile-nav-open {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-right: 5px;
+    margin-left: 5px;
+    
 }
 
 .cell-number {

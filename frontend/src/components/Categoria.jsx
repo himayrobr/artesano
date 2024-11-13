@@ -85,11 +85,11 @@ function Categoria() {
             <img src={Return} alt="return" className='retur' />
           </button>
           <img className='rombo' src={Rombo} alt="Rombo" />
-          <h1 className='content-rombo'>Categorias</h1>
+          <h1 className='category'>Categorias</h1>
         </header>
-        <div className="categorias1">
+        <div className="categorias1-categoria">
                 <div className='contenedor-categoria1'>
-                    <div 
+                    <div
                         className={`categoria1 ${selectedCategory === 'Textileria' ? 'selected' : ''}`} 
                         onClick={() => handleCategoryClick('Textileria')}
                     >
@@ -160,22 +160,22 @@ function Categoria() {
                         <p>Pintura tradicional</p>
                     </div>
                 </div>
-            </div>
+        </div>
 
 
-        <section className="productos">
+        <section className="productos-categorias">
           <h2>Artesanías</h2>
           <div className="search2">
-            <img src={seekerImg} alt="Buscar" className='Buscar' />
+            <img src={seekerImg} alt="Buscar" className='Buscar-categoria' />
             <input
               type="text"
               placeholder="Buscar taller..."
               value={filterInput}
               onChange={handleSearchChange}
             />
+          <img src={Filter} alt="Filtro" className="filter-categorias" onClick={toggleModal} />
           </div>
 
-          <img src={Filter} alt="Filtro" id="filter" onClick={toggleModal} />
 
           {isModalOpen && (
             <div className="modal">
@@ -201,26 +201,29 @@ function Categoria() {
               <p>{error}</p>
             </div>
           ) : (
-            <div className="producto-grid">
-              {sortedTalleres.length > 0 ? (
-                sortedTalleres.map((producto) => (
-                  <div key={producto._id} className="producto-card">
-                    <Link to={producto.ruta || '/'}>
+            <div className="producto-grid-categorias ">
+            {sortedTalleres.length > 0 ? (
+              sortedTalleres.map((producto) => (
+                <div key={producto._id} className="producto-card-categorias ">
+                  <Link to={producto.ruta || '/'}>
+                    <div className="imagen-container-categorias ">
                       <img 
                         src={producto.fotos?.[0] || productoPlaceholder} 
                         alt={producto.nombre} 
                         onError={(e) => { e.target.src = productoPlaceholder; }} 
                       />
-                      <h3>{producto.nombre}</h3>
-                    </Link>
-                    <p>{producto.ubicacion}</p>
-                    <p>S/.{producto.precio}</p>
-                  </div>
-                ))
-              ) : (
-                <p>No hay productos disponibles en esta categoría.</p>
-              )}
-            </div>
+                    </div>
+                    <h3>{producto.nombre}</h3>
+                  </Link>
+                  <p>{producto.ubicacion}</p>
+                  <p>S/.{producto.precio}</p>
+                </div>
+              ))
+            ) : (
+              <p>No hay productos disponibles en esta categoría.</p>
+            )}
+          </div>
+
           )}
         </section>
       </div>
