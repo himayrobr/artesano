@@ -179,7 +179,7 @@ const Home = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/">
+                <Link to="/AtencionCliente">
                   <img src={customerServiceImg} alt="Atención al cliente" />
                   <strong>Atención al cliente</strong>
                 </Link>
