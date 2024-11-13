@@ -1,27 +1,52 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
+import axios from 'axios';
 import { endpoints } from '../apiConfig';
 
 const RuraqLogin = () => {
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Aquí iría la lógica de autenticación con el backend para el login manual
-    console.log('Login with', emailOrPhone, password);
+    
+    try {
+      // Realizar solicitud de login al backend
+      const response = await axios.post(
+        endpoints.login,
+        { emailOrPhone, password },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+
+      // Guardar token en localStorage y redirigir al home
+      const token = response.data.token;
+      localStorage.setItem('authToken', token);
+      navigate('/home');
+    } catch (error) {
+      // Manejo de errores detallado
+      console.error('Error al iniciar sesión:', error.response || error.message);
+
+      if (error.response && error.response.status === 400) {
+        setErrorMessage('Credenciales incorrectas. Verifica tu nombre de usuario y contraseña.');
+      } else {
+        setErrorMessage('Error al iniciar sesión. Por favor, intenta de nuevo más tarde.');
+      }
+    }
   };
 
   const handleRegisterClick = () => {
-    navigate('/register'); // Redirige a la página de registro
+    navigate('/register');
   };
 
   return (
     <div className="login-container">
       <div className="form-container">
         <h2 className="title">Inicia sesión con tu cuenta de Ruraq Maki</h2>
+
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         <form onSubmit={handleLogin}>
           <input

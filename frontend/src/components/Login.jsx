@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import { endpoints } from '../apiConfig';
@@ -11,6 +11,7 @@ const Login = () => {
   };
 
   const handleAuth = (provider) => {
+    // Redirigir al backend para el inicio de sesión con el proveedor seleccionado
     switch (provider) {
       case 'facebook':
         window.location.href = `${endpoints.register}/facebook`;
@@ -29,6 +30,27 @@ const Login = () => {
   const handleRuraqLoginClick = () => {
     navigate('/ruraq-login'); // Redirige a la página de login de Ruraq Maki
   };
+
+  // Función para manejar la respuesta de autenticación con el token
+  const handleAuthCallback = () => {
+    // Verificar si hay un token en la URL (esto es lo que se espera de la redirección del backend)
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token'); // Obtén el token de la URL
+    
+    if (token) {
+      // Almacenar el token en localStorage
+      localStorage.setItem('authToken', token);
+      console.log("Token guardado:", token);
+      // Redirigir al home o página de destino
+      navigate('/home');
+    }
+  };
+
+  // Uso de useEffect para manejar el callback de autenticación en el inicio de la página
+  useEffect(() => {
+    // Verifica si estamos en el flujo de autenticación con un token en la URL
+    handleAuthCallback();
+  }, []); // Esto se ejecutará solo cuando el componente se monte
 
   return (
     <div className="login-container">
