@@ -13,9 +13,9 @@ const orderRoutes = require('./backend/routes/orderRoutes');
 const couponRoutes = require('./backend/routes/couponRoutes');
 const cartRoutes = require('./backend/routes/cartRoutes');
 const storeRoutes = require('./backend/routes/storeRouter');
-
+//claro ineidy 
 connect();
-
+//easy cherry
 // Inicialización de Express
 const app = express();
 
