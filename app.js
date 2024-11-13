@@ -1,8 +1,10 @@
 const express = require("express");
 const path = require("path");
-require('dotenv').config();
-const connect = require('./backend/helpers/connect'); 
-const cors = require('cors'); 
+require("dotenv").config();
+const connect = require("./backend/helpers/connect");
+const cors = require("cors");
+const session = require("express-session");
+const passport = require("./backend/middleware/passportConfig");
 
 const workshopRoutes = require('./backend/routes/workshopRoutes');
 const productRoutes = require('./backend/routes/productRoutes');
@@ -12,19 +14,23 @@ const couponRoutes = require('./backend/routes/couponRoutes');
 const cartRoutes = require('./backend/routes/cartRoutes');
 const storeRoutes = require('./backend/routes/storeRouter');
 
-
-
-
-
-
-// Conexión a la base de datos
 connect();
 
+// Inicialización de Express
 const app = express();
 
-// Middleware
+// Middleware de CORS
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Content-Type,Authorization",
+  })
+);
+
+// Middleware de JSON
 app.use(express.json());
-app.use(cors()); 
 
 app.use('/store', storeRoutes)
 app.use('/workshops', workshopRoutes);
@@ -34,22 +40,28 @@ app.use('/orders', orderRoutes );
 app.use('/coupons', couponRoutes );
 app.use('/cart', cartRoutes);
 
+// Middleware de sesiones para Passport (autenticación)
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "default_session_secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 1000 * 60 * 60 * 24,
+    },
+  })
+);
 
+// Inicializar Passport y usar sesiones
+app.use(passport.initialize());
+app.use(passport.session());
 
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(express.static(path.join(__dirname, 'dist', 'client')));
-//   app.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'dist', 'client', 'index.html'));
-//   });
-// }
+// Rutas de autenticación
+const authRoutes = require("./backend/routes/authRoutes");
+app.use("/auth", authRoutes);
 
-// Configuración del puerto y host
-const PORT = process.env.EXPRESS_PORT || 5000;
-const HOST = process.env.EXPRESS_HOST_NAME || 'localhost';
-
-// Inicio del servidor
-app.listen(PORT, HOST, () => {
-  console.log(`Servidor corriendo en http://${HOST}:${PORT}`);
-});
-
-//
+// Configuración del puerto y servidor
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Servidor ejecutándose en el puerto ${PORT}`));
