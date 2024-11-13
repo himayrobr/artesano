@@ -1,0 +1,121 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.contenedor-comentarios{
+    display: flex;
+    background-color: white;
+    width: 100%;
+    min-height: 100vh;
+}
+.contenedor-main {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+.header h1{
+    color: rgb(3, 3, 3);
+    font-size: 16px;
+    text-align: center;
+    margin-top: 3vh;
+}
+
+.retur {
+    width: 34px;
+    cursor: pointer;
+}
+
+.rombo {
+    position: absolute;
+    margin-left: 40vw;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+}
+
+.content-rombo {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+    margin-left: 50vw;
+}
+
+.problemas-frecuentes h2,
+.otro h2 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.problema-btn {
+    display: block;
+    width: 98%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #e0e0e0;
+    text-align: left;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1vw;
+}
+
+.otro .textarea-comentario {
+    width: 98%;
+    height: 80px;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    margin-left: 1vw;
+    font-size: 14px;
+    color: #333;
+}
+
+.botones {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.btn-adjuntar, .btn-enviar {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-adjuntar {
+    background-color: #e0e0e0;
+    color: #333;
+    margin-left: 1vw;
+}
+
+.btn-enviar {
+    background-color: #222325;
+    color: #fff;
+    margin-right: 1vw;
+    transition: 1s;
+}
+.btn-enviar:hover{
+    background-color: #bc9f0d;
+}

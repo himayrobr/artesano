@@ -173,7 +173,7 @@ const Home = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/">
+                <Link to="/Comentarios">
                   <img src={commentsImg} alt="Comentarios" />
                   <strong>Comentarios</strong>
                 </Link>
