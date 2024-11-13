@@ -27,7 +27,7 @@ import TallaPiedra from '../components/TallaPiedra.jsx';
 import ConfirmacionCompra from '../components/ConfirmacionCompra.jsx';
 import Ajustes from '../components/Ajustes.jsx';
 import Comentarios from '../components/Comentarios.jsx';
-
+import AtencionCliente from '../components/AtencionCliente.jsx';
 
 
 
@@ -57,6 +57,7 @@ const AppRouter = () => (
         <Route path="/ConfirmacionCompra" element={<ConfirmacionCompra />} />
         <Route path="/Ajustes" element={<Ajustes />} />
         <Route path= "Comentarios" element={<Comentarios />} />
+        <Route path="/AtencionCliente" element={<AtencionCliente />} />
     </Routes>
 );
 
