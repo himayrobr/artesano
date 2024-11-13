@@ -13,6 +13,9 @@ import RegisterByPhone from '../components/RegisterByPhone.jsx';
 import RuraqLogin from '../components/RuraqLogin.jsx';
 import PrivacyPolicy from '../components/PrivacyPolicy.jsx';
 import TallerAwaq from '../components/TallerAwaq.jsx';
+import Ajustes from '../components/Ajustes.jsx';
+import Comentarios from '../components/Comentarios.jsx';
+import AtencionCliente from '../components/AtencionCliente.jsx';
 
 // Puedes agregar un componente de inicio aquí si lo deseas
 const AppRouter = () => (
@@ -35,6 +38,9 @@ const AppRouter = () => (
     {/* Otras rutas */}
     <Route path="/loading" element={<LoadingPage />} />
     <Route path="/textileria" element={<Textileria />} />
+    <Route path="/Ajustes" element={<Ajustes /> } />
+    <Route path="/Comentarios" element={<Comentarios /> } />  
+    <Route path="/AtencionCliente" element={<AtencionCliente />} />
   </Routes>
 );
 
