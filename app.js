@@ -6,9 +6,16 @@ const cors = require("cors");
 const session = require("express-session");
 const passport = require("./backend/middleware/passportConfig");
 
-// Conexión a la base de datos MongoDB
+const workshopRoutes = require('./backend/routes/workshopRoutes');
+const productRoutes = require('./backend/routes/productRoutes');
+const userRoutes = require('./backend/routes/userRoutes');
+const orderRoutes = require('./backend/routes/orderRoutes');
+const couponRoutes = require('./backend/routes/couponRoutes');
+const cartRoutes = require('./backend/routes/cartRoutes');
+const storeRoutes = require('./backend/routes/storeRouter');
+//claro ineidy 
 connect();
-
+//easy cherry
 // Inicialización de Express
 const app = express();
 
@@ -24,6 +31,14 @@ app.use(
 
 // Middleware de JSON
 app.use(express.json());
+
+app.use('/store', storeRoutes)
+app.use('/workshops', workshopRoutes);
+app.use('/products', productRoutes);
+app.use('/users', userRoutes );
+app.use('/orders', orderRoutes );
+app.use('/coupons', couponRoutes );
+app.use('/cart', cartRoutes);
 
 // Middleware de sesiones para Passport (autenticación)
 app.use(
