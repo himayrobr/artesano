@@ -1,88 +1,103 @@
-// Agregar producto al carrito
+const mongoose = require('mongoose');
+const Cart = require('../models/cartModel');
+const Product = require('../models/productModel');
+
+// Obtener el carrito del usuario
+exports.getCart = async (req, res) => {
+  // Asumiendo que tienes un middleware que agrega el id del usuario
+  const userId = 'user_test_id';  // Cambia esto a un valor dinámico si es necesario
+
+  try {
+    // Asegúrate de que el userId es un ObjectId válido
+    const objectIdUserId = mongoose.Types.ObjectId(userId);
+
+    const cart = await Cart.findOne({ userId: objectIdUserId }).populate('items.productId');
+    if (!cart) {
+      return res.status(200).json({ items: [], total: 0 });
+    }
+    res.status(200).json(cart);
+  } catch (error) {
+    console.error('Error al obtener el carrito:', error);
+    res.status(500).json({ mensaje: 'Error al obtener el carrito', error });
+  }
+};
+
+// Agregar un producto al carrito
 exports.addItemToCart = async (req, res) => {
-  const userId = req.user.id;
+  const userId = 'user_test_id';  // Cambia esto a un valor dinámico si es necesario
   const { productId, cantidad } = req.body;
 
   try {
+    // Asegúrate de que el userId es un ObjectId válido
+    const objectIdUserId = mongoose.Types.ObjectId(userId);
     const product = await Product.findById(productId);
     if (!product) return res.status(404).json({ mensaje: 'Producto no encontrado' });
 
-    let cart = await Cart.findOne({ userId });
-    const precio = product.precio;
-
+    let cart = await Cart.findOne({ userId: objectIdUserId });
     if (cart) {
-      const itemIndex = cart.items.findIndex(item => item.productId == productId);
+      // Si el carrito existe, actualiza la cantidad o agrega el nuevo producto
+      const itemIndex = cart.items.findIndex(item => item.productId.equals(productId));
 
       if (itemIndex > -1) {
+        // Producto ya existe en el carrito, actualiza la cantidad
         cart.items[itemIndex].cantidad += cantidad;
-        cart.items[itemIndex].precio = precio;
       } else {
-        cart.items.push({ productId, cantidad, precio });
+        // Producto no existe en el carrito, agrégalo
+        cart.items.push({ productId, cantidad });
       }
     } else {
+      // Si no existe el carrito, crea uno nuevo
       cart = new Cart({
-        userId,
-        items: [{ productId, cantidad, precio }],
-        total: precio * cantidad,
+        userId: objectIdUserId,  // Usa ObjectId aquí
+        items: [{ productId, cantidad }],
       });
     }
 
-    cart.total = cart.items.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+    // Recalcula el total del carrito
+    cart.total = await calculateCartTotal(cart.items);
+
     await cart.save();
     res.status(200).json(cart);
   } catch (error) {
+    console.error('Error al agregar producto al carrito:', error);
     res.status(500).json({ mensaje: 'Error al agregar al carrito', error });
   }
 };
 
-// Quitar producto del carrito
+// Eliminar un producto del carrito
 exports.removeItemFromCart = async (req, res) => {
-  const userId = req.user.id;
-  const { productId } = req.body;
+  const userId = 'user_test_id';  // Cambia esto a un valor dinámico si es necesario
+  const { productId } = req.params;
 
   try {
-    let cart = await Cart.findOne({ userId });
+    // Asegúrate de que el userId es un ObjectId válido
+    const objectIdUserId = mongoose.Types.ObjectId(userId);
 
-    if (cart) {
-      const itemIndex = cart.items.findIndex(item => item.productId == productId);
+    let cart = await Cart.findOne({ userId: objectIdUserId });
+    if (!cart) return res.status(404).json({ mensaje: 'Carrito no encontrado' });
 
-      if (itemIndex > -1) {
-        cart.items.splice(itemIndex, 1);
-        cart.total = cart.items.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
-        await cart.save();
-        return res.status(200).json(cart);
-      }
-      
-      return res.status(404).json({ mensaje: 'Producto no encontrado en el carrito' });
-    }
-
-    res.status(404).json({ mensaje: 'Carrito no encontrado' });
-  } catch (error) {
-    res.status(500).json({ mensaje: 'Error al quitar del carrito', error });
-  }
-};
-
-// Aplicar cupón de descuento
-exports.applyCoupon = async (req, res) => {
-  const userId = req.user.id;
-  const { couponCode } = req.body;
-
-  try {
-    const coupon = await Coupon.findOne({ code: couponCode });
-
-    if (!coupon) return res.status(404).json({ mensaje: 'Cupón no encontrado' });
-
-    let cart = await Cart.findOne({ userId });
-
-    if (cart) {
-      const discount = coupon.discount;
-      cart.total = cart.total - (cart.total * discount / 100);
+    const itemIndex = cart.items.findIndex(item => item.productId.equals(productId));
+    if (itemIndex > -1) {
+      cart.items.splice(itemIndex, 1);
+      // Recalcula el total del carrito
+      cart.total = await calculateCartTotal(cart.items);
       await cart.save();
-      return res.status(200).json(cart);
+      res.status(200).json(cart);
+    } else {
+      res.status(404).json({ mensaje: 'Producto no encontrado en el carrito' });
     }
-
-    res.status(404).json({ mensaje: 'Carrito no encontrado' });
   } catch (error) {
-    res.status(500).json({ mensaje: 'Error al aplicar el cupón', error });
+    console.error('Error al eliminar producto del carrito:', error);
+    res.status(500).json({ mensaje: 'Error al eliminar del carrito', error });
   }
 };
+
+// Función para calcular el total del carrito
+async function calculateCartTotal(items) {
+  let total = 0;
+  for (let item of items) {
+    const product = await Product.findById(item.productId);
+    total += product.precio * item.cantidad;
+  }
+  return total;
+}

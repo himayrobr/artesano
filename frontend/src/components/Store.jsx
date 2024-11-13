@@ -23,7 +23,7 @@ import generalSettingsImg from '../storage/img/generalSettings.svg'; // Asegúra
 import { useHomeLogic } from '../data/StoreLogic.js';
 import orderBy from 'lodash/orderBy';
 
-// Función para obtener las tiendas
+// Se añade el hook para consumir la API
 const fetchStores = async () => {
   try {
     const response = await fetch('http://localhost:5000/store/stores'); // Cambia la URL según sea necesario
