@@ -20,13 +20,18 @@ EXPRESS_HOST="localhost"
 EXPRESS_PORT=5000
 MONGO_URI="mongodb+srv://topetusam:campus2023@mongo-learn-101.ij8au6n.mongodb.net/"
 MONGO_DB="artesanias"
-JWT_SECRET=your_jwt_secret
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-FACEBOOK_APP_ID=your_facebook_app_id
-FACEBOOK_APP_SECRET=your_facebook_app_secret
-DISCORD_CLIENT_ID=your_discord_client_id
-DISCORD_CLIENT_SECRET=your_discord_client_secret
+GOOGLE_CLIENT_ID=516537379956-0qepjc7l5vuinnuhcgshvbdldgtsuuof.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+
+DISCORD_CLIENT_ID=1300935621199663124
+DISCORD_CLIENT_SECRET=oJT2CEQZg2oZja-E_KrBhNm2Vr3sVVsQ
+
+FACEBOOK_CLIENT_ID=894385772785638
+FACEBOOK_CLIENT_SECRET=01358c2b25722e0c4865ab6c68870a93
+
+SESSION_SECRET=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+MONGO_URI=mongodb+srv://topetusam:campus2023@mongo-learn-101.ij8au6n.mongodb.net/artesanias
+JWT_SECRET=P7kR9RynmAN2J8P-7UWj-xukQjbo8Hga5lEEanWVCnY
 ```
 
 ### **Instalacion**
