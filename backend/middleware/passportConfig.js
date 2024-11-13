@@ -2,7 +2,7 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const DiscordStrategy = require("passport-discord").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
-const User = require("../models/User");
+const User = require("../models/userModel");
 
 passport.serializeUser((user, done) => {
   console.log("Serializando usuario:", user);
