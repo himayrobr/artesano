@@ -12,6 +12,7 @@ import RegisterByEmail from '../components/RegisterByEmail.jsx';
 import RegisterByPhone from '../components/RegisterByPhone.jsx';
 import RuraqLogin from '../components/RuraqLogin.jsx';
 import PrivacyPolicy from '../components/PrivacyPolicy.jsx';
+import TallerAwaq from '../components/TallerAwaq.jsx';
 
 // Puedes agregar un componente de inicio aquí si lo deseas
 const AppRouter = () => (
@@ -28,6 +29,7 @@ const AppRouter = () => (
     <Route path="/home" element={<Home />} />
     <Route path="/perfil" element={<Perfil />} />
     <Route path="/store" element={<Store />} />
+    <Route path="/taller/:id" element={<TallerAwaq />} />
     <Route path="/categoria/:categoriaId" element={<Categoria />} />
     
     {/* Otras rutas */}
