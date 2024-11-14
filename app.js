@@ -67,7 +67,6 @@ app.use("/api", chatRoutes); // Ruta del chat configurada como "/api/chat"
 
 // Socket.io para chat en tiempo real
 io.on("connection", (socket) => {
-  console.log("Usuario conectado:", socket.id);
 
   socket.on("sendMessage", (message) => {
     console.log("Mensaje recibido:", message);
@@ -75,7 +74,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("Usuario desconectado:", socket.id);
   });
 });
 

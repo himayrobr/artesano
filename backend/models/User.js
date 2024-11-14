@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   facebookId: { type: String, unique: true, sparse: true },
   email: { type: String, unique: true, sparse: true, default: null },
   phone: { type: String, unique: true, sparse: true },
-  username: { type: String, unique: true, sparse: true },  // Asegúrate que el username sea único
+  username: { type: String, unique: true, sparse: true },  
   password: { type: String },
   photo: { type: String, required: false, default: null },
   address: { type: String, required: false, default: null },
@@ -23,23 +23,26 @@ const userSchema = new mongoose.Schema({
 
 // Middleware para manejar la creación del username real desde Google, Facebook o Discord
 userSchema.pre('save', function(next) {
-  // Si el username está vacío o es null, intentamos asignar uno con el nombre real
+  // Verificamos si el username está vacío antes de asignarlo
   if (!this.username) {
-    // Si tiene Google ID, asignamos el nombre real de Google
+    
     if (this.googleId) {
-      this.username = this.displayName || `google_${this.googleId}`;
+      // Si es Google, creamos un username único basado en el id de Google
+      this.username = `google_${this.googleId}`;
     } 
-    // Si tiene Discord ID, asignamos el nombre real de Discord
+    
     else if (this.discordId) {
-      this.username = this.username || this.displayName || `discord_${this.discordId}`;
+      // Si es Discord, usamos el displayName o el id
+      this.username = this.username || `discord_${this.discordId}`;
     } 
-    // Si tiene Facebook ID, asignamos el nombre real de Facebook
+    
     else if (this.facebookId) {
-      this.username = this.username || this.displayName || `facebook_${this.facebookId}`;
+      // Si es Facebook, usamos el id de Facebook
+      this.username = this.username || `facebook_${this.facebookId}`;
     }
   }
 
-  // Si aún no tiene un username asignado, lo generamos basado en el timestamp
+  // Si no se genera username, se asigna un valor por defecto único basado en la fecha
   if (!this.username) {
     this.username = `user_${Date.now()}`;
   }
