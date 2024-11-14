@@ -28,10 +28,14 @@ function Categoria() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filterInput, setFilterInput] = useState('');
   const [orderByValue, setOrderByValue] = useState('nombre');
-  const [sortedTalleres, setSortedTalleres] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Estados para el buscador
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
     const fetchProductos = async () => {
@@ -46,7 +50,9 @@ function Categoria() {
         }
         
         const data = await response.json();
-        setProductos(Array.isArray(data) ? data : []);
+        const products = Array.isArray(data) ? data : [];
+        setProductos(products);
+        setFilteredProducts(products);
       } catch (error) {
         console.error('Error al obtener los productos:', error);
         setError('Error al cargar los productos. Por favor, intente nuevamente.');
@@ -60,21 +66,50 @@ function Categoria() {
     }
   }, [categoriaId]);
 
+  // Actualiza los resultados de búsqueda en base al término ingresado
   useEffect(() => {
-    let filteredTalleres = [...productos];
-    if (filterInput) {
-      filteredTalleres = filteredTalleres.filter((taller) =>
-        taller.nombre.toLowerCase().includes(filterInput.toLowerCase()) ||
-        taller.ubicacion.toLowerCase().includes(filterInput.toLowerCase())
-      );
-    }
-    filteredTalleres = orderBy(filteredTalleres, [orderByValue], ['asc']);
-    setSortedTalleres(filteredTalleres);
-  }, [filterInput, orderByValue, productos]);
+    const searchProductos = async () => {
+      if (searchTerm.trim() === '') {
+        setSearchResults([]);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const response = await fetch(endpoints.search(searchTerm));
+        if (!response.ok) {
+          throw new Error('Error en la búsqueda');
+        }
+        const data = await response.json();
+        setSearchResults(data);
+      } catch (error) {
+        console.error('Error al buscar:', error);
+        setSearchResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    searchProductos();
+  }, [searchTerm]);
+
+  // Efecto para aplicar filtros y ordenamiento
+  useEffect(() => {
+    let filtered = [...productos];
+    filtered = orderBy(filtered, [orderByValue], ['asc']);
+    setFilteredProducts(filtered);
+  }, [orderByValue, productos]);
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
-  const handleSearchChange = (e) => setFilterInput(e.target.value);
-  const handleOrderChange = (e) => setOrderByValue(e.target.value);
+  
+  const handleOrderChange = (e) => {
+    setOrderByValue(e.target.value);
+  };
+
   const handleBack = () => navigate('/home');
 
   return (
@@ -87,96 +122,24 @@ function Categoria() {
           <img className='rombo' src={Rombo} alt="Rombo" />
           <h1 className='category'>Categorias</h1>
         </header>
-        <div className="categorias1-categoria">
-                <div className='contenedor-categoria1'>
-                    <div
-                        className={`categoria1 ${selectedCategory === 'Textileria' ? 'selected' : ''}`} 
-                        onClick={() => handleCategoryClick('Textileria')}
-                    >
-                        <img src={TextileriaIcon} alt="Textilería" />
-                        <p>Textilería</p>
-                    </div>
-                    <div 
-                        className={`categoria1 ${selectedCategory === 'Ceramica' ? 'selected' : ''}`} 
-                        onClick={() => handleCategoryClick('Ceramica')}
-                    >
-                        <img src={Ceramica} alt="Cerámica" />
-                        <p>Cerámica</p>
-                    </div>
-                    <div 
-                        className={`categoria1 ${selectedCategory === 'Orfebreria' ? 'selected' : ''}`} 
-                        onClick={() => handleCategoryClick('Orfebreria')}
-                    >
-                        <img src={Orfebreria} alt="Orfebrería" />
-                        <p>Orfebrería</p>
-                    </div>
-                    <div 
-                        className={`categoria1 ${selectedCategory === 'Tallaenpiedra' ? 'selected' : ''}`} 
-                        onClick={() => handleCategoryClick('Tallaenpiedra')}
-                    >
-                        <img src={Tallaenpiedra} alt="Talla en piedra" />
-                        <p>Talla en piedra</p>
-                    </div>
-                    <div 
-                        className={`categoria1 ${selectedCategory === 'Tallaenmadera' ? 'selected' : ''}`} 
-                        onClick={() => handleCategoryClick('Tallaenmadera')}
-                    >
-                        <img src={Tallaenmadera} alt="Talla en madera" />
-                        <p>Talla en madera</p>
-                    </div>
-                    <div 
-                        className={`categoria1 ${selectedCategory === 'Bordado' ? 'selected' : ''}`} 
-                        onClick={() => handleCategoryClick('Bordado')}
-                    >
-                        <img src={Bordado} alt="Bordado" />
-                        <p>Bordado</p>
-                    </div>
-                    <div 
-                        className={`categoria1 ${selectedCategory === 'Joyeria' ? 'selected' : ''}`} 
-                        onClick={() => handleCategoryClick('Joyeria')}
-                    >
-                        <img src={Joyeria} alt="Joyería" />
-                        <p>Joyería</p>
-                    </div>
-                    <div 
-                        className={`categoria1 ${selectedCategory === 'Hojalateria' ? 'selected' : ''}`} 
-                        onClick={() => handleCategoryClick('Hojalateria')}
-                    >
-                        <img src={Hojalateria} alt="Hojalatería" />
-                        <p>Hojalatería</p>
-                    </div>
-                    <div 
-                        className={`categoria1 ${selectedCategory === 'Estampado' ? 'selected' : ''}`} 
-                        onClick={() => handleCategoryClick('Estampado')}
-                    >
-                        <img src={Estampado} alt="Estampado" />
-                        <p>Estampado</p>
-                    </div>
-                    <div 
-                        className={`categoria1 ${selectedCategory === 'Pintura' ? 'selected' : ''}`} 
-                        onClick={() => handleCategoryClick('Pintura')}
-                    >
-                        <img src={Pintura} alt="Pintura tradicional" />
-                        <p>Pintura tradicional</p>
-                    </div>
-                </div>
-        </div>
 
-
-        <section className="productos-categorias">
-          <h2>Artesanías</h2>
-          <div className="search2">
-            <img src={seekerImg} alt="Buscar" className='Buscar-categoria' />
-            <input
-              type="text"
-              placeholder="Buscar taller..."
-              value={filterInput}
-              onChange={handleSearchChange}
-            />
-          <img src={Filter} alt="Filtro" className="filter-categorias" onClick={toggleModal} />
-          </div>
-
-
+        {/* Buscador y Filtro combinados */}
+        <div className="search">
+          <img src={seekerImg} alt="Buscar" className='Buscar-categoria' />
+          <input
+            type="text"
+            placeholder="Buscar producto..."
+            value={searchTerm}
+            onChange={handleSearch}
+          />
+          <img 
+            src={Filter} 
+            alt="Filtro" 
+            className="filter-categorias" 
+            onClick={toggleModal}
+          />
+          
+          {/* Modal de filtros */}
           {isModalOpen && (
             <div className="modal">
               <div className="modal-content">
@@ -192,6 +155,78 @@ function Categoria() {
             </div>
           )}
 
+          {/* Resultados de búsqueda */}
+          {isLoading && (
+            <div className="result">
+              <p>Buscando...</p>
+            </div>
+          )}
+          {searchResults.length > 0 && searchTerm && (
+            <div className="result">
+              <ul>
+                {searchResults.map((item) => (
+                  <li key={item._id}>
+                    <Link to={`/producto/${item._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                      {item.fotos && item.fotos[0] && (
+                        <img src={item.fotos[0]} alt={item.nombre} className="product-thumbnail" />
+                      )}
+                      <span style={{ marginLeft: '50px' }}>{item.nombre} - ${item.precio}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        <div className="categorias1-categoria">
+          <div className='contenedor-categoria1'>
+            <Link to="/categoria/Textilería" className={`categoria1 ${selectedCategory === 'Textilería' ? 'selected' : ''}`}>
+              <img src={TextileriaIcon} alt="Textilería" />
+              <p>Textilería</p>
+            </Link>
+            <Link to="/categoria/Cerámica" className={`categoria1 ${selectedCategory === 'Cerámica' ? 'selected' : ''}`}>
+              <img src={Ceramica} alt="Cerámica" />
+              <p>Cerámica</p>
+            </Link>
+            <Link to="/categoria/Orfebrería" className={`categoria1 ${selectedCategory === 'Orfebrería' ? 'selected' : ''}`}>
+              <img src={Orfebreria} alt="Orfebrería" />
+              <p>Orfebrería</p>
+            </Link>
+            <Link to="/categoria/Talla en piedra" className={`categoria1 ${selectedCategory === 'Talla en piedra' ? 'selected' : ''}`}>
+              <img src={Tallaenpiedra} alt="Talla en piedra" />
+              <p>Talla en piedra</p>
+            </Link>
+            <Link to="/categoria/Talla en madera" className={`categoria1 ${selectedCategory === 'Talla en madera' ? 'selected' : ''}`}>
+              <img src={Tallaenmadera} alt="Talla en madera" />
+              <p>Talla en madera</p>
+            </Link>
+            <Link to="/categoria/Bordado" className={`categoria1 ${selectedCategory === 'Bordado' ? 'selected' : ''}`}>
+              <img src={Bordado} alt="Bordado" />
+              <p>Bordado</p>
+            </Link>
+            <Link to="/categoria/Joyería" className={`categoria1 ${selectedCategory === 'Joyería' ? 'selected' : ''}`}>
+              <img src={Joyeria} alt="Joyería" />
+              <p>Joyería</p>
+            </Link>
+            <Link to="/categoria/Hojalatería" className={`categoria1 ${selectedCategory === 'Hojalatería' ? 'selected' : ''}`}>
+              <img src={Hojalateria} alt="Hojalatería" />
+              <p>Hojalatería</p>
+            </Link>
+            <Link to="/categoria/Estampado" className={`categoria1 ${selectedCategory === 'Estampado' ? 'selected' : ''}`}>
+              <img src={Estampado} alt="Estampado" />
+              <p>Estampado</p>
+            </Link>
+            <Link to="/categoria/Pintura" className={`categoria1 ${selectedCategory === 'Pintura' ? 'selected' : ''}`}>
+              <img src={Pintura} alt="Pintura" />
+              <p>Pintura tradicional</p>
+            </Link>
+          </div>
+        </div>
+
+        <section className="productos-categorias">
+          <h2>Artesanías</h2>
+
           {loading ? (
             <div className="loading">
               <p>Cargando productos...</p>
@@ -201,34 +236,33 @@ function Categoria() {
               <p>{error}</p>
             </div>
           ) : (
-            <div className="producto-grid-categorias ">
-            {sortedTalleres.length > 0 ? (
-              sortedTalleres.map((producto) => (
-                <div key={producto._id} className="producto-card-categorias ">
-                  <Link to={producto.ruta || '/'}>
-                    <div className="imagen-container-categorias ">
-                      <img 
-                        src={producto.fotos?.[0] || productoPlaceholder} 
-                        alt={producto.nombre} 
-                        onError={(e) => { e.target.src = productoPlaceholder; }} 
-                      />
-                    </div>
-                    <h3>{producto.nombre}</h3>
-                  </Link>
-                  <p>{producto.ubicacion}</p>
-                  <p>S/.{producto.precio}</p>
-                </div>
-              ))
-            ) : (
-              <p>No hay productos disponibles en esta categoría.</p>
-            )}
-          </div>
-
+            <div className="producto-grid-categorias">
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map((producto) => (
+                  <div key={producto._id} className="producto-card-categorias">
+                    <Link to={producto.ruta || '/'}>
+                      <div className="imagen-container-categorias">
+                        <img 
+                          src={producto.fotos?.[0] || productoPlaceholder} 
+                          alt={producto.nombre} 
+                          onError={(e) => { e.target.src = productoPlaceholder; }} 
+                        />
+                      </div>
+                      <h3>{producto.nombre}</h3>
+                    </Link>
+                    <p>{producto.ubicacion}</p>
+                    <p>S/.{producto.precio}</p>
+                  </div>
+                ))
+              ) : (
+                <p>No hay productos disponibles en esta categoría.</p>
+              )}
+            </div>
           )}
         </section>
       </div>
     </div>
   );
-};
+}
 
 export default Categoria;
