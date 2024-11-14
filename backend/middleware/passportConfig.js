@@ -2,8 +2,10 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const DiscordStrategy = require("passport-discord").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
-const User = require("../models/userModel");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
+// Serialización y deserialización del usuario
 passport.serializeUser((user, done) => {
   console.log("Serializando usuario:", user);
   done(null, user.id);
@@ -19,7 +21,7 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-// Configuración de Google Strategy
+// Configuración de la estrategia de Google
 passport.use(
   new GoogleStrategy(
     {
@@ -30,6 +32,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         console.log("Google Profile:", profile);
+
         let user = await User.findOne({ googleId: profile.id });
         if (!user) {
           user = await User.create({
@@ -41,6 +44,21 @@ passport.use(
         } else {
           console.log("Usuario existente con Google:", user);
         }
+
+        // Generar el JWT
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+          expiresIn: "1h", // Expiración del token (1 hora en este ejemplo)
+        });
+
+        // Log del token generado
+        console.log("Token generado para Google:", token);
+
+        // Añadir el token al objeto del usuario
+        user.token = token;
+
+        // Confirmamos que el token se ha añadido correctamente
+        console.log("Token asignado al usuario:", user.token);
+
         return done(null, user);
       } catch (error) {
         console.error("Error en Google Strategy:", error);
@@ -50,7 +68,7 @@ passport.use(
   )
 );
 
-// Configuración de Discord Strategy
+// Configuración de la estrategia de Discord
 passport.use(
   new DiscordStrategy(
     {
@@ -62,6 +80,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         console.log("Discord Profile:", profile);
+
         let user = await User.findOne({ discordId: profile.id });
         if (!user) {
           user = await User.create({
@@ -73,6 +92,21 @@ passport.use(
         } else {
           console.log("Usuario existente con Discord:", user);
         }
+
+        // Generar el JWT
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+          expiresIn: "1h", // Expiración del token (1 hora en este ejemplo)
+        });
+
+        // Log del token generado
+        console.log("Token generado para Discord:", token);
+
+        // Añadir el token al objeto del usuario
+        user.token = token;
+
+        // Confirmamos que el token se ha añadido correctamente
+        console.log("Token asignado al usuario:", user.token);
+
         return done(null, user);
       } catch (error) {
         console.error("Error en Discord Strategy:", error);
@@ -82,7 +116,7 @@ passport.use(
   )
 );
 
-// Configuración de Facebook Strategy
+// Configuración de la estrategia de Facebook
 passport.use(
   new FacebookStrategy(
     {
@@ -94,6 +128,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         console.log("Facebook Profile:", profile);
+
         let user = await User.findOne({ facebookId: profile.id });
         if (!user) {
           user = await User.create({
@@ -105,6 +140,21 @@ passport.use(
         } else {
           console.log("Usuario existente con Facebook:", user);
         }
+
+        // Generar el JWT
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+          expiresIn: "1h", // Expiración del token (1 hora en este ejemplo)
+        });
+
+        // Log del token generado
+        console.log("Token generado para Facebook:", token);
+
+        // Añadir el token al objeto del usuario
+        user.token = token;
+
+        // Confirmamos que el token se ha añadido correctamente
+        console.log("Token asignado al usuario:", user.token);
+
         return done(null, user);
       } catch (error) {
         console.error("Error en Facebook Strategy:", error);
