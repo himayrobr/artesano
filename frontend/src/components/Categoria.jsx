@@ -117,7 +117,7 @@ function Categoria() {
       <div className='conten-todo'>
         <header className='header'>
           <button onClick={handleBack} className="back-button">
-            <img src={Return} alt="return" className='retur' />
+            <img src={Return} alt="return" className='flecha' />
           </button>
           <img className='rombo' src={Rombo} alt="Rombo" />
           <h1 className='category'>Categorias</h1>
