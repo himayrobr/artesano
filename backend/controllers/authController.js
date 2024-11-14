@@ -4,7 +4,6 @@ const User = require("../models/User");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const DiscordStrategy = require("passport-discord").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
-const bcrypt = require("bcryptjs");
 const cookieParser = require("cookie-parser");
 
 // Genera un token JWT
@@ -31,14 +30,11 @@ exports.registerByEmail = async (req, res) => {
       return res.status(400).json({ message: "La contraseña debe tener al menos 8 caracteres." });
     }
 
-    // Encriptar la contraseña
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Crear nuevo usuario
+    // Crear nuevo usuario (sin encriptar la contraseña)
     user = new User({
       username,
       email,
-      password: hashedPassword,  // Contraseña encriptada
+      password,  // Contraseña en texto plano
       photo,
       address,
       phone,
@@ -78,14 +74,11 @@ exports.registerByPhone = async (req, res) => {
       return res.status(400).json({ message: "La contraseña debe tener al menos 8 caracteres." });
     }
 
-    // Encriptar la contraseña
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Crear nuevo usuario
+    // Crear nuevo usuario (sin encriptar la contraseña)
     user = new User({
       username,
       phone,
-      password: hashedPassword,  // Contraseña encriptada
+      password,  // Contraseña en texto plano
       email,
       photo,
       address,
@@ -116,8 +109,8 @@ exports.login = async (req, res) => {
     console.log("Buscando usuario con email, teléfono o nombre de usuario:", emailOrPhone);
 
     // Buscar usuario por correo, teléfono o nombre de usuario
-    const user = await User.findOne({ 
-      $or: [{ email: emailOrPhone }, { phone: emailOrPhone }, { username: emailOrPhone }] 
+    const user = await User.findOne({
+      $or: [{ email: emailOrPhone }, { phone: emailOrPhone }, { username: emailOrPhone }]
     });
 
     if (!user) {
@@ -125,9 +118,8 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'Credenciales incorrectas.' });
     }
 
-    // Comparar la contraseña encriptada
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    // Comparar la contraseña en texto plano
+    if (user.password !== password) {
       console.log("Contraseña incorrecta");
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }

@@ -7,6 +7,7 @@ import RegisterByPhone from './components/RegisterByPhone';
 import Home from './components/Home';
 import RuraqLogin from './components/RuraqLogin'; // Importa el componente para Ruraq Maki
 import PrivacyPolicy from './components/PrivacyPolicy';
+import Chat from './components/Chat';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/home" element={<Home />} /> {/* Ruta para Home */}
         <Route path="/ruraq-login" element={<RuraqLogin />} /> {/* Ruta para login de Ruraq Maki */}
         <Route path="/politica-privacidad" element={<PrivacyPolicy />} /> {/* Ruta para la política de privacidad */}
+        <Route path="/Chat" element={<Chat />} /> {/* Ruta para el chat */}
       </Routes>
     </Router>
   );
