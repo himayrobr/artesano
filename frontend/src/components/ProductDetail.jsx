@@ -38,11 +38,55 @@ function ProductDetail() {
   }, [productId]);
 
   const handleBack = () => {
-    navigate(-1); // Regresa a la página anterior
+    navigate(-1);
   };
 
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
+  };
+
+  const handleAddToCart = () => {
+    if (!product) return;
+
+    try {
+      // Obtener el carrito actual
+      const savedCart = localStorage.getItem('cart');
+      let currentCart = savedCart ? JSON.parse(savedCart) : { items: [], total: 0 };
+      
+      // Buscar si el producto ya existe en el carrito
+      const existingItemIndex = currentCart.items.findIndex(item => item._id === product._id);
+      
+      if (existingItemIndex !== -1) {
+        // Si el producto ya existe, incrementar su cantidad
+        currentCart.items[existingItemIndex].cantidad += 1;
+      } else {
+        // Si no existe, añadir nuevo producto
+        const newProduct = {
+          _id: String(product._id),
+          nombre: String(product.nombre),
+          precio: parseFloat(product.precio),
+          imagen: product.fotos?.[0] || '',
+          cantidad: 1
+        };
+        currentCart.items.push(newProduct);
+      }
+
+      // Recalcular el total del carrito
+      currentCart.total = currentCart.items.reduce(
+        (sum, item) => sum + (parseFloat(item.precio) * item.cantidad),
+        0
+      );
+
+      // Guardar el carrito actualizado
+      localStorage.setItem('cart', JSON.stringify(currentCart));
+      
+      console.log('Carrito actualizado:', currentCart);
+      alert('Producto añadido al carrito');
+      navigate('/cart');
+    } catch (error) {
+      console.error('Error al añadir al carrito:', error);
+      alert('Hubo un error al añadir el producto al carrito');
+    }
   };
 
   if (loading) {
@@ -66,14 +110,12 @@ function ProductDetail() {
 
   return (
     <div className="product-detail-container">
-      {/* Header */}
       <header className="product-header">
         <button onClick={handleBack} className="back-button">
           <img src={Return} alt="Volver" />
         </button>
       </header>
 
-      {/* Product Image */}
       <div className="product-image-container">
         <img
           src={product.fotos?.[0] || '/placeholder.png'}
@@ -88,7 +130,6 @@ function ProductDetail() {
         </button>
       </div>
 
-      {/* Product Information */}
       <div className="product-info">
         <div className="product-header-info">
           <div className="product-title-price">
@@ -115,7 +156,11 @@ function ProductDetail() {
           </div>
         </div>
 
-        <button className="add-to-cart-button">
+        <button 
+          className="add-to-cart-button"
+          onClick={handleAddToCart}
+          disabled={!product}
+        >
           Añadir a mi carrito de compras
         </button>
       </div>

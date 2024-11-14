@@ -261,7 +261,7 @@ const Home = () => {
         <Link to="/Home">
           <img src={categoriesImg} alt="Categorías" />
         </Link>
-        <Link to="/">
+        <Link to="/Cart">
           <img src={shoppingCartImg} alt="Carrito de compras" />
         </Link>
         <Link to="/Perfil">
