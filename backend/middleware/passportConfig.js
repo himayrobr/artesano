@@ -39,6 +39,7 @@ passport.use(
             googleId: profile.id,
             email: profile.emails[0].value,
             displayName: profile.displayName,
+            username: profile.displayName || `google_${profile.id}`, // Usar el nombre real de Google
           });
           console.log("Nuevo usuario creado con Google:", user);
         } else {
@@ -87,6 +88,7 @@ passport.use(
             discordId: profile.id,
             email: profile.email,
             displayName: profile.username,
+            username: profile.username || `discord_${profile.id}`, // Usar el nombre real de Discord
           });
           console.log("Nuevo usuario creado con Discord:", user);
         } else {
@@ -135,6 +137,7 @@ passport.use(
             facebookId: profile.id,
             email: profile.emails && profile.emails[0] ? profile.emails[0].value : null,
             displayName: profile.displayName,
+            username: profile.displayName || `facebook_${profile.id}`, // Usar el nombre real de Facebook
           });
           console.log("Nuevo usuario creado con Facebook:", user);
         } else {
