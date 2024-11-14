@@ -18,6 +18,7 @@ import Comentarios from '../components/Comentarios.jsx';
 import AtencionCliente from '../components/AtencionCliente.jsx';
 import ProductDetail from '../components/ProductDetail.jsx';
 import Cart from '../components/Cart';
+import Chat from '../components/Chat.jsx'
 
 // Puedes agregar un componente de inicio aquí si lo deseas
 const AppRouter = () => (
@@ -29,6 +30,7 @@ const AppRouter = () => (
     <Route path="/registro/celular" element={<RegisterByPhone />} />
     <Route path="/ruraq-login" element={<RuraqLogin />} />
     <Route path="/politica-privacidad" element={<PrivacyPolicy />} />
+    <Route path="/chat" element={<Chat />} />
     
     {/* Rutas relacionadas con la tienda y categorías */}
     <Route path="/home" element={<Home />} />
