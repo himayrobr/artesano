@@ -255,8 +255,8 @@ const Home = () => {
         <Link to="/Store">
           <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />
         </Link>
-        <Link to="/">
-          <img src={couponsImg} alt="Cupones" />
+        <Link to="/ProductosDescuentos">
+          <img src={couponsImg} alt="ProductosDescuentos" />
         </Link>
         <Link to="/Home">
           <img src={categoriesImg} alt="Categorías" />

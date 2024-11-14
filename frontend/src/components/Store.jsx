@@ -222,7 +222,7 @@ function Store() {
         <Link to="/Store">
           <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />
         </Link>
-        <Link to="/">
+        <Link to="/ProductosDescuentos">
           <img src={couponsImg} alt="Cupones" />
         </Link>
         <Link to="/Home">
@@ -231,7 +231,7 @@ function Store() {
         <Link to="/shopping">
           <img src={shoppingCartImg} alt="Carrito de compras" />
         </Link>
-        <Link to="/generalSettings">
+        <Link to="/Perfil">
           <img src={generalSettingsImg} alt="Ajustes" />
         </Link>
       </footer>
