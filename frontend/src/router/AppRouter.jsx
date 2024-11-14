@@ -1,64 +1,49 @@
-// AppRouter.js
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from '../components/Home.jsx';
 import Textileria from '../components/Textileria.jsx';
-
-
 import LoadingPage from '../components/LoadingPage.jsx';
 import Perfil from '../components/Perfil.jsx';
 import Store from '../components/Store.jsx';
-import TallerAwaq from '../components/TallerAwaq.jsx'
-
-import ArteAbedall from '../components/ArteAbedall.jsx';
-import AsociacionArtesano from '../components/AsociacionArtesano.jsx';
-import Lastenia from '../components/Lastenia.jsx'
-import Retablo from '../components/Retablo.jsx';
-import TallerSanabria from '../components/TallerSanabria.jsx';
-import Bordado from '../components/Bordado.jsx';
-import Ceramica from '../components/Ceramica.jsx';
-import Estampado from '../components/Estampado.jsx';
-import Hojaleteria from '../components/Hojaleteria.jsx';
-import Joyeria from '../components/Joyeria.jsx';
-import Orfeteria from '../components/Orfeteria.jsx';
-import Pintura from '../components/Pintura.jsx';
-import TallaMadera from '../components/TallaMadera.jsx';
-import TallaPiedra from '../components/TallaPiedra.jsx';
-import ConfirmacionCompra from '../components/ConfirmacionCompra.jsx';
+import Categoria from '../components/Categoria.jsx';
+import Login from '../components/Login.jsx';
+import Register from '../components/Register.jsx';
+import RegisterByEmail from '../components/RegisterByEmail.jsx';
+import RegisterByPhone from '../components/RegisterByPhone.jsx';
+import RuraqLogin from '../components/RuraqLogin.jsx';
+import PrivacyPolicy from '../components/PrivacyPolicy.jsx';
+import TallerAwaq from '../components/TallerAwaq.jsx';
 import Ajustes from '../components/Ajustes.jsx';
 import Comentarios from '../components/Comentarios.jsx';
 import AtencionCliente from '../components/AtencionCliente.jsx';
+import ProductDetail from '../components/ProductDetail.jsx';
 
-
-
+// Puedes agregar un componente de inicio aquí si lo deseas
 const AppRouter = () => (
-    <Routes>
-        <Route path="/" element={<LoadingPage />} />
-        <Route path="/Home" element={<Home />} />
-        <Route path="/Textileria" element={<Textileria />} />
-        <Route path="/Bordado" element={<Bordado />} />
-        <Route path="/Ceramica" element={<Ceramica />} />
-        <Route path="/Estampado" element={<Estampado />} />
-        <Route path="/Hojaleteria" element={<Hojaleteria />} />
-        <Route path="/Joyeria" element={<Joyeria />} />
-        <Route path="/Orfeteria" element={<Orfeteria />} />
-        <Route path="/Pintura" element={<Pintura />} />
-        <Route path="/TallaMadera" element={<TallaMadera />} />
-        <Route path="/TallaPiedra" element={<TallaPiedra />} />
+  <Routes>
+    {/* Rutas relacionadas con el login y registro */}
+    <Route path="/" element={<Login />} />
+    <Route path="/register" element={<Register />} />
+    <Route path="/registro/correo" element={<RegisterByEmail />} />
+    <Route path="/registro/celular" element={<RegisterByPhone />} />
+    <Route path="/ruraq-login" element={<RuraqLogin />} />
+    <Route path="/politica-privacidad" element={<PrivacyPolicy />} />
+    
+    {/* Rutas relacionadas con la tienda y categorías */}
+    <Route path="/home" element={<Home />} />
+    <Route path="/perfil" element={<Perfil />} />
+    <Route path="/store" element={<Store />} />
+    <Route path="/taller/:id" element={<TallerAwaq />} />
+    <Route path="/categoria/:categoriaId" element={<Categoria />} />
+    <Route path="/product/:productId" element={<ProductDetail />} />
 
-        <Route path="/Perfil" element={<Perfil />} />
-        <Route path="/Store" element={<Store />} />
-        <Route path="/TallerAwaq" element={<TallerAwaq />} />
-        <Route path="/AsociacionArtesano" element={<AsociacionArtesano />} />
-        <Route path="/ArteAbedall" element={<ArteAbedall />} />
-        <Route path="/Lastenia" element={<Lastenia />} />
-        <Route path="/Retablo" element={<Retablo />} />
-        <Route path="/TallerSanabria" element={<TallerSanabria />} />
-        <Route path="/ConfirmacionCompra" element={<ConfirmacionCompra />} />
-        <Route path="/Ajustes" element={<Ajustes />} />
-        <Route path= "Comentarios" element={<Comentarios />} />
-        <Route path="/AtencionCliente" element={<AtencionCliente />} />
-    </Routes>
+    {/* Otras rutas */}
+    <Route path="/loading" element={<LoadingPage />} />
+    <Route path="/textileria" element={<Textileria />} />
+    <Route path="/Ajustes" element={<Ajustes /> } />
+    <Route path="/Comentarios" element={<Comentarios /> } />  
+    <Route path="/AtencionCliente" element={<AtencionCliente />} />
+  </Routes>
 );
 
 export default AppRouter;

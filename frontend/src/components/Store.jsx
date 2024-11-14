@@ -1,16 +1,11 @@
-import React, { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+// Store.js
+import React, { useRef, useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom'; // Importa useNavigate para la redirección
 import '../styles/Store.css';
 import menuImg from '../storage/img/menu.svg';
 import seekerImg from '../storage/img/seeker.svg';
 import favoritesImg from '../storage/img/favorites.svg';
 import shoppingImg from '../storage/img/shopping.svg';
-import workshopsAndCraftsImg from '../storage/img/workshopsAndCrafts.svg';
-import couponsImg from '../storage/img/coupons.svg';
-import categoriesImg from '../storage/img/categories.svg';
-import shoppingCartImg from '../storage/img/shoppingCart.svg';
-import generalSettingsImg from '../storage/img/generalSettings.svg';
-import profileImg from '../storage/img/perfile.png';
 import workshopImg from '../storage/img/workshop.svg';
 import redeemCouponsImg from '../storage/img/redeemCoupons.svg';
 import settingsImg from '../storage/img/settings.svg';
@@ -18,84 +13,74 @@ import commentsImg from '../storage/img/comments.svg';
 import customerServiceImg from '../storage/img/customerService.svg';
 import Diseño from '../storage/img/diseño.svg';
 import Filter from '../storage/img/Group8(1).svg';
-import imagen1 from '../storage/img/Rectangle 14.png';
-import imagen2 from '../storage/img/Rectangle 16.png';
-import imagen3 from '../storage/img/Rectangle 22.png';
-import imagen4 from '../storage/img/Rectangle 23.png';
-import imagen5 from '../storage/img/Rectangle 24.png';
-import imagen6 from '../storage/img/Rectangle 25.png';
+import profileImg from '../storage/img/perfile.png';
+import workshopsAndCraftsImg from '../storage/img/workshopsAndCrafts.svg'; // Asegúrate de que este archivo exista
+import couponsImg from '../storage/img/coupons.svg'; // Asegúrate de que este archivo exista
+import categoriesImg from '../storage/img/categories.svg'; // Asegúrate de que este archivo exista
+import shoppingCartImg from '../storage/img/shoppingCart.svg'; // Asegúrate de que este archivo exista
+import generalSettingsImg from '../storage/img/generalSettings.svg'; // Asegúrate de que este archivo exista
+
 import { useHomeLogic } from '../data/StoreLogic.js';
 import orderBy from 'lodash/orderBy';
 
 
-const talleres = [
-  { nombre: "Arte Abedail Aller Escalante", ubicacion: "Cusco", imagen: imagen1, ruta: "/ArteAbedall" },
-  { nombre: "Asoc. de artesanos Tinkuy", ubicacion: "Huánuco", imagen: imagen2, ruta: "/AsociacionArtesano" },
-];
-const talleres2 = [
-  { nombre: "Retablos Jesús Urbano", ubicacion: "Ayacucho", imagen: imagen3, ruta: "/Retablo" },
-  { nombre: "Taller Awaq Ayllus", ubicacion: "Ayacucho", imagen: imagen4, ruta: "/TallerAwaq" },
-];
-const talleres3 = [
-  { nombre: "Taller Sanabria Núñez", ubicacion: "Junín", imagen: imagen5, ruta: "/TallerSanabria" },
-  { nombre: "Lastenia Canayo", ubicacion: "Ucayali", imagen: imagen6, ruta: "/Lastenia" },
-];
-
-
-
-function Card({ nombre, ubicacion, imagen, ruta }) {
-  return (
-    <div className="card">
-      <Link to={ruta}>
-        <div className="card-content">
-          <h3>{nombre}</h3>
-          <p>{ubicacion}</p>
-        </div>
-        <img src={imagen} alt={nombre} className="card-img" />
-      </Link>
-    </div>
-  );
-}
+// Función para obtener las tiendas
+const fetchStores = async () => {
+  try {
+    const response = await fetch('http://localhost:5000/store/stores'); // Cambia la URL según sea necesario
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error al obtener los datos de las tiendas:', error);
+    return [];
+  }
+};
 
 function Store() {
   const { menuOpen, searchTerm, filteredResults, toggleMenu, handleSearch } = useHomeLogic();
+  const navigate = useNavigate(); // Inicializa el hook useNavigate
   const menuRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filterInput, setFilterInput] = useState('');
   const [orderByValue, setOrderByValue] = useState('nombre');
-  const [sortedTalleres, setSortedTalleres] = useState([...talleres, ...talleres2, ...talleres3]);
+  const [sortedTalleres, setSortedTalleres] = useState([]);
+  const [talleresData, setTalleresData] = useState([]);
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
+  // Cargar las tiendas al montar el componente
+  useEffect(() => {
+    const loadStores = async () => {
+      const stores = await fetchStores();
+      setTalleresData(stores); // Almacena los datos en el estado
+      setSortedTalleres(stores); // Al principio, los talleres no estarán ordenados
+    };
+    loadStores();
+  }, []);
 
-  const handleSearchChange = (e) => {
-    setFilterInput(e.target.value);
-  };
-
-  const applyFilter = () => {
-    console.log('Filtro aplicado:', filterInput);
-    toggleModal(); // Cierra el modal después de aplicar el filtro
-  };
-
+  // Abrir o cerrar el modal de filtro
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
+  
+  // Cambiar el orden de los talleres
   const handleOrderChange = (e) => {
     const orderValue = e.target.value;
-    setOrderByValue(orderValue);  // Cambiar el valor de la opción seleccionada
+    setOrderByValue(orderValue);
 
     let sortedArray;
-
     switch (orderValue) {
       case 'nombre':
-        sortedArray = orderBy(sortedTalleres, ['nombre'], ['asc']);
+        sortedArray = orderBy(talleresData, ['nombre'], ['asc']);
         break;
       case 'ubicacion':
-        sortedArray = orderBy(sortedTalleres, ['ubicacion'], ['asc']);
+        sortedArray = orderBy(talleresData, ['ubicacion'], ['asc']);
         break;
       default:
-        sortedArray = sortedTalleres;
+        sortedArray = talleresData;
     }
 
     setSortedTalleres(sortedArray);
+  };
+
+  // Redirigir al detalle de un taller específico
+  const handleCardClick = (taller) => {
+    navigate(`/taller/${taller._id}`, { state: { taller } });
   };
 
   return (
@@ -117,7 +102,7 @@ function Store() {
               <div className="result">
                 <ul>
                   {filteredResults.map((item) => (
-                    <li key={item._id_}>{item.name}</li>
+                    <li key={item._id}>{item.name}</li>
                   ))}
                 </ul>
               </div>
@@ -150,7 +135,7 @@ function Store() {
                 </Link>
               </li>
               <li>
-                <Link to="/">
+                <Link to="/TallerEducativo">
                   <img src={workshopImg} alt="Talleres" />
                   <strong>Talleres</strong>
                 </Link>
@@ -187,13 +172,13 @@ function Store() {
         </div>
       </header>
 
-      <main className='scroll-container'>
+      <main className="scroll-container">
         <section className="section">
           <div className="content">
             <img src={Diseño} id="diseño" alt="Diseño" />
             <h2 className="tituloStore">Talleres y tiendas artesanales</h2>
             <p className="parrafo">Tiendas de artesanías de todas partes del Perú</p>
-            
+
             {/* Icono de filtro que abre el modal */}
             <img src={Filter} alt="Filtro" id="filter" onClick={toggleModal} />
             
@@ -208,27 +193,27 @@ function Store() {
                   <label htmlFor="orderBy">Ordenar por:</label>
                   <select 
                     id="orderBy"
-                    value={orderByValue}  // Cambié el estado para manejar el filtro de orden
-                    onChange={handleOrderChange} // Función para manejar el cambio
+                    value={orderByValue} 
+                    onChange={handleOrderChange} 
                   >
                     <option value="nombre">Nombre</option>
                     <option value="ubicacion">Ubicación</option>
                   </select>
                   
-                  <button onClick={applyFilter}>Aplicar filtro</button>
+                  <button onClick={toggleModal}>Aplicar filtro</button>
                 </div>
               </div>
             )}
 
             <div className="grid-container">
-              {sortedTalleres.map((taller, index) => (
-                <Card
-                  key={index}
-                  nombre={taller.nombre}
-                  ubicacion={taller.ubicacion}
-                  imagen={taller.imagen}
-                  ruta={taller.ruta}
-                />
+              {sortedTalleres.map((taller) => (
+                <div key={taller._id} className="card" onClick={() => handleCardClick(taller)}>
+                  <div className="card-content">
+                    <h3>{taller.nombre}</h3>
+                    <p>{taller.ciudad}</p>
+                  </div>
+                  <img src={taller.foto} alt={taller.nombre} className="card-img" />
+                </div>
               ))}
             </div>
           </div>
@@ -244,11 +229,11 @@ function Store() {
         <Link to="/Home">
           <img src={categoriesImg} alt="Categorías" />
         </Link>
-        <Link to="/">
+        <Link to="/shopping">
           <img src={shoppingCartImg} alt="Carrito de compras" />
         </Link>
-        <Link to="/Perfil">
-          <img src={generalSettingsImg} alt="Configuración general" />
+        <Link to="/generalSettings">
+          <img src={generalSettingsImg} alt="Ajustes" />
         </Link>
       </footer>
     </div>
