@@ -267,7 +267,7 @@ function Perfil() {
         <Link to="/Store">
           <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />
         </Link>
-        <Link to="/">
+        <Link to="/ProductosDescuentos">
           <img src={couponsImg} alt="Cupones" />
         </Link>
         <Link to="/Home">
