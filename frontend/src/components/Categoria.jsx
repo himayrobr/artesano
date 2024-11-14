@@ -240,7 +240,7 @@ function Categoria() {
               {filteredProducts.length > 0 ? (
                 filteredProducts.map((producto) => (
                   <div key={producto._id} className="producto-card-categorias">
-                    <Link to={producto.ruta || '/'}>
+                    <Link to={`/product/${producto._id}`}>
                       <div className="imagen-container-categorias">
                         <img 
                           src={producto.fotos?.[0] || productoPlaceholder} 
@@ -249,9 +249,9 @@ function Categoria() {
                         />
                       </div>
                       <h3>{producto.nombre}</h3>
-                    </Link>
                     <p>{producto.ubicacion}</p>
                     <p>S/.{producto.precio}</p>
+                    </Link>
                   </div>
                 ))
               ) : (
