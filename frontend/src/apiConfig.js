@@ -10,6 +10,7 @@ export const endpoints = {
   ruraqLogin: `${API_BASE_URL}auth/ruraq-login`,
   getCategoryUrl: (categoria) => `${API_BASE_URL}products/categoria/${categoria}`,
   search: (query) => `${API_BASE_URL}products/search?q=${encodeURIComponent(query)}`,
+  getProductUrl: (productId) => `${API_BASE_URL}products/${productId}`,
 };
 
 export default API_BASE_URL;

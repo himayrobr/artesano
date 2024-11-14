@@ -16,6 +16,7 @@ import TallerAwaq from '../components/TallerAwaq.jsx';
 import Ajustes from '../components/Ajustes.jsx';
 import Comentarios from '../components/Comentarios.jsx';
 import AtencionCliente from '../components/AtencionCliente.jsx';
+import ProductDetail from '../components/ProductDetail.jsx';
 
 // Puedes agregar un componente de inicio aquí si lo deseas
 const AppRouter = () => (
@@ -34,7 +35,8 @@ const AppRouter = () => (
     <Route path="/store" element={<Store />} />
     <Route path="/taller/:id" element={<TallerAwaq />} />
     <Route path="/categoria/:categoriaId" element={<Categoria />} />
-    
+    <Route path="/product/:productId" element={<ProductDetail />} />
+
     {/* Otras rutas */}
     <Route path="/loading" element={<LoadingPage />} />
     <Route path="/textileria" element={<Textileria />} />
