@@ -260,7 +260,7 @@ function ProductosDescuentos () {
         </div>
 
 
-        <section className="productos-categorias-descuento">
+        <section className="productos-categorias">
             <img src={Triangulo} className="Triangulo" />
           <h2>Descuentos y promociones </h2>
           <p className='parrafo-h2'>En cientos de artesanias</p>
@@ -274,7 +274,7 @@ function ProductosDescuentos () {
               <p>{error}</p>
             </div>
           ) : (
-            <div className="producto-grid-categorias-descuento">
+            <div className="producto-grid-categorias">
                 {productos.map((producto) => (
                     <div key={producto.id} className="producto-card-categorias">
                     <img src={producto.image} alt={producto.nombre} />
