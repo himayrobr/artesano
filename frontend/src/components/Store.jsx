@@ -1,3 +1,4 @@
+// Store.js
 import React, { useRef, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Importa useNavigate para la redirección
 import '../styles/Store.css';
@@ -18,8 +19,6 @@ import couponsImg from '../storage/img/coupons.svg'; // Asegúrate de que este a
 import categoriesImg from '../storage/img/categories.svg'; // Asegúrate de que este archivo exista
 import shoppingCartImg from '../storage/img/shoppingCart.svg'; // Asegúrate de que este archivo exista
 import generalSettingsImg from '../storage/img/generalSettings.svg'; // Asegúrate de que este archivo exista
-import { endpoints } from '../apiConfig';
-
 
 import { useHomeLogic } from '../data/StoreLogic.js';
 import orderBy from 'lodash/orderBy';
@@ -27,7 +26,7 @@ import orderBy from 'lodash/orderBy';
 // Función para obtener las tiendas
 const fetchStores = async () => {
   try {
-    const response = await fetch(endpoints.getAllStores); // Cambia la URL según sea necesario
+    const response = await fetch('http://localhost:5000/store/stores'); // Cambia la URL según sea necesario
     const data = await response.json();
     return data;
   } catch (error) {

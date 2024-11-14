@@ -29,6 +29,13 @@ app.use(
   })
 );
 
+// Configuración de headers de seguridad para prevenir problemas con las políticas de permisos
+app.use((req, res, next) => {
+  res.setHeader("Permissions-Policy", "interest-cohort=(), otp-credentials=(), shared-storage=()");
+  res.setHeader("Origin-Agent-Cluster", "?1");
+  next();
+});
+
 // Middleware de JSON
 app.use(express.json());
 
