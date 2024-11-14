@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';  
 import { Link } from 'react-router-dom';
 import { endpoints } from '../apiConfig';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Home.css';
 
 // Import images
@@ -39,7 +40,10 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [userName, setUserName] = useState(''); // Agregar estado para el nombre del usuario
   const menuRef = useRef(null);
+
+  const navigate = useNavigate();  // Hook de navegación de react-router-dom
 
   // Function to toggle menu
   const toggleMenu = () => {
@@ -71,19 +75,56 @@ const Home = () => {
     }
   };
 
-  // Close menu when clicking outside
+  // Fetch user data after login
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setMenuOpen(false);
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          throw new Error('Token no encontrado en localStorage');
+        }
+
+        const response = await fetch('http://localhost:5000/auth/user', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Error al obtener los datos del usuario');
+        }
+
+        const data = await response.json();
+        // Aquí puedes hacer algo con los datos del usuario
+        console.log(data);
+        setUserName(data.name); // Asumir que el usuario tiene un campo `name`
+      } catch (error) {
+        console.error('Error al obtener los datos del usuario:', error);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []); // Close the useEffect hook properly
+    fetchUserData();
+  }, []);
+
+  // Extract token from URL and store it in localStorage
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    if (token) {
+      // Guarda el token en localStorage
+      localStorage.setItem('token', token);
+      console.log("Token almacenado en localStorage");
+    }
+
+    if (!token) {
+      console.log("No se encontró el token en la URL.");
+      // Redirigir al login si no se encontró el token
+      navigate('/home');  // Usamos el hook useNavigate
+    }
+  }, [navigate]); 
+
 
   return (
     <div>
@@ -128,13 +169,13 @@ const Home = () => {
 
         {/* Sidebar menu */}
         <div className={`navigation ${menuOpen ? 'open' : ''}`} ref={menuRef}>
-          <div className="mobile-top-bar">
-            {/* Close menu button */}
-            <span className="mobile-nav-toggle close" onClick={toggleMenu}>
-              <img src={profileImg} alt="Perfil" />
-              <h3>SaraMartin9</h3>
-            </span>
-          </div>
+        <div className="mobile-top-bar">
+          {/* Close menu button */}
+          <span className="mobile-nav-toggle close" onClick={toggleMenu}>
+            <img src={profileImg} alt="Perfil" />
+            <h3>{userName || 'Invitado'}</h3> {/* Mostrar el nombre del usuario o "Invitado" */}
+          </span>
+        </div>
           
           {/* Navigation menu */}
           <div className="main-navigation">

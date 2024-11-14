@@ -11,6 +11,7 @@ export const endpoints = {
   getCategoryUrl: (categoria) => `${API_BASE_URL}products/categoria/${categoria}`,
   search: (query) => `${API_BASE_URL}products/search?q=${encodeURIComponent(query)}`,
   getProductUrl: (productId) => `${API_BASE_URL}products/${productId}`,
+  userData: `${API_BASE_URL}auth/user`,
 };
 
 export default API_BASE_URL;

@@ -15,41 +15,65 @@ const router = express.Router();
 
 // Google
 router.get("/google", loginWithGoogle);
-router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/" }), (req, res) => {
+router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/login" }), (req, res) => {
   console.log("Autenticación con Google exitosa");
 
-  // Imprimir el token generado en la consola
-  const token = req.user.token; // Asegúrate de que el token esté disponible en req.user
+  // Generar un token JWT para el usuario autenticado
+  const token = req.user ? req.user.token : null;
+
+  if (!token) {
+    return res.status(401).json({ message: "No se pudo generar el token." });
+  }
+
   console.log("Token generado con Google:", token);
 
+  // Configurar cookie con el token (expira en 1 hora)
+  res.cookie("token", token, { httpOnly: true, maxAge: 3600000 }); // 1 hora
+
   // Redirigir al frontend
-  res.redirect("http://localhost:5173/home");
+  res.redirect(`http://localhost:5173/home?token=${token}`);
 });
 
 // Discord
 router.get("/discord", loginWithDiscord);
-router.get("/discord/callback", passport.authenticate("discord", { failureRedirect: "/" }), (req, res) => {
+router.get("/discord/callback", passport.authenticate("discord", { failureRedirect: "/login" }), (req, res) => {
   console.log("Autenticación con Discord exitosa");
 
-  // Imprimir el token generado en la consola
-  const token = req.user.token; // Asegúrate de que el token esté disponible en req.user
+  // Generar un token JWT para el usuario autenticado
+  const token = req.user ? req.user.token : null;
+
+  if (!token) {
+    return res.status(401).json({ message: "No se pudo generar el token." });
+  }
+
   console.log("Token generado con Discord:", token);
 
+  // Configurar cookie con el token (expira en 1 hora)
+  res.cookie("token", token, { httpOnly: true, maxAge: 3600000 }); // 1 hora
+
   // Redirigir al frontend
-  res.redirect("http://localhost:5173/home");
+  res.redirect(`http://localhost:5173/home?token=${token}`);
 });
 
 // Facebook
 router.get("/facebook", loginWithFacebook);
-router.get("/facebook/callback", passport.authenticate("facebook", { failureRedirect: "/" }), (req, res) => {
+router.get("/facebook/callback", passport.authenticate("facebook", { failureRedirect: "/login" }), (req, res) => {
   console.log("Autenticación con Facebook exitosa");
 
-  // Imprimir el token generado en la consola
-  const token = req.user.token; // Asegúrate de que el token esté disponible en req.user
+  // Generar un token JWT para el usuario autenticado
+  const token = req.user ? req.user.token : null;
+
+  if (!token) {
+    return res.status(401).json({ message: "No se pudo generar el token." });
+  }
+
   console.log("Token generado con Facebook:", token);
 
+  // Configurar cookie con el token (expira en 1 hora)
+  res.cookie("token", token, { httpOnly: true, maxAge: 3600000 }); // 1 hora
+
   // Redirigir al frontend
-  res.redirect("http://localhost:5173/home");
+  res.redirect(`http://localhost:5173/home?token=${token}`);
 });
 
 // Ruta para inicio de sesión con correo y contraseña

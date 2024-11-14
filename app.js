@@ -4,6 +4,7 @@ require("dotenv").config();
 const connect = require("./backend/helpers/connect");
 const cors = require("cors");
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const passport = require("./backend/middleware/passportConfig");
 
 const workshopRoutes = require('./backend/routes/workshopRoutes');
@@ -61,13 +62,13 @@ app.use(
   })
 );
 
-// Inicializar Passport y usar sesiones
+app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Rutas de autenticación
 const authRoutes = require("./backend/routes/authRoutes");
-app.use("/auth", authRoutes);
+app.use('/auth', authRoutes)
 
 // Configuración del puerto y servidor
 const PORT = process.env.PORT || 5000;

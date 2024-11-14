@@ -131,12 +131,14 @@ exports.login = async (req, res) => {
     // Configurar cookie con el token (expira en 1 hora)
     res.cookie("token", token, { httpOnly: true, maxAge: 3600000 }); // 1 hora
 
-    res.json({ message: 'Inicio de sesión exitoso', token });
+    // Aquí se envía también el userId en la respuesta
+    res.json({ message: 'Inicio de sesión exitoso', token, userId: user._id });
   } catch (error) {
     console.error("Error en el proceso de inicio de sesión:", error);
     res.status(500).json({ message: 'Error en el servidor' });
   }
 };
+
 
 // Configuración de Google Strategy
 passport.use(
