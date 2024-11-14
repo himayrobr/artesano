@@ -140,7 +140,7 @@ function Store() {
                 </Link>
               </li>
               <li>
-                <Link to="/">
+                <Link to="/CanjearCupon">
                   <img src={redeemCouponsImg} alt="Canjear cupón" />
                   <strong>Canjear cupón</strong>
                 </Link>
