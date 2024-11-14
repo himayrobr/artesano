@@ -1,8 +1,7 @@
-// backend/models/User.js
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 
-const userSchemaa = new mongoose.Schema({
+// Definimos el esquema del usuario
+const userSchema = new mongoose.Schema({
   googleId: { type: String, unique: true, sparse: true },
   discordId: { type: String, unique: true, sparse: true },
   facebookId: { type: String, unique: true, sparse: true },
@@ -17,18 +16,13 @@ const userSchemaa = new mongoose.Schema({
   workshopsEnrolled: { type: [String], default: [] },
   acceptedTerms: { type: Boolean, default: true },
   marketingConsent: { type: Boolean, default: true },
-  token: String, 
+  token: String,
 }, {
   collection: 'User'
 });
 
-// Encriptar la contraseña antes de guardarla
-userSchemaa.pre('save', async function(next) {
-  if (this.isModified('password')) {
-    this.password = await bcrypt.hash(this.password, 10);
-  }
-  next();
-});
+// Eliminamos el middleware para encriptar la contraseña, ya que no se usará encriptación.
 
-const User = mongoose.models.User || mongoose.model('User', userSchemaa);
+const User = mongoose.models.User || mongoose.model('User', userSchema);
+
 module.exports = User;

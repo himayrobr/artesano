@@ -2,55 +2,53 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import { endpoints } from '../apiConfig';
+import Cookies from 'js-cookie'; // Añadido para manejar cookies
 
 const Login = () => {
   const navigate = useNavigate();
 
+  // Función para redirigir a la página de registro
   const handleRegisterClick = () => {
-    navigate('/register'); // Redirige a la página de registro
+    navigate('/register');
   };
 
+  // Función para manejar la autenticación con proveedores externos
   const handleAuth = (provider) => {
     // Redirigir al backend para el inicio de sesión con el proveedor seleccionado
-    switch (provider) {
-      case 'facebook':
-        window.location.href = `${endpoints.register}/facebook`;
-        break;
-      case 'google':
-        window.location.href = `${endpoints.register}/google`;
-        break;
-      case 'discord':
-        window.location.href = `${endpoints.register}/discord`;
-        break;
-      default:
-        break;
+    const authUrls = {
+      facebook: `${endpoints.register}/facebook`,
+      google: `${endpoints.register}/google`,
+      discord: `${endpoints.register}/discord`,
+    };
+    
+    if (authUrls[provider]) {
+      window.location.href = authUrls[provider];
     }
   };
 
+  // Función para redirigir a la página de login de Ruraq Maki
   const handleRuraqLoginClick = () => {
-    navigate('/ruraq-login'); // Redirige a la página de login de Ruraq Maki
+    navigate('/ruraq-login');
   };
 
-  // Función para manejar la respuesta de autenticación con el token
+  // Función para manejar el callback de autenticación y almacenar el token
   const handleAuthCallback = () => {
-    // Verificar si hay un token en la URL (esto es lo que se espera de la redirección del backend)
     const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token'); // Obtén el token de la URL
-    
+    const token = urlParams.get('token');
+
     if (token) {
-      // Almacenar el token en localStorage
+      // Guardar el token en localStorage y en cookies para persistencia
       localStorage.setItem('authToken', token);
+      Cookies.set('authToken', token, { expires: 1 }); // Cookie expira en 1 día
       console.log("Token guardado:", token);
-      // Redirigir al home o página de destino
       navigate('/home');
     }
   };
 
-  // Uso de useEffect para manejar el callback de autenticación en el inicio de la página
+  // Uso de useEffect para verificar si hay un token en la URL cuando el componente se monta
   useEffect(() => {
-    // Verifica si estamos en el flujo de autenticación con un token en la URL
     handleAuthCallback();
-  }, []); // Esto se ejecutará solo cuando el componente se monte
+  }, []);
 
   return (
     <div className="login-container">

@@ -1,10 +1,11 @@
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const DiscordStrategy = require("passport-discord").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
+const bcrypt = require("bcryptjs");
+const cookieParser = require("cookie-parser");
 
 // Genera un token JWT
 const generateToken = (user) => {
@@ -19,20 +20,44 @@ exports.registerByEmail = async (req, res) => {
   console.log("Datos de registro recibidos:", req.body);
 
   try {
+    // Verificar si el correo ya está registrado
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ message: "El correo ya está registrado." });
     }
 
+    // Validación mínima de la contraseña
+    if (password.length < 8) {
+      return res.status(400).json({ message: "La contraseña debe tener al menos 8 caracteres." });
+    }
+
+    // Encriptar la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
-    user = new User({ username, email, password: hashedPassword, photo, address, phone, type, favorites, workshopsEnrolled });
+
+    // Crear nuevo usuario
+    user = new User({
+      username,
+      email,
+      password: hashedPassword,  // Contraseña encriptada
+      photo,
+      address,
+      phone,
+      type,
+      favorites,
+      workshopsEnrolled
+    });
     await user.save();
 
+    // Generar token
     const token = generateToken(user);
+
+    // Configurar cookie con el token (expira en 1 hora)
+    res.cookie("token", token, { httpOnly: true, maxAge: 3600000 }); // 1 hora
+
     res.status(201).json({ message: "Usuario registrado exitosamente.", token });
   } catch (error) {
     console.error("Error en el registro:", error);
-    res.status(500).json({ message: "Error en el registro." });
+    res.status(500).json({ message: "Error en el registro. Intenta nuevamente." });
   }
 };
 
@@ -42,20 +67,44 @@ exports.registerByPhone = async (req, res) => {
   console.log("Datos de registro por teléfono recibidos:", req.body);
 
   try {
+    // Verificar si el número de teléfono ya está registrado
     let user = await User.findOne({ phone });
     if (user) {
       return res.status(400).json({ message: "El número de teléfono ya está registrado." });
     }
 
+    // Validación mínima de la contraseña
+    if (password.length < 8) {
+      return res.status(400).json({ message: "La contraseña debe tener al menos 8 caracteres." });
+    }
+
+    // Encriptar la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
-    user = new User({ username, phone, password: hashedPassword, email, photo, address, type, favorites, workshopsEnrolled });
+
+    // Crear nuevo usuario
+    user = new User({
+      username,
+      phone,
+      password: hashedPassword,  // Contraseña encriptada
+      email,
+      photo,
+      address,
+      type,
+      favorites,
+      workshopsEnrolled
+    });
     await user.save();
 
+    // Generar token
     const token = generateToken(user);
+
+    // Configurar cookie con el token (expira en 1 hora)
+    res.cookie("token", token, { httpOnly: true, maxAge: 3600000 }); // 1 hora
+
     res.status(201).json({ message: "Usuario registrado exitosamente.", token });
   } catch (error) {
     console.error("Error en el registro:", error);
-    res.status(500).json({ message: "Error en el registro." });
+    res.status(500).json({ message: "Error en el registro. Intenta nuevamente." });
   }
 };
 
@@ -67,28 +116,28 @@ exports.login = async (req, res) => {
     console.log("Buscando usuario con email, teléfono o nombre de usuario:", emailOrPhone);
 
     // Buscar usuario por correo, teléfono o nombre de usuario
-    const user = await User.findOne({ $or: [{ email: emailOrPhone }, { phone: emailOrPhone }, { username: emailOrPhone }] });
+    const user = await User.findOne({ 
+      $or: [{ email: emailOrPhone }, { phone: emailOrPhone }, { username: emailOrPhone }] 
+    });
 
     if (!user) {
       console.log("Usuario no encontrado");
       return res.status(400).json({ message: 'Credenciales incorrectas.' });
     }
 
-    // Depura la contraseña
-    console.log("Contraseña ingresada:", password);
-    console.log("Contraseña almacenada:", user.password);
-
-    // Verificar la contraseña
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
+    // Comparar la contraseña encriptada
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       console.log("Contraseña incorrecta");
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
 
-    // Crear token JWT
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    console.log("Inicio de sesión exitoso para el usuario:", user._id, token);
+    // Generar token JWT si la contraseña es válida
+    const token = generateToken(user);
+    console.log("Inicio de sesión exitoso para el usuario:", user._id);
+
+    // Configurar cookie con el token (expira en 1 hora)
+    res.cookie("token", token, { httpOnly: true, maxAge: 3600000 }); // 1 hora
 
     res.json({ message: 'Inicio de sesión exitoso', token });
   } catch (error) {
