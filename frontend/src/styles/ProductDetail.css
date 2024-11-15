@@ -178,3 +178,22 @@
   .return-link:hover {
     text-decoration: underline;
   }
+  
+  /* Estilos para las notificaciones de SweetAlert2 */
+  .colored-toast.swal2-icon-success {
+    background-color: #4CAF50 !important;
+  }
+  
+  .colored-toast .swal2-title {
+    color: white;
+  }
+  
+  .swal2-popup.swal2-toast {
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    border-radius: 10px !important;
+  }
+  
+  .swal2-icon {
+    border-color: #fff !important;
+    color: #fff !important;
+  }
