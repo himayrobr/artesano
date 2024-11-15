@@ -20,14 +20,12 @@ import categoriesImg from '../storage/img/categories.svg'; // Asegúrate de que 
 import shoppingCartImg from '../storage/img/shoppingCart.svg'; // Asegúrate de que este archivo exista
 import generalSettingsImg from '../storage/img/generalSettings.svg'; // Asegúrate de que este archivo exista
 import { endpoints } from '../apiConfig.js';
-
-import { useHomeLogic } from '../data/StoreLogic.js';
 import orderBy from 'lodash/orderBy';
 
 // Función para obtener las tiendas
 const fetchStores = async () => {
   try {
-    const response = await fetch(endpoints.store); // Cambia la URL según sea necesario
+    const response = await fetch('http://localhost:5000/store/'); // Cambia la URL según sea necesario
     const data = await response.json();
     return data;
   } catch (error) {
