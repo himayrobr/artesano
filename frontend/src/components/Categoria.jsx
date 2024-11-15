@@ -225,7 +225,7 @@ function Categoria() {
         </div>
 
         <section className="productos-categorias">
-          <h2>Artesanías</h2>
+          <h2 className='titulo-productos-categorias'>Artesanías</h2>
 
           {loading ? (
             <div className="loading">
