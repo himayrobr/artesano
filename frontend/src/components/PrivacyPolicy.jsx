@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { endpoints } from '../apiConfig';  // Asegúrate de que endpoints esté correctamente configurado
 import '../styles/PrivacyPolicy.css';
 
 const PolicyPrivacy = () => {
@@ -34,9 +35,9 @@ const PolicyPrivacy = () => {
 
         // Determinamos el endpoint según si es un registro por email o por teléfono
         if (registrationData.email) {
-          endpoint = 'http://localhost:5000/auth/register/email';
+          endpoint = endpoints.registerByEmail;
         } else if (registrationData.phone) {
-          endpoint = 'http://localhost:5000/auth/register/phone';
+          endpoint = endpoints.registerByPhone;
         }
 
         // Si no es un registro válido, mostramos un mensaje de error

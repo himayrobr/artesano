@@ -34,9 +34,9 @@ const Login = () => {
   // Función para manejar el callback de autenticación y almacenar el token
   const handleAuthCallback = () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+    const userData = urlParams.get('userData');
 
-    if (token) {
+    if (userData?.token) {
       // Guardar el token en localStorage y en cookies para persistencia
       localStorage.setItem('authToken', token);
       Cookies.set('authToken', token, { expires: 1 }); // Cookie expira en 1 día

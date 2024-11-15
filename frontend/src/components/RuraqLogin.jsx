@@ -25,14 +25,22 @@ const RuraqLogin = () => {
         }
       );
 
+      if(response.status == 500){
+        console.log('Error');
+        return;
+      }
+
       // Guardar el token de la cookie en localStorage
-      const token = response.data.token;  // Asegúrate de que el backend también lo devuelva si es necesario
-      localStorage.setItem('authToken', token);
+      //const token = response.data.token;  // Asegúrate de que el backend también lo devuelva si es necesario
+      const data = response.data;  // Asegúrate de que el backend también lo devuelva si es necesario
+      // console.log('Data: ', token);
+      // localStorage.setItem('authToken', token);
+      localStorage.setItem('userData', JSON.stringify(data))
 
-      console.log('Token guardado:', token);
+      // console.log('Token guardado:', token);
 
-      // Mostrar el token en la consola y confirmar la sesión
-      console.log('Usuario conectado:', token);
+      // // Mostrar el token en la consola y confirmar la sesión
+      // console.log('Usuario conectado:', token);
 
       // Redirigir al home
       navigate('/home');

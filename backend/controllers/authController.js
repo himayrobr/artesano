@@ -131,10 +131,10 @@ exports.login = async (req, res) => {
     // Configurar cookie con el token (expira en 1 hora)
     res.cookie("token", token, { httpOnly: true, maxAge: 3600000 }); // 1 hora
 
-    res.json({ message: 'Inicio de sesión exitoso', token });
+    res.status(200).json({ userId: user.id, username: user.username, userPhoto: user.photo, token });
   } catch (error) {
     console.error("Error en el proceso de inicio de sesión:", error);
-    res.status(500).json({ message: 'Error en el servidor' });
+    res.status(500);
   }
 };
 

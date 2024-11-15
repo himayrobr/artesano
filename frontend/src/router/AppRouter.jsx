@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from '../components/Home.jsx';
 import Textileria from '../components/Textileria.jsx';
 import LoadingPage from '../components/LoadingPage.jsx';
@@ -55,6 +55,9 @@ const AppRouter = () => (
     <Route path="/CanjearCupon" element={<CanjearCupon />} />
     <Route path="/TallerEducativo" element={<TallerEducativo />} />
 
+
+    {/* Ruta por defecto */}
+    <Route path="*" element={<Navigate to="/" />} />
   </Routes>
 );
 

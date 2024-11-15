@@ -15,11 +15,12 @@ import customerServiceImg from '../storage/img/customerService.svg';
 import Diseño from '../storage/img/diseño.svg';
 import Filter from '../storage/img/Group8(1).svg';
 import profileImg from '../storage/img/perfile.png';
-import workshopsAndCraftsImg from '../storage/img/workshopsAndCrafts.svg';
-import couponsImg from '../storage/img/coupons.svg';
-import categoriesImg from '../storage/img/categories.svg';
-import shoppingCartImg from '../storage/img/shoppingCart.svg';
-import generalSettingsImg from '../storage/img/generalSettings.svg';
+import workshopsAndCraftsImg from '../storage/img/workshopsAndCrafts.svg'; // Asegúrate de que este archivo exista
+import couponsImg from '../storage/img/coupons.svg'; // Asegúrate de que este archivo exista
+import categoriesImg from '../storage/img/categories.svg'; // Asegúrate de que este archivo exista
+import shoppingCartImg from '../storage/img/shoppingCart.svg'; // Asegúrate de que este archivo exista
+import generalSettingsImg from '../storage/img/generalSettings.svg'; // Asegúrate de que este archivo exista
+import { endpoints } from '../apiConfig.js';
 
 import { endpoints } from '../apiConfig';
 import orderBy from 'lodash/orderBy';
@@ -27,7 +28,7 @@ import orderBy from 'lodash/orderBy';
 // Función para obtener las tiendas
 const fetchStores = async () => {
   try {
-    const response = await fetch('http://localhost:5000/store/');
+    const response = await fetch(endpoints.store); // Cambia la URL según sea necesario
     const data = await response.json();
     return data;
   } catch (error) {
