@@ -245,21 +245,27 @@
     margin-bottom: 15px;
     font-size: 18px;
 }
-.productos-categorias h2{
-    margin-left: 20px;
+.productos-categorias {
+    width: 100%;
+    margin-top: 20px; 
 }
-/* Grid de Productos */
+
+.productos-categorias h2 {
+    margin-left: 20px;
+    margin-top: 20px !important;
+}
+
 .producto-grid-categorias {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     padding: 30px;
-    justify-content: center;
-    align-items: stretch;
+    margin-top: 20px; /* Alternativamente, agrega margen aquí */
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
 }
+
 
 .producto-card-categorias {
     display: flex;
