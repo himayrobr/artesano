@@ -17,8 +17,6 @@ import Ajustes from '../components/Ajustes.jsx';
 import Comentarios from '../components/Comentarios.jsx';
 import AtencionCliente from '../components/AtencionCliente.jsx';
 import ProductDetail from '../components/ProductDetail.jsx';
-import CanjearCupon from '../components/CanjearCupon.jsx';
-import ProductosDescuentos from '../components/ProductosDescuentos';
 import Cart from '../components/Cart';
 import Chat from '../components/Chat.jsx'
 
@@ -51,10 +49,6 @@ const AppRouter = () => (
     <Route path="/Ajustes" element={<Ajustes /> } />
     <Route path="/Comentarios" element={<Comentarios /> } />  
     <Route path="/AtencionCliente" element={<AtencionCliente />} />
-    <Route path="/CanjearCupon" element={<CanjearCupon />} />
-    <Route path="/ProductosDescuentos" element={<ProductosDescuentos />} />
-
-
     <Route path="/Cart" element={<Cart />} />
     <Route path="/ProductosDescuentos" element={<ProductosDescuentos />} />
     <Route path="/CanjearCupon" element={<CanjearCupon />} />
