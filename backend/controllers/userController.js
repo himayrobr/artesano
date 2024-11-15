@@ -8,20 +8,26 @@ const Workshop = require('../models/workshopModel'); // Changed 'Taller' to 'Wor
 const updateUser = async (req, res) => {
   try {
     const userId = new mongoose.Types.ObjectId(req.params.id);
-    const { nombre, contraseña, fotoPerfil, direccion, telefono } = req.body;
+    console.log('1. ID recibido:', userId);
+    console.log('2. Datos recibidos:', req.body);
 
-    const updatedData = { nombre, fotoPerfil, direccion, telefono };
+    const updatedData = {};
+    
+    // Validar cada campo antes de añadirlo a updatedData
+    if (req.body.nombre) updatedData.username = req.body.nombre;
+    if (req.body.telefono) updatedData.phone = req.body.telefono;
+    if (req.body.direccion) updatedData.address = req.body.direccion;
+    if (req.body.fotoPerfil) updatedData.photo = req.body.fotoPerfil;
 
-    if (contraseña) {
-      const salt = await bcrypt.genSalt(10);
-      updatedData.contraseña = await bcrypt.hash(contraseña, salt);
-    }
+    console.log('3. Datos a actualizar:', updatedData);
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: updatedData },
       { new: true, runValidators: true }
     );
+
+    console.log('4. Usuario actualizado:', updatedUser);
 
     if (!updatedUser) {
       return res.status(404).json({ mensaje: 'Usuario no encontrado' });
@@ -32,6 +38,7 @@ const updateUser = async (req, res) => {
       usuario: updatedUser,
     });
   } catch (error) {
+    console.error('Error en updateUser:', error);
     res.status(500).json({ mensaje: 'Error al actualizar el usuario', error });
   }
 };
