@@ -19,6 +19,7 @@ import AtencionCliente from '../components/AtencionCliente.jsx';
 import ProductDetail from '../components/ProductDetail.jsx';
 import CanjearCupon from '../components/CanjearCupon.jsx';
 import ProductosDescuentos from '../components/ProductosDescuentos';
+import Cart from '../components/Cart';
 
 // Puedes agregar un componente de inicio aquí si lo deseas
 const AppRouter = () => (
@@ -49,6 +50,7 @@ const AppRouter = () => (
     <Route path="/ProductosDescuentos" element={<ProductosDescuentos />} />
 
 
+    <Route path="/Cart" element={<Cart />} />
   </Routes>
 );
 

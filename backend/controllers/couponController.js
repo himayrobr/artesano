@@ -4,12 +4,48 @@ const Coupon = require('../models/couponModel'); // Ajusta la ruta según la ubi
 // Crear un cupón
 exports.createCoupon = async (req, res) => {
   try {
+    // Extraer datos del cuerpo de la solicitud
     const { codigo, descuento, tipo, fechaExpiracion, usuarioId } = req.body;
-    const newCoupon = new Coupon({ codigo, descuento, tipo, fechaExpiracion, usuarioId });
-    await newCoupon.save();
-    res.status(201).json({ message: 'Cupón creado con éxito', coupon: newCoupon });
+
+    // Validar que los campos requeridos estén presentes
+    if (!codigo || !descuento || !tipo) {
+      return res.status(400).json({ 
+        mensaje: 'Los campos código, descuento y tipo son obligatorios'
+      });
+    }
+
+    // Validar que el código sea único
+    const cuponExistente = await Coupon.findOne({ codigo });
+    if (cuponExistente) {
+      return res.status(400).json({
+        mensaje: 'Ya existe un cupón con este código'
+      });
+    }
+
+    // Crear nuevo cupón
+    const nuevoCupon = new Coupon({
+      codigo,
+      descuento,
+      tipo,
+      fechaExpiracion,
+      usuarioId
+    });
+
+    // Guardar en base de datos
+    await nuevoCupon.save();
+
+    // Enviar respuesta exitosa
+    res.status(201).json({
+      mensaje: 'Cupón creado exitosamente',
+      cupon: nuevoCupon
+    });
+
   } catch (error) {
-    res.status(500).json({ message: 'Error al crear el cupón', error: error.message });
+    console.error('Error al crear cupón:', error);
+    res.status(500).json({
+      mensaje: 'Error al crear el cupón',
+      error: error.mensaje
+    });
   }
 };
 

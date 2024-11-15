@@ -110,7 +110,7 @@ const Home = () => {
                   <ul>
                     {searchResults.map((item) => (
                       <li key={item._id}>
-                        <Link to={`/producto/${item._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                        <Link to={`/product/${item._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
                           {/* Mostrar la primera imagen del array de fotos */}
                           {item.fotos && item.fotos[0] && (
                             <img src={item.fotos[0]} alt={item.nombre} className="product-thumbnail" />
@@ -261,7 +261,7 @@ const Home = () => {
         <Link to="/Home">
           <img src={categoriesImg} alt="Categorías" />
         </Link>
-        <Link to="/">
+        <Link to="/Cart">
           <img src={shoppingCartImg} alt="Carrito de compras" />
         </Link>
         <Link to="/Perfil">
