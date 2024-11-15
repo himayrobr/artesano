@@ -228,7 +228,7 @@ function Store() {
         <Link to="/Home">
           <img src={categoriesImg} alt="Categorías" />
         </Link>
-        <Link to="/shopping">
+        <Link to="/Cart">
           <img src={shoppingCartImg} alt="Carrito de compras" />
         </Link>
         <Link to="/Perfil">
