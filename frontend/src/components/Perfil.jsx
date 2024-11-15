@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Perfil.css';
 
@@ -18,12 +18,16 @@ import settingsImg from '../storage/img/settings.svg';
 import commentsImg from '../storage/img/comments.svg';
 import customerServiceImg from '../storage/img/customerService.svg';
 import Edit from '../storage/img/Group 17.svg';
-
-
-import { useHomeLogic } from '../data/PerfilLogic';
+import { endpoints } from '../apiConfig';
 
 function Perfil() {
-  const { menuOpen, searchTerm, filteredResults, toggleMenu, handleSearch } = useHomeLogic();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState({
+    products: [],
+    stores: []
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const menuRef = useRef(null);
 
   const [editMode, setEditMode] = useState({
@@ -43,6 +47,69 @@ function Perfil() {
 
   const [showPaymentForm, setShowPaymentForm] = useState(false);
 
+  // Function to toggle menu
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  // Function to perform search
+  const handleSearch = async (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    if (value.trim()) {
+      setIsLoading(true);
+      try {
+        // Fetch both products and stores simultaneously
+        const [productsResponse, storesResponse] = await Promise.all([
+          fetch(endpoints.search(value)),
+          fetch(endpoints.searchByStore(value))
+        ]);
+
+        if (!productsResponse.ok || !storesResponse.ok) {
+          throw new Error('Error en la búsqueda');
+        }
+
+        const [productsData, storesData] = await Promise.all([
+          productsResponse.json(),
+          storesResponse.json()
+        ]);
+
+        setSearchResults({
+          products: productsData,
+          stores: storesData
+        });
+      } catch (error) {
+        console.error('Error al buscar:', error);
+        setSearchResults({
+          products: [],
+          stores: []
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setSearchResults({
+        products: [],
+        stores: []
+      });
+    }
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const toggleEditMode = (field) => {
     setEditMode((prev) => ({ ...prev, [field]: !prev[field] }));
   };
@@ -61,11 +128,11 @@ function Perfil() {
   };
 
   return (
-      <div className="main">     
+    <div className="main">     
       <header>
         <div className="mobile-header">
           <div className="mobile-nav-toggle" >
-          <img src={menuImg} id='checkbox' alt="Menú" onClick={toggleMenu}/>
+            <img src={menuImg} id='checkbox' alt="Menú" onClick={toggleMenu}/>
             <div className="search">
               <img src={seekerImg} alt="Buscar" />
               <input
@@ -74,16 +141,54 @@ function Perfil() {
                 value={searchTerm}
                 onChange={handleSearch}
               />
+              {/* Search Results Container */}
+              {isLoading && (
+                <div className="result">
+                  <p>Buscando...</p>
+                </div>
+              )}
+              {(searchResults.products.length > 0 || searchResults.stores.length > 0) && (
+                <div className="result">
+                  {/* Store Results */}
+                  {searchResults.stores.length > 0 && (
+                    <div className="stores-results">
+                      <h4>Tiendas</h4>
+                      <ul>
+                        {searchResults.stores.map((store) => (
+                          <li key={`store-${store._id}`}>
+                            <Link to={`/store/${store._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                              {store.foto && (
+                                <img src={store.foto} alt={store.nombre} className="store-thumbnail" />
+                              )}
+                              <span style={{ marginLeft: '50px' }}>{store.nombre}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  {/* Product Results */}
+                  {searchResults.products.length > 0 && (
+                    <div className="products-results">
+                      <h4>Productos</h4>
+                      <ul>
+                        {searchResults.products.map((item) => (
+                          <li key={`product-${item._id}`}>
+                            <Link to={`/product/${item._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                              {item.fotos && item.fotos[0] && (
+                                <img src={item.fotos[0]} alt={item.nombre} className="product-thumbnail" />
+                              )}
+                              <span style={{ marginLeft: '50px' }}>{item.nombre} - ${item.precio}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-            {filteredResults.length > 0 && (
-              <div className="result">
-                <ul>
-                  {filteredResults.map((item) => (
-                    <li key={item._id_}>{item.name}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
         </div>
 
@@ -119,7 +224,7 @@ function Perfil() {
                 </Link>
               </li>
               <li>
-                <Link to="/CanjearCupon">
+                <Link to="/">
                   <img src={redeemCouponsImg} alt="Canjear cupón" />
                   <strong>Canjear cupón</strong>
                 </Link>

@@ -11,6 +11,7 @@ export const endpoints = {
   chat: `${API_BASE_URL}api/chat`, 
   getCategoryUrl: (categoria) => `${API_BASE_URL}products/categoria/${categoria}`,
   search: (query) => `${API_BASE_URL}products/search?q=${encodeURIComponent(query)}`,
+  searchByStore: (query) => `${API_BASE_URL}store/search?q=${encodeURIComponent(query)}`,
   getProductUrl: (productId) => `${API_BASE_URL}products/${productId}`,
 };
 

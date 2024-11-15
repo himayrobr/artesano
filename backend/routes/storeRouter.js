@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const storeController = require('../controllers/storeController');
 
-router.get('/stores', storeController.getAllStores);
+router.get('/', storeController.getAllStores);
+router.get('/search', storeController.searchStores);
 
 module.exports = router;

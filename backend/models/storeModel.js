@@ -6,7 +6,7 @@ const storeSchema = new mongoose.Schema({
   foto: { type: String, required: true },
   documental: { type: String, required: true },
   ciudad: { type: String, required: true },
-});
+}, { collection: 'Store' });
 
 const Store = mongoose.model('Store', storeSchema, 'Store');
 module.exports = Store;
