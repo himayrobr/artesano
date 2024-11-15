@@ -328,3 +328,132 @@ input::placeholder {
         font-size: 0.8rem;
     }
 }    
+
+.producto-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas por defecto */
+    gap: 20px;
+    justify-content: center; /* Centra los elementos horizontalmente */
+    align-items: center; /* Centra los elementos verticalmente */
+    width: 70%;
+    margin: 0 auto; /* Centra el contenedor */
+    padding: 20px 0;
+}
+
+.producto-card {
+    display: flex;
+    flex-direction: column; /* Asegura que el contenido de las tarjetas se apile verticalmente */
+    justify-content: center; /* Centra el contenido de las tarjetas verticalmente */
+    align-items: center; /* Centra el contenido de las tarjetas horizontalmente */
+}
+
+.producto-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.producto-card h3 {
+    font-size: 0.9rem;
+    color: white;
+    text-decoration: none;
+    text-align: center; /* Centra el título */
+}
+
+.producto-card p {
+    font-size: 0.8rem;
+    text-align: center; /* Centra el párrafo */
+}
+
+/* Back Link */
+.back-link {
+    display: inline-block;
+    margin: 15px 0;
+    color: #007bff;
+    text-decoration: none;
+    text-align: center; /* Centra el enlace */
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Media Queries para móviles y pantallas pequeñas */
+@media (max-width: 1280px) {
+    .producto-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en dispositivos grandes como el Galaxy S21 Ultra */
+    }
+}
+
+@media (max-width: 1024px) {
+    .producto-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en dispositivos como iPads y otros tablets */
+    }
+
+    .producto-card {
+        width: 100%; /* Permite que las tarjetas ocupen todo el ancho */
+    }
+}
+
+@media (max-width: 768px) {
+    .producto-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en pantallas pequeñas de móviles */
+    }
+
+    .producto-card {
+        width: 700%;
+    }
+
+    .portada-image {
+        width: 100%;
+        height: auto;
+    }
+
+    .titulo1 {
+        bottom: 0;
+        margin-top: -30px;
+    }
+    .categorias1 {
+        padding: 50px;
+        width: 100%;
+        height: 20vh;
+    }
+    .contenedor-categoria1 {
+        width: 100%;
+        height: 20vh;
+        margin-top: 8vh;
+    }
+    .search2::after {
+        border: none;
+        height: 5vh;
+    }
+}
+
+@media (max-width: 576px) {
+    .producto-grid {
+        grid-template-columns: 1fr; /* Una columna en pantallas más pequeñas (como móviles muy compactos) */
+    }
+
+    .producto-card {
+        width: 80%;
+    }
+
+    .titulo1 {
+        bottom: 0;
+        margin-top: -20px;
+        font-size: 10px;
+    }
+
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    .subtitulo {
+        font-size: 0.8rem;
+    }
+
+    .portada-image {
+        width: 100%;
+        height: 50vh;
+    }
+}

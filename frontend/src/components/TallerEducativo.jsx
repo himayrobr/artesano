@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/TallerEducativo.css';
 
@@ -9,6 +9,8 @@ import seekerImg from '../storage/img/seeker.svg';
 
 function TallerEducativo() {
     const [tallerECode, setTallerECode] = useState('');
+    const [talleres, setTalleres] = useState([]); // Estado para almacenar los talleres educativos
+    const [loading, setLoading] = useState(true); // Estado para manejar el loading
 
     const handleBack = () => {
         // Lógica para regresar a la página anterior
@@ -17,6 +19,23 @@ function TallerEducativo() {
     const handleInputChange = (event) => {
         setTallerECode(event.target.value);
     };
+
+    // Función para obtener los talleres educativos
+    const fetchTalleres = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/workshops'); // URL de la API que devuelve los talleres
+            const data = await response.json(); // Parsear la respuesta como JSON
+            setTalleres(data); // Guardar los talleres en el estado
+            setLoading(false); // Detener el loading
+        } catch (error) {
+            console.error('Error fetching talleres:', error);
+            setLoading(false); // Detener el loading en caso de error
+        }
+    };
+
+    useEffect(() => {
+        fetchTalleres(); // Llamar la función cuando el componente se monta
+    }, []);
 
     return (
         <div className='taller-educativo'>
@@ -43,46 +62,30 @@ function TallerEducativo() {
                     </div>
                 </div>
 
-                <div className="tallerE-card">
-                    <div className="tallerE-image-container">
-                        <img src={Imagenprueba} alt="Taller" className="tallerE-image" />
-                    </div>   
+                {/* Verificar si los talleres están cargando */}
+                {loading ? (
+                    <p>Cargando talleres...</p>
+                ) : (
+                    talleres.map((taller, index) => (
+                        <div key={index} className="tallerE-card">
+                            <div className="tallerE-image-container">
+                                <img src={taller.imagen || Imagenprueba} alt="Taller" className="tallerE-image" />
+                            </div>   
 
-                    <div className="tallerE-details">
-                        <p className="tallerE-info">Taller de bordado ayacuchano<br /><span>Para el público en general</span><br />Taller dado por los artesanos de Taller Awaq Ayllus</p>
-                        <button className="btn-use-tallerE">Entérate más sobre el taller aquí</button>
-                    </div>
-                </div>
-                <div className="tallerE-card">
-                    <div className="tallerE-image-container">
-                        <img src={Imagenprueba} alt="Taller" className="tallerE-image" />
-                    </div>   
+                            <div className="tallerE-details">
+                                <p className="tallerE-info">{taller.nombre}<br />
+                                    <span>{taller.descripcion}</span><br />
+                                    Taller dado por {taller.artesanoId}</p>
+                                <button className="btn-use-tallerE">
+                                    Entérate más sobre el taller aquí
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                )}
 
-                    <div className="tallerE-details">
-                        <p className="tallerE-info">Taller de bordado ayacuchano<br /><span>Para el público en general</span><br />Taller dado por los artesanos de Taller Awaq Ayllus</p>
-                        <button className="btn-use-tallerE">Entérate más sobre el taller aquí</button>
-                    </div>
-                </div>
-                <div className="tallerE-card">
-                    <div className="tallerE-image-container">
-                        <img src={Imagenprueba} alt="Taller" className="tallerE-image" />
-                    </div>   
-
-                    <div className="tallerE-details">
-                        <p className="tallerE-info">Taller de bordado ayacuchano<br /><span>Para el público en general</span><br />Taller dado por los artesanos de Taller Awaq Ayllus</p>
-                        <button className="btn-use-tallerE">Entérate más sobre el taller aquí</button>
-                    </div>
-                </div>
-                <div className="tallerE-card">
-                    <div className="tallerE-image-container">
-                        <img src={Imagenprueba} alt="Taller" className="tallerE-image" />
-                    </div>   
-
-                    <div className="tallerE-details">
-                        <p className="tallerE-info">Taller de bordado ayacuchano<br /><span>Para el público en general</span><br />Taller dado por los artesanos de Taller Awaq Ayllus</p>
-                        <button className="btn-use-tallerE">Entérate más sobre el taller aquí</button>
-                    </div>
-                </div>
+                {/* Aquí puedes mantener los talleres estáticos que ya tenías */}
+                
             </div>
         </div>
     );
