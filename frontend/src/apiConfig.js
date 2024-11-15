@@ -8,6 +8,7 @@ export const endpoints = {
   login: `${API_BASE_URL}auth/login`,
   logout: `${API_BASE_URL}auth/logout`,
   ruraqLogin: `${API_BASE_URL}auth/ruraq-login`,
+  chat: `${API_BASE_URL}api/chat`, 
   getCategoryUrl: (categoria) => `${API_BASE_URL}products/categoria/${categoria}`,
   search: (query) => `${API_BASE_URL}products/search?q=${encodeURIComponent(query)}`,
   getProductUrl: (productId) => `${API_BASE_URL}products/${productId}`,

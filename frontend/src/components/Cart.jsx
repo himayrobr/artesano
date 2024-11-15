@@ -172,61 +172,104 @@ const Cart = () => {
   );
 
   const renderCartContent = () => (
-    <div className='contenido'>
-      <h2>Tu Carrito</h2>
-      {cartState.items.length === 0 ? (
-        <div className="empty-cart">
-          <p>Tu carrito está vacío</p>
-          <Link to="/store" className="continue-shopping">
-            Continuar comprando
-          </Link>
-        </div>
-      ) : (
-        <div className="cart-items">
-          {cartState.items.map(item => ( 
-            <div key={item._id} className="cart-item">
-              {item.imagen && <img src={item.imagen} alt={item.nombre} />}
-              <div className="item-details">
-                <h3>{item.nombre}</h3>
-                <p className="price">Precio: ${item.precio}</p>
-                <div className="quantity-controls">
+    <div className="fondo">
+
+      <div className='contenido'>
+        <h2>Tu Carrito</h2>
+        <p>Revisa aquí los productos que añadiste a tu carrito</p>
+        {cartState.items.length === 0 ? (
+          <div className="empty-cart">
+            <p>Tu carrito está vacío</p>
+            <Link to="/store" className="continue-shopping">
+              Continuar comprando
+            </Link>
+          </div>
+        ) : (
+          <div className="cart-items">
+            {cartState.items.map(item => ( 
+              <div key={item._id} className="cart-item">
+                {item.imagen && <img src={item.imagen} alt={item.nombre} />}
+                <div className="item-details">
+                  <h3>{item.nombre}</h3>
+                  <p className="price">Precio: ${item.precio}</p>
+                  <div className="quantity-controls">
+                    <button 
+                      onClick={() => updateQuantity(item._id, item.cantidad - 1)}
+                      className="quantity-btn"
+                    >
+                      -
+                    </button>
+                    <span className="quantity">{item.cantidad}</span>
+                    <button 
+                      onClick={() => updateQuantity(item._id, item.cantidad + 1)}
+                      className="quantity-btn"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <p className="subtotal">Subtotal: ${item.precio * item.cantidad}</p>
                   <button 
-                    onClick={() => updateQuantity(item._id, item.cantidad - 1)}
-                    className="quantity-btn"
+                    onClick={() => removeFromCart(item._id)}
+                    className="remove-btn"
                   >
-                    -
-                  </button>
-                  <span className="quantity">{item.cantidad}</span>
-                  <button 
-                    onClick={() => updateQuantity(item._id, item.cantidad + 1)}
-                    className="quantity-btn"
-                  >
-                    +
+                    Eliminar
                   </button>
                 </div>
-                <p className="subtotal">Subtotal: ${item.precio * item.cantidad}</p>
-                <button 
-                  onClick={() => removeFromCart(item._id)}
-                  className="remove-btn"
-                >
-                  Eliminar
-                </button>
               </div>
+            ))}
+
+
+
+
+
+            <div className="abajoo">
+              <div className="botonna">
+              <button>Añadir cupón de descuento</button>
+              </div>
+              <div className="sub">
+                <div className="subtotall">
+                  <div className="deresub">
+                    <p>Sub total</p>
+                  </div>
+                  <div className="izqsub">
+                  ${cartState.total.toFixed(2)}
+                  </div>
+                </div>
+                <div className="subtotall">
+                  <div className="deresub">
+                    <p>
+                      Gastos de envío 
+                    </p>
+                  </div>
+                  <div className="izqsub">
+                  <p>$/20</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="sub2">
+                <div className="izqtot">
+                  Total
+                </div>
+                <div className="dertot">
+                ${ (cartState.total + 20).toFixed(2) }
+                </div>
+              </div>
+              
             </div>
-          ))}
-          <div className="cart-summary">
-            <h3>Total: ${cartState.total.toFixed(2)}</h3>
-            <button 
-              className="checkout-btn"
-              onClick={handleCheckout}
-            >
-              Proceder al pago
-            </button>
+            <div className="cart-summary">
+              <button 
+                className="checkout-btn"
+                onClick={handleCheckout}
+              >
+                Realizar compra
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
-  );
+    );
 
   const renderFooter = () => (
     <footer>

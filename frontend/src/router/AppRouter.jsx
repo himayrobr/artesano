@@ -20,6 +20,10 @@ import ProductDetail from '../components/ProductDetail.jsx';
 import CanjearCupon from '../components/CanjearCupon.jsx';
 import ProductosDescuentos from '../components/ProductosDescuentos';
 import Cart from '../components/Cart';
+import Chat from '../components/Chat.jsx'
+
+import ProductosDescuentos from '../components/ProductosDescuentos.jsx';
+import CanjearCupon from '../components/CanjearCupon.jsx';
 
 // Puedes agregar un componente de inicio aquí si lo deseas
 const AppRouter = () => (
@@ -31,6 +35,7 @@ const AppRouter = () => (
     <Route path="/registro/celular" element={<RegisterByPhone />} />
     <Route path="/ruraq-login" element={<RuraqLogin />} />
     <Route path="/politica-privacidad" element={<PrivacyPolicy />} />
+    <Route path="/chat" element={<Chat />} />
     
     {/* Rutas relacionadas con la tienda y categorías */}
     <Route path="/home" element={<Home />} />
@@ -51,6 +56,9 @@ const AppRouter = () => (
 
 
     <Route path="/Cart" element={<Cart />} />
+    <Route path="/ProductosDescuentos" element={<ProductosDescuentos />} />
+    <Route path="/CanjearCupon" element={<CanjearCupon />} />
+
   </Routes>
 );
 
