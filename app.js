@@ -116,3 +116,12 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Servidor ejecutándose en el puerto ${PORT}`);
 });
+
+app.use('/uploads', express.static('uploads'));
+
+// Crear directorio si no existe
+const fs = require('fs');
+const uploadDir = 'uploads/profile-photos';
+if (!fs.existsSync(uploadDir)){
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
