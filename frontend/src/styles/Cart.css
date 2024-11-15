@@ -7,6 +7,60 @@
     font-family: "Bellota-Regular";
 }
 
+.abajoo{
+    display: flex;
+    flex-direction: column;
+}
+
+.botonna button{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-radius: 7px;
+    background-color: #7d7d7d62;
+    border-color:#7d7d7d02;;
+    font-size: 20px;
+}
+
+.sub{
+    display: flex;
+    flex-direction: column;
+    border-radius: 7px;
+    background-color: #7d7d7d62;
+    border-color:#7d7d7d02;;
+    font-size: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top:20px ;
+}
+
+.deresub{
+    margin-bottom: 20px;
+}
+
+.sub2{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+    border-radius: 7px;
+    background-color: #7d7d7d62;
+    border-color:#7d7d7d02;;
+    font-size: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top:20px ;
+    padding-bottom: 20px;
+}
+.subtotall{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
 body.mobile-nav-open {
     overflow: hidden;
 }
@@ -16,6 +70,12 @@ body.mobile-nav-open {
     width: 100%;
 }
 
+.fondo{
+    overflow-x: auto;
+    padding-top: 25px;
+    background-color: #fff;
+    margin-bottom: 300px;
+}
 
 
 /* Campo de búsqueda */
@@ -84,13 +144,14 @@ body.mobile-nav-open {
 
 
 .cart-items{
-    background-color: lightseagreen;
+    background-color: rgb(255, 255, 255);
+    margin-top: 25px;
 }
 
 
 .contenido {
     padding: 20px;
-    background-color: #ff0000;
+    background-color: #ffffff;
     border-radius: 8px;
 }
 .cart-item {
@@ -98,12 +159,12 @@ body.mobile-nav-open {
     gap: 15px;
     margin-bottom: 15px;
     padding: 10px;
-    background-color: #000000;
+    background-color: #7d7d7d62;
     border: 1px solid #ddd;
     border-radius: 8px;
 }
 .cart-item img {
-    width: 80px;
+    width: 150px;
     border-radius: 8px;
 }
 .item-details {
@@ -124,7 +185,7 @@ body.mobile-nav-open {
 }
 .quantity-btn {
     padding: 5px 10px;
-    background-color: #00ff73;
+    background-color: #131313ab;
     border: none;
     border-radius: 5px;
     cursor: pointer;
