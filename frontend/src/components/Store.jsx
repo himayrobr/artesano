@@ -1,7 +1,8 @@
-// Store.js
 import React, { useRef, useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Importa useNavigate para la redirección
+import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Store.css';
+
+// Importar imágenes
 import menuImg from '../storage/img/menu.svg';
 import seekerImg from '../storage/img/seeker.svg';
 import favoritesImg from '../storage/img/favorites.svg';
@@ -14,19 +15,19 @@ import customerServiceImg from '../storage/img/customerService.svg';
 import Diseño from '../storage/img/diseño.svg';
 import Filter from '../storage/img/Group8(1).svg';
 import profileImg from '../storage/img/perfile.png';
-import workshopsAndCraftsImg from '../storage/img/workshopsAndCrafts.svg'; // Asegúrate de que este archivo exista
-import couponsImg from '../storage/img/coupons.svg'; // Asegúrate de que este archivo exista
-import categoriesImg from '../storage/img/categories.svg'; // Asegúrate de que este archivo exista
-import shoppingCartImg from '../storage/img/shoppingCart.svg'; // Asegúrate de que este archivo exista
-import generalSettingsImg from '../storage/img/generalSettings.svg'; // Asegúrate de que este archivo exista
+import workshopsAndCraftsImg from '../storage/img/workshopsAndCrafts.svg';
+import couponsImg from '../storage/img/coupons.svg';
+import categoriesImg from '../storage/img/categories.svg';
+import shoppingCartImg from '../storage/img/shoppingCart.svg';
+import generalSettingsImg from '../storage/img/generalSettings.svg';
 
-import { useHomeLogic } from '../data/StoreLogic.js';
+import { endpoints } from '../apiConfig';
 import orderBy from 'lodash/orderBy';
 
 // Función para obtener las tiendas
 const fetchStores = async () => {
   try {
-    const response = await fetch('http://localhost:5000/store/stores'); // Cambia la URL según sea necesario
+    const response = await fetch('http://localhost:5000/store/');
     const data = await response.json();
     return data;
   } catch (error) {
@@ -36,28 +37,57 @@ const fetchStores = async () => {
 };
 
 function Store() {
-  const { menuOpen, searchTerm, filteredResults, toggleMenu, handleSearch } = useHomeLogic();
-  const navigate = useNavigate(); // Inicializa el hook useNavigate
+  const navigate = useNavigate();
   const menuRef = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orderByValue, setOrderByValue] = useState('nombre');
   const [sortedTalleres, setSortedTalleres] = useState([]);
   const [talleresData, setTalleresData] = useState([]);
+  
+  // Estados para el buscador
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState({
+    products: [],
+    stores: []
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Cargar las tiendas al montar el componente
+  // Efecto para cargar las tiendas
   useEffect(() => {
     const loadStores = async () => {
       const stores = await fetchStores();
-      setTalleresData(stores); // Almacena los datos en el estado
-      setSortedTalleres(stores); // Al principio, los talleres no estarán ordenados
+      setTalleresData(stores);
+      setSortedTalleres(stores);
     };
     loadStores();
   }, []);
 
-  // Abrir o cerrar el modal de filtro
-  const toggleModal = () => setIsModalOpen(!isModalOpen);
-  
-  // Cambiar el orden de los talleres
+  // Efecto para cerrar el menú al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Función para alternar el menú
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  // Función para alternar el modal de filtro
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  // Función para manejar el cambio de orden
   const handleOrderChange = (e) => {
     const orderValue = e.target.value;
     setOrderByValue(orderValue);
@@ -77,7 +107,50 @@ function Store() {
     setSortedTalleres(sortedArray);
   };
 
-  // Redirigir al detalle de un taller específico
+  // Función para manejar la búsqueda
+  const handleSearch = async (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    if (value.trim()) {
+      setIsLoading(true);
+      try {
+        const [productsResponse, storesResponse] = await Promise.all([
+          fetch(endpoints.search(value)),
+          fetch(endpoints.searchByStore(value))
+        ]);
+
+        if (!productsResponse.ok || !storesResponse.ok) {
+          throw new Error('Error en la búsqueda');
+        }
+
+        const [productsData, storesData] = await Promise.all([
+          productsResponse.json(),
+          storesResponse.json()
+        ]);
+
+        setSearchResults({
+          products: productsData,
+          stores: storesData
+        });
+      } catch (error) {
+        console.error('Error al buscar:', error);
+        setSearchResults({
+          products: [],
+          stores: []
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setSearchResults({
+        products: [],
+        stores: []
+      });
+    }
+  };
+
+  // Función para manejar el clic en una tarjeta
   const handleCardClick = (taller) => {
     navigate(`/taller/${taller._id}`, { state: { taller } });
   };
@@ -96,16 +169,54 @@ function Store() {
                 value={searchTerm}
                 onChange={handleSearch}
               />
+              {/* Contenedor de resultados de búsqueda */}
+              {isLoading && (
+                <div className="result">
+                  <p>Buscando...</p>
+                </div>
+              )}
+              {(searchResults.products.length > 0 || searchResults.stores.length > 0) && (
+                <div className="result">
+                  {/* Resultados de tiendas */}
+                  {searchResults.stores.length > 0 && (
+                    <div className="stores-results">
+                      <h4>Tiendas</h4>
+                      <ul>
+                        {searchResults.stores.map((store) => (
+                          <li key={`store-${store._id}`}>
+                            <Link to={`/store/${store._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                              {store.foto && (
+                                <img src={store.foto} alt={store.nombre} className="store-thumbnail" />
+                              )}
+                              <span style={{ marginLeft: '50px' }}>{store.nombre}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  {/* Resultados de productos */}
+                  {searchResults.products.length > 0 && (
+                    <div className="products-results">
+                      <h4>Productos</h4>
+                      <ul>
+                        {searchResults.products.map((item) => (
+                          <li key={`product-${item._id}`}>
+                            <Link to={`/product/${item._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                              {item.fotos && item.fotos[0] && (
+                                <img src={item.fotos[0]} alt={item.nombre} className="product-thumbnail" />
+                              )}
+                              <span style={{ marginLeft: '50px' }}>{item.nombre} - ${item.precio}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-            {filteredResults.length > 0 && (
-              <div className="result">
-                <ul>
-                  {filteredResults.map((item) => (
-                    <li key={item._id}>{item.name}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
         </div>
 
@@ -140,7 +251,7 @@ function Store() {
                 </Link>
               </li>
               <li>
-                <Link to="/CanjearCupon">
+                <Link to="/">
                   <img src={redeemCouponsImg} alt="Canjear cupón" />
                   <strong>Canjear cupón</strong>
                 </Link>
@@ -188,12 +299,11 @@ function Store() {
                   <span className="close" onClick={toggleModal}>&times;</span>
                   <h2>Filtrar búsqueda</h2>
                   
-                  {/* Selección para ordenar */}
                   <label htmlFor="orderBy">Ordenar por:</label>
                   <select 
                     id="orderBy"
                     value={orderByValue} 
-                    onChange={handleOrderChange} 
+                    onChange={handleOrderChange}
                   >
                     <option value="nombre">Nombre</option>
                     <option value="ubicacion">Ubicación</option>
@@ -218,6 +328,7 @@ function Store() {
           </div>
         </section>
       </main>
+
       <footer>
         <Link to="/Store">
           <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />
