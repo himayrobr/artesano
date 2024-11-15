@@ -45,7 +45,7 @@ const Home = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState('');
-  const [userPhoto, setUserPhoto] = useState('');
+  const [userPhoto, setUserPhoto] = useState(null);
   const menuRef = useRef(null);
   const navigate = useNavigate();
 
@@ -111,7 +111,7 @@ const Home = () => {
 
       if (userData) {
         setUsername(userData.username);
-        setUserPhoto(userData.photo ? userData.photo : BaseProfileImg);
+        setUserPhoto(userData.userPhoto ? userData.userPhoto : BaseProfileImg);
       }
     } catch (error) {
       console.error('Error al parsear datos:', error);
@@ -154,6 +154,20 @@ const Home = () => {
       console.error('Error al cerrar sesión:', error);
     }
   };
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    setUserPhoto(userData?.userPhoto || BaseProfileImg);
+
+    // Escuchar cambios en la foto
+    const handlePhotoUpdate = () => {
+      const updatedUserData = JSON.parse(localStorage.getItem('userData'));
+      setUserPhoto(updatedUserData?.userPhoto || BaseProfileImg);
+    };
+
+    window.addEventListener('userPhotoUpdated', handlePhotoUpdate);
+    return () => window.removeEventListener('userPhotoUpdated', handlePhotoUpdate);
+  }, []);
 
   return (
     <div>
@@ -225,7 +239,14 @@ const Home = () => {
           <div className="mobile-top-bar">
             {/* Close menu button */}
             <span className="mobile-nav-toggle close" onClick={toggleMenu}>
-              <img src={userPhoto} alt="Perfil" />
+              <img 
+                src={userPhoto} 
+                alt="Foto de perfil"
+                onError={(e) => {
+                  e.target.onerror = null; 
+                  e.target.src = BaseProfileImg;
+                }}
+              />
               <h3>{username}</h3>
             </span>
           </div>
