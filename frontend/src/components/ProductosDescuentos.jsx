@@ -324,7 +324,7 @@ function ProductosDescuentos() {
                 ) : (
                     <div className="producto-grid-categorias-descuento">
                         {productos.map((producto) => (
-                            <div key={producto.id} className="producto-card-categorias">
+                            <div key={producto.id} className="productos-card-categorias">
                                 <img src={producto.image} alt={producto.nombre} />
                                 <h3>{producto.nombre}</h3>
                                 {producto.artesano && <p>{producto.artesano}</p>}

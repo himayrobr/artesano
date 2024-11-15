@@ -255,13 +255,13 @@ const Home = () => {
           <div className="main-navigation">
             <ul className="navigation__option">
               <li>
-                <Link to="/">
+                <Link to="/Home">
                   <img src={favoritesImg} alt="Lista de favoritos" />
                   <strong>Lista de favoritos</strong>
                 </Link>
               </li>
               <li>
-                <Link to="/">
+                <Link to="/Home">
                   <img src={shoppingImg} alt="Compras" />
                   <strong>Compras</strong>
                 </Link>
@@ -273,7 +273,7 @@ const Home = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/">
+                <Link to="/CanjearCupon">
                   <img src={redeemCouponsImg} alt="Canjear cupón" />
                   <strong>Canjear cupón</strong>
                 </Link>
@@ -297,12 +297,6 @@ const Home = () => {
                 <Link to="/AtencionCliente">
                   <img src={customerServiceImg} alt="Atención al cliente" />
                   <strong>Atención al cliente</strong>
-                </Link>
-              </li>
-              <li>
-                <Link onClick={handleLogout}>
-                  <img src={customerServiceImg} alt="" />
-                  <strong>Cerrar sesion</strong>
                 </Link>
               </li>
             </ul>

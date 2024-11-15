@@ -14,8 +14,8 @@
 }
 
 .mobile-header {
-    background: #000;
-    height: 70px;
+    background: #101010;
+    height: 50px;
     padding: 0 15px;
 }
 
@@ -256,7 +256,7 @@
     margin-top: 20px;
 }
 
-.producto-card-categorias {
+.productos-card-categorias {
     background-color: #060606;
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -264,28 +264,31 @@
     position: relative;
     overflow: hidden;
     transition: transform 0.3s ease;
-    height: 30vh;
+    height: 28vh;
 }
 
-.producto-card-categorias img {
+.productos-card-categorias img {
     width: 100%;
     border-radius: 5px;
 }
 
-.producto-card-categorias h3 {
+.productos-card-categorias h3 {
     font-size: 16px;
+    color: white;
     font-weight: bold;
+    text-align: center;
 }
 
-.producto-card-categorias p {
+.productos-card-categorias p {
     font-size: 14px;
-    color: #666;
+    color: #ffffff;
+    text-align: center;
 }
 
-.producto-card-categorias .precio {
+.productos-card-categorias .precio {
+    color: #333;
     font-size: 16px;
     font-weight: bold;
-    color: #333;
 }
 
 /* Descuento y Promoción */
@@ -353,7 +356,6 @@ footer a img:hover {
     
     .categorias1-categoria {
         max-height: 100px;
-        overflow: hidden;
     }
     .productos-categorias {
         padding: 10px;  

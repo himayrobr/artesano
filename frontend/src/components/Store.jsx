@@ -155,7 +155,7 @@ function Store() {
   };
 
   return (
-    <div className="main">
+    <div className="main-store">
       <header>
         <div className="mobile-header">
           <div className="mobile-nav-toggle">
@@ -232,13 +232,13 @@ function Store() {
           <div className="main-navigation">
             <ul className="navigation__option">
               <li>
-                <Link to="/">
+                <Link to="/Home">
                   <img src={favoritesImg} alt="Lista de favoritos" />
                   <strong>Lista de favoritos</strong>
                 </Link>
               </li>
               <li>
-                <Link to="/">
+                <Link to="/Home">
                   <img src={shoppingImg} alt="Compras" />
                   <strong>Compras</strong>
                 </Link>
@@ -250,7 +250,7 @@ function Store() {
                 </Link>
               </li>
               <li>
-                <Link to="/">
+                <Link to="/CanjearCupon">
                   <img src={redeemCouponsImg} alt="Canjear cupón" />
                   <strong>Canjear cupón</strong>
                 </Link>

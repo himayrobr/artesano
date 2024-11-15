@@ -317,7 +317,6 @@ function Perfil() {
 
   return (
     <div>
-      {/* Header */}
       <header>
         <div className="mobile-header">
           <div className="mobile-nav-toggle">
@@ -346,7 +345,7 @@ function Perfil() {
       </header>
 
       {/* Contenido principal del perfil */}
-      <main className="main">
+      <main className="main-perfil">
         <div className="profile-container">
           <div className="profile-header">
             <div 
@@ -401,7 +400,7 @@ function Perfil() {
                   setEditMode(prev => ({ ...prev, username: !editMode.username }));
                 }}
               >
-                <img src={Edit} alt="Editar" />
+                <img src={Edit} className="Editar" />
               </button>
             </div>
 
@@ -422,7 +421,7 @@ function Perfil() {
                   setEditMode({...editMode, email: !editMode.email});
                 }}
               >
-                <img src={Edit} alt="Editar" />
+                <img src={Edit} className="Editar" />
               </button>
             </div>
 
@@ -443,7 +442,7 @@ function Perfil() {
                   setEditMode({...editMode, phone: !editMode.phone});
                 }}
               >
-                <img src={Edit} alt="Editar" />
+                <img src={Edit} className="Editar" />
               </button>
             </div>
 
@@ -464,7 +463,7 @@ function Perfil() {
                   setEditMode({...editMode, address: !editMode.address});
                 }}
               >
-                <img src={Edit} alt="Editar" />
+                <img src={Edit} className="Editar" />
               </button>
             </div>
           </div>
@@ -506,61 +505,55 @@ function Perfil() {
           </span>
         </div>
         
-        <div className="main-navigation">
-          <ul className="navigation__option">
-            <li>
-              <Link to="/">
-                <img src={favoritesImg} alt="Lista de favoritos" />
-                <strong>Lista de favoritos</strong>
-              </Link>
-            </li>
-            <li>
-              <Link to="/">
-                <img src={shoppingImg} alt="Compras" />
-                <strong>Compras</strong>
-              </Link>
-            </li>
-            <li>
-              <Link to="/TallerEducativo">
-                <img src={workshopImg} alt="Talleres" />
-                <strong>Talleres</strong>
-              </Link>
-            </li>
-            <li>
-              <Link to="/">
-                <img src={redeemCouponsImg} alt="Canjear cupón" />
-                <strong>Canjear cupón</strong>
-              </Link>
-            </li>
-          </ul>
-          <div className="navigation__division"></div>
-          <ul className="navigation__option">
-            <li>
-              <Link to="/Ajustes">
-                <img src={settingsImg} alt="Ajustes" />
-                <strong>Ajustes</strong>
-              </Link>
-            </li>
-            <li>
-              <Link to="/Comentarios">
-                <img src={commentsImg} alt="Comentarios" />
-                <strong>Comentarios</strong>
-              </Link>
-            </li>
-            <li>
-              <Link to="/AtencionCliente">
-                <img src={customerServiceImg} alt="Atención al cliente" />
-                <strong>Atención al cliente</strong>
-              </Link>
-            </li>
-            <li>
-              <Link onClick={handleLogout}>
-                <img src={customerServiceImg} alt="" />
-                <strong>Cerrar sesión</strong>
-              </Link>
-            </li>
-          </ul>
-        </div>
+          <div className="main-navigation">
+            <ul className="navigation__option">
+              <li>
+                <Link to="/Home">
+                  <img src={favoritesImg} alt="Lista de favoritos" />
+                  <strong>Lista de favoritos</strong>
+                </Link>
+              </li>
+              <li>
+                <Link to="/Home">
+                  <img src={shoppingImg} alt="Compras" />
+                  <strong>Compras</strong>
+                </Link>
+              </li>
+              <li>
+                <Link to="/TallerEducativo">
+                  <img src={workshopImg} alt="Talleres" />
+                  <strong>Talleres</strong>
+                </Link>
+              </li>
+              <li>
+                <Link to="/CanjearCupon">
+                  <img src={redeemCouponsImg} alt="Canjear cupón" />
+                  <strong>Canjear cupón</strong>
+                </Link>
+              </li>
+            </ul>
+            <div className="navigation__division"></div>
+            <ul className="navigation__option">
+              <li>
+                <Link to="/Ajustes">
+                  <img src={settingsImg} alt="Ajustes" />
+                  <strong>Ajustes</strong>
+                </Link>
+              </li>
+              <li>
+                <Link to="/Comentarios">
+                  <img src={commentsImg} alt="Comentarios" />
+                  <strong>Comentarios</strong>
+                </Link>
+              </li>
+              <li>
+                <Link to="/AtencionCliente">
+                  <img src={customerServiceImg} alt="Atención al cliente" />
+                  <strong>Atención al cliente</strong>
+                </Link>
+              </li>
+            </ul>
+          </div>
       </div>
     </div>
   );
