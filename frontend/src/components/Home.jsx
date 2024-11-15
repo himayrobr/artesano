@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';  
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { endpoints } from '../apiConfig';
 import '../styles/Home.css';
@@ -14,6 +15,7 @@ import categoriesImg from '../storage/img/categories.svg';
 import shoppingCartImg from '../storage/img/shoppingCart.svg';
 import generalSettingsImg from '../storage/img/generalSettings.svg';
 import profileImg from '../storage/img/perfile.png';
+import BaseProfileImg from '../storage/img/R.png';
 import workshopImg from '../storage/img/workshop.svg';
 import redeemCouponsImg from '../storage/img/redeemCoupons.svg';
 import settingsImg from '../storage/img/settings.svg';
@@ -39,7 +41,10 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState('');
+  const [userPhoto, setUserPhoto] = useState('');
   const menuRef = useRef(null);
+  const navigate = useNavigate();
 
   // Function to toggle menu
   const toggleMenu = () => {
@@ -71,19 +76,62 @@ const Home = () => {
     }
   };
 
-  // Close menu when clicking outside
   useEffect(() => {
+    // Obtener datos del usuario del localStorage
+    try {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+
+      if (!userData || !userData.token) {
+        navigate('/', { replace: true });
+        //window.location.href = '/'; // * Descomentar en caso de que no retorne al Login...
+        return;
+      }  
+
+      if (userData) {
+        setUsername(userData.username);
+        setUserPhoto(userData.photo ? userData.photo : BaseProfileImg);
+      }
+    } catch (error) {
+      console.error('Error al parsear datos:', error);
+    }
+    
+    // Close menu when clicking outside
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setMenuOpen(false);
       }
     };
 
+    // Prevenir navegación hacia atrás después del logout
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener('popstate', preventBack);
+
     document.addEventListener('mousedown', handleClickOutside);
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('popstate', preventBack);
     };
-  }, []); // Close the useEffect hook properly
+  }, [navigate]); // Close the useEffect hook properly
+
+  const preventBack = () => {
+    window.history.pushState(null, null, window.location.pathname);
+  };
+
+  const handleLogout = () => {
+    try {
+      // Limpiar datos
+      setUsername('');
+      setUserPhoto('')
+      localStorage.clear(); // Limpia todo el localStorage
+
+      // Redirigir y reemplazar la entrada en el historial
+      navigate('/', { replace: true });
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  };
 
   return (
     <div>
@@ -131,8 +179,8 @@ const Home = () => {
           <div className="mobile-top-bar">
             {/* Close menu button */}
             <span className="mobile-nav-toggle close" onClick={toggleMenu}>
-              <img src={profileImg} alt="Perfil" />
-              <h3>SaraMartin9</h3>
+              <img src={userPhoto} alt="Perfil" />
+              <h3>{username}</h3>
             </span>
           </div>
           
@@ -182,6 +230,12 @@ const Home = () => {
                 <Link to="/AtencionCliente">
                   <img src={customerServiceImg} alt="Atención al cliente" />
                   <strong>Atención al cliente</strong>
+                </Link>
+              </li>
+              <li>
+                <Link onClick={handleLogout}>
+                  <img src={customerServiceImg} alt="" />
+                  <strong>Cerrar sesion</strong>
                 </Link>
               </li>
             </ul>
