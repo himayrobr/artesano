@@ -16,6 +16,7 @@ body.mobile-nav-open {
     width: 100%;
 }
 
+<<<<<<< HEAD
 /* Mobile Header */
 .mobile-header {
     background: #000;
@@ -35,6 +36,9 @@ body.mobile-nav-open {
     width: 40px;
     cursor: pointer;
 }
+=======
+
+>>>>>>> dev-ensamble
 
 /* Campo de búsqueda */
 .search {
@@ -100,6 +104,7 @@ body.mobile-nav-open {
     width: 60%;
 }
 
+<<<<<<< HEAD
 /* Carrito */
 .cart-container {
     padding: 20px;
@@ -107,6 +112,17 @@ body.mobile-nav-open {
 .contenido {
     padding: 20px;
     background-color: #f8f8f8;
+=======
+
+.cart-items{
+    background-color: lightseagreen;
+}
+
+
+.contenido {
+    padding: 20px;
+    background-color: #ff0000;
+>>>>>>> dev-ensamble
     border-radius: 8px;
 }
 .cart-item {
@@ -114,7 +130,11 @@ body.mobile-nav-open {
     gap: 15px;
     margin-bottom: 15px;
     padding: 10px;
+<<<<<<< HEAD
     background-color: #fff;
+=======
+    background-color: #000000;
+>>>>>>> dev-ensamble
     border: 1px solid #ddd;
     border-radius: 8px;
 }
@@ -140,7 +160,11 @@ body.mobile-nav-open {
 }
 .quantity-btn {
     padding: 5px 10px;
+<<<<<<< HEAD
     background-color: #ddd;
+=======
+    background-color: #00ff73;
+>>>>>>> dev-ensamble
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -167,6 +191,7 @@ body.mobile-nav-open {
 }
 
 /* Footer */
+<<<<<<< HEAD
 footer {
     display: flex;
     justify-content: space-around;
@@ -177,3 +202,6 @@ footer a img {
     width: 30px;
     cursor: pointer;
 }
+=======
+
+>>>>>>> dev-ensamble

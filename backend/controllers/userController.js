@@ -124,40 +124,38 @@ const getEnrolledWorkshops = async (req, res) => {
 };
 
 // Get favorites
-const getFavorites = async (req, res) => {
+const obtenerFavoritos = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(400).json({ mensaje: 'ID de usuario no válido' });
     }
-    const userId = new mongoose.Types.ObjectId(req.params.id);
-    const userWithFavorites = await User.aggregate([
+    const usuarioId = new mongoose.Types.ObjectId(req.params.id);
+    const usuarioConTalleres = await User.aggregate([
       {
-        $match: { _id: userId },
+        $match: { _id: usuarioId }, 
       },
       {
         $lookup: {
-          from: 'product',
+          from: 'Product',
           localField: 'favoritos',
           foreignField: '_id',
-          as: 'favorites',
+          as: 'Favoritos',
         },
       },
       {
         $project: {
           _id: 0,
           nombre: 1,
-          favorites: 1,
+          Favoritos: 1,
         },
       },
     ]);
-
-    if (!userWithFavorites || userWithFavorites.length === 0) {
+    if (!usuarioConTalleres || usuarioConTalleres.length === 0) {
       return res.status(404).json({ mensaje: 'Este usuario no tiene productos favoritos' });
     }
-
     res.status(200).json({
       mensaje: 'Favoritos encontrados',
-      usuario: userWithFavorites[0],
+      usuario: usuarioConTalleres[0],
     });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al buscar los favoritos', error });
@@ -287,7 +285,7 @@ module.exports = {
   getUserById,
   deleteUserById,
   getEnrolledWorkshops,
-  getFavorites,
+  obtenerFavoritos,
   addFavorite,
   removeFavorite,
   addWorkshop,
