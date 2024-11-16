@@ -1,34 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
-import { useHomeLogic } from '../data/TallerLogic.js';
+import { Link, useParams } from 'react-router-dom';
+import { endpoints } from '../apiConfig';
 import '../styles/TallerAwaq.css';
 
 import Return from '../storage/img/arrow_back.svg';
 import seekerImg from '../storage/img/seeker.svg';
 import Filter from '../storage/img/Group8(1).svg';
+import SearchBar from './SearchBar';
 
 function TallerAwaq() {
-  useHomeLogic();
-
+  const { id } = useParams();
+  const [taller, setTaller] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filterInput, setFilterInput] = useState('');
   const [orderByValue, setOrderByValue] = useState('nombre');
   const [sortedTalleres, setSortedTalleres] = useState([]);
-  const [allTalleres, setAllTalleres] = useState([]); // Estado para almacenar todos los talleres
-  const location = useLocation();
-  const { taller } = location.state || {}; // Obtener el taller seleccionado desde la ruta
+  const [allTalleres, setAllTalleres] = useState([]);
 
+  // Fetch taller específico
+  useEffect(() => {
+    const fetchTallerDetails = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(endpoints.getTaller(id));
+        
+        if (!response.ok) {
+          throw new Error('No se pudo cargar la información del taller');
+        }
+
+        const data = await response.json();
+        setTaller(data);
+      } catch (err) {
+        console.error('Error al cargar el taller:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchTallerDetails();
+    }
+  }, [id]);
+
+  // Fetch todos los talleres
   useEffect(() => {
     const fetchTalleres = async () => {
       try {
-        const response = await fetch('http://localhost:5000/store/');  // Cambia esto si es necesario
+        const response = await fetch(endpoints.getAllTalleres());
         
-        // Verifica si la respuesta fue exitosa
         if (!response.ok) {
-          throw new Error('Error en la respuesta: ${response.statusText}');
+          throw new Error(`Error en la respuesta: ${response.statusText}`);
         }
   
-        const data = await response.json();  // Intenta obtener los datos JSON
+        const data = await response.json();
         console.log('Datos recibidos:', data);
         setAllTalleres(data);
       } catch (error) {
@@ -38,45 +65,43 @@ function TallerAwaq() {
   
     fetchTalleres();
   }, []);
-  
 
+  // Efecto para filtrar y ordenar talleres
   useEffect(() => {
-    // Aplica el filtro y el orden cuando cambian filterInput o orderByValue
-    let filteredTalleres = [...allTalleres]; // Copiar los talleres originales
+    let filteredTalleres = [...allTalleres];
 
-    // Filtro por nombre (si el input tiene texto)
     if (filterInput) {
       filteredTalleres = filteredTalleres.filter((taller) =>
         taller.nombre.toLowerCase().includes(filterInput.toLowerCase())
       );
     }
 
-    // Ordena por el valor seleccionado (nombre o ubicación)
     filteredTalleres = filteredTalleres.sort((a, b) => {
       if (orderByValue === 'nombre') {
         return a.nombre.localeCompare(b.nombre);
       }
-      return a.ciudad.localeCompare(b.ciudad); // Ordenar por ciudad
+      return a.ciudad.localeCompare(b.ciudad);
     });
 
-    setSortedTalleres(filteredTalleres);  // Actualizar los talleres filtrados y ordenados
-  }, [filterInput, orderByValue, allTalleres]);  // Depender de filterInput, orderByValue y allTalleres
+    setSortedTalleres(filteredTalleres);
+  }, [filterInput, orderByValue, allTalleres]);
 
-  if (!sortedTalleres.length) {
-    return <div>No se encontraron talleres.</div>;  // Mostrar mensaje si no hay talleres
+  if (loading) {
+    return <div className="loading">Cargando información del taller...</div>;
   }
 
-  // Función para manejar cambios en el campo de búsqueda
+  if (error) {
+    return <div className="error">Error: {error}</div>;
+  }
+
   const handleSearchChange = (e) => {
     setFilterInput(e.target.value);
   };
 
-  // Función para manejar cambios en el criterio de orden
   const handleOrderChange = (e) => {
     setOrderByValue(e.target.value);
   };
 
-  // Función para abrir y cerrar el modal de filtro
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -89,27 +114,19 @@ function TallerAwaq() {
         </Link>
 
         <div className='titulo1'>{taller ? taller.nombre : 'Taller no encontrado'}</div>
-        <img src={taller ? taller.foto : ''} alt={taller ? taller.nombre : ''} className="portada-image" />
-        <h1>{taller ? taller.ciudad : ''}</h1>
+        <img src={taller?.foto} alt={taller?.nombre} className="portada-image" />
+        <h1>{taller?.ciudad}</h1>
         <p className="subtitulo">
-          Detalles del taller: {taller ? taller.descripcion : 'Descripción no disponible'}</p>
+          Detalles del taller: {taller ? taller.descripcion : 'Descripción no disponible'}
+        </p>
       </header>
 
       <section className="productos">
         <h2>Artesanías</h2>
-        <div className="search1">
-          <img src={seekerImg} className="Buscar" />
-          <input
-            type="text"
-            placeholder="Buscar taller..."
-            value={filterInput}
-            onChange={handleSearchChange}
-          />
-        </div>
+        <SearchBar /> {/* Aquí usamos el nuevo componente SearchBar */}
 
         <img src={Filter} alt="Filtro" className="filter" onClick={toggleModal} />
 
-        {/* Modal de filtro */}
         {isModalOpen && (
           <div className="modal">
             <div className="modal-content">
@@ -133,15 +150,15 @@ function TallerAwaq() {
 
         <div className="producto-grid">
           {sortedTalleres.length > 0 ? (
-            sortedTalleres.map((taller, index) => (
-              <div className="producto-card" key={index}>
+            sortedTalleres.map((taller) => (
+              <div className="producto-card" key={taller._id}>
                 <img src={taller.foto} alt={taller.nombre} />
                 <h3>{taller.nombre}</h3>
                 <p>{taller.ciudad}</p>
               </div>
             ))
           ) : (
-            <p>No se encontraron talleres</p>  // Mensaje si no hay resultados
+            <p>No se encontraron talleres</p>
           )}
         </div>
       </section>
@@ -149,4 +166,4 @@ function TallerAwaq() {
   );
 }
 
-export default TallerAwaq
+export default TallerAwaq;

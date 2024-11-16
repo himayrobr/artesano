@@ -6,6 +6,7 @@ import Botonretroceso from '../storage/img/arrow_back.svg';
 import Rombo from '../storage/img/Rectangle86.svg';
 import Imagenprueba from '../storage/img/Rectangle 14.png';
 import seekerImg from '../storage/img/seeker.svg';
+import SearchBar from './SearchBar';
 
 function TallerEducativo() {
     const [tallerECode, setTallerECode] = useState('');
@@ -49,18 +50,7 @@ function TallerEducativo() {
                 <h1 className='title-taller'>Talleres<br />Educativos</h1>
             </header>
             <div className="content-container">
-                <div className="search-tallerE">
-                    <img src={seekerImg} alt="Buscar" className='Buscar-taller' />
-                    <div className="input-group">
-                        <input 
-                            type="text" 
-                            value={tallerECode} 
-                            onChange={handleInputChange} 
-                            placeholder="Buscar taller, por categoría o artesanos" 
-                            className="input-tallerE"
-                        />
-                    </div>
-                </div>
+                <SearchBar /> 
 
                 {/* Verificar si los talleres están cargando */}
                 {loading ? (

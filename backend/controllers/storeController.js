@@ -25,15 +25,18 @@ exports.searchStores = async (req, res) => {
   }
 };
 
-
-const handleStoreClick = async (_id) => {
+// Buscar tienda por ID
+exports.getStoreById = async (req, res) => {
   try {
-    const response = await fetch(`http://localhost:5000/store/${_id}`); // Solicitar información de la tienda por ID
-    if (!response.ok) throw new Error('Error al obtener los datos de la tienda');
+    const { id } = req.params; // ID de la tienda desde los parámetros de la URL
+    const store = await Stores.findById(id);
 
-    const storeData = await response.json();
-    setTaller(storeData); // Actualizar el estado con la nueva tienda seleccionada
+    if (!store) {
+      return res.status(404).json({ message: 'Tienda no encontrada' });
+    }
+
+    res.status(200).json(store);
   } catch (error) {
-    console.error('Error al obtener los datos de la tienda:', error);
+    res.status(500).json({ message: 'Error al buscar la tienda', error });
   }
 };

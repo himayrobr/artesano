@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import '../styles/Categoria.css';
 import productoPlaceholder from '../storage/img/Rectangle 14.png';
+import SearchBar from './SearchBar';
 import { endpoints } from '../apiConfig';
 
-// Icon imports remain unchanged
+// Icon imports
 import Ceramica from '../storage/img/ceramicCategory.svg';
 import TextileriaIcon from '../storage/img/workshopCategory.svg';
 import Tallaenpiedra from '../storage/img/stoneWorkshopCategory.svg';
@@ -16,7 +17,6 @@ import Orfebreria from '../storage/img/goldsmithCategory.svg';
 import Estampado from '../storage/img/stampedCategory.svg';
 import Pintura from '../storage/img/paintingTraditionalCategory.svg';
 import Filter from '../storage/img/Group8(1).svg';
-import seekerImg from '../storage/img/seeker.svg';
 import Return from '../storage/img/arrow_back.svg';
 import Rombo from '../storage/img/Rectangle86.svg';
 import orderBy from 'lodash/orderBy';
@@ -30,11 +30,6 @@ function Categoria() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [orderByValue, setOrderByValue] = useState('nombre');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  // Estados para el buscador
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
@@ -66,43 +61,12 @@ function Categoria() {
     }
   }, [categoriaId]);
 
-  // Actualiza los resultados de búsqueda en base al término ingresado
-  useEffect(() => {
-    const searchProductos = async () => {
-      if (searchTerm.trim() === '') {
-        setSearchResults([]);
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        const response = await fetch(endpoints.search(searchTerm));
-        if (!response.ok) {
-          throw new Error('Error en la búsqueda');
-        }
-        const data = await response.json();
-        setSearchResults(data);
-      } catch (error) {
-        console.error('Error al buscar:', error);
-        setSearchResults([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    searchProductos();
-  }, [searchTerm]);
-
-  // Efecto para aplicar filtros y ordenamiento
+  // Effect for applying filters and sorting
   useEffect(() => {
     let filtered = [...productos];
     filtered = orderBy(filtered, [orderByValue], ['asc']);
     setFilteredProducts(filtered);
   }, [orderByValue, productos]);
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
   
@@ -116,6 +80,7 @@ function Categoria() {
     <div className="main2">
       <div className='conten-todo'>
         <header className='header'>
+
           <button onClick={handleBack} className="back-button">
             <img src={Return} alt="return" className='flecha' />
           </button>
@@ -123,19 +88,12 @@ function Categoria() {
           <h1 className='category'>Categorias</h1>
         </header>
 
-        {/* Buscador y Filtro combinados */}
-        <div className="search">
-          <img src={seekerImg} alt="Buscar" className='Buscar-categoria' />
-          <input
-            type="text"
-            placeholder="Buscar producto..."
-            value={searchTerm}
-            onChange={handleSearch}
-          />
+        <div className="filter-container">
+          <SearchBar />
           <img 
             src={Filter} 
             alt="Filtro" 
-            className="filter-categorias" 
+            className="filters-categorias" 
             onClick={toggleModal}
           />
           
@@ -152,29 +110,6 @@ function Categoria() {
                 </select>
                 <button onClick={toggleModal}>Aplicar filtro</button>
               </div>
-            </div>
-          )}
-
-          {/* Resultados de búsqueda */}
-          {isLoading && (
-            <div className="result">
-              <p>Buscando...</p>
-            </div>
-          )}
-          {searchResults.length > 0 && searchTerm && (
-            <div className="result">
-              <ul>
-                {searchResults.map((item) => (
-                  <li key={item._id}>
-                    <Link to={`/product/${item._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-                      {item.fotos && item.fotos[0] && (
-                        <img src={item.fotos[0]} alt={item.nombre} className="product-thumbnail" />
-                      )}
-                      <span style={{ marginLeft: '50px' }}>{item.nombre} - ${item.precio}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
             </div>
           )}
         </div>
@@ -249,8 +184,8 @@ function Categoria() {
                         />
                       </div>
                       <h3>{producto.nombre}</h3>
-                    <p>{producto.ubicacion}</p>
-                    <p>S/.{producto.precio}</p>
+                      <p>{producto.ubicacion}</p>
+                      <p>S/.{producto.precio}</p>
                     </Link>
                   </div>
                 ))

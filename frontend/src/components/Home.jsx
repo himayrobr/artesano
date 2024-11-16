@@ -1,12 +1,13 @@
 import React, { useRef, useState, useEffect } from 'react';  
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import SearchBar from './SearchBar'; // Importamos el nuevo componente
+import Footer from './Footer';
 import { endpoints } from '../apiConfig';
 import '../styles/Home.css';
 
 // Import images
 import menuImg from '../storage/img/menu.svg';
-import seekerImg from '../storage/img/seeker.svg';
 import favoritesImg from '../storage/img/favorites.svg';
 import shoppingImg from '../storage/img/shopping.svg';
 import workshopsAndCraftsImg from '../storage/img/workshopsAndCrafts.svg';
@@ -14,7 +15,6 @@ import couponsImg from '../storage/img/coupons.svg';
 import categoriesImg from '../storage/img/categories.svg';
 import shoppingCartImg from '../storage/img/shoppingCart.svg';
 import generalSettingsImg from '../storage/img/generalSettings.svg';
-import profileImg from '../storage/img/perfile.png';
 import BaseProfileImg from '../storage/img/R.png';
 import workshopImg from '../storage/img/workshop.svg';
 import redeemCouponsImg from '../storage/img/redeemCoupons.svg';
@@ -38,12 +38,6 @@ import Pintura from '../storage/img/paintingTraditionalCategory.svg';
 
 const Home = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState({
-    products: [],
-    stores: []
-  });
-  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [userPhoto, setUserPhoto] = useState(null);
   const menuRef = useRef(null);
@@ -52,50 +46,6 @@ const Home = () => {
   // Function to toggle menu
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
-  };
-
-  // Function to perform combined search
-  const handleSearch = async (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-
-    if (value.trim()) {
-      setIsLoading(true);
-      try {
-        // Fetch both products and stores simultaneously
-        const [productsResponse, storesResponse] = await Promise.all([
-          fetch(endpoints.search(value)),
-          fetch(endpoints.searchByStore(value))
-        ]);
-
-        if (!productsResponse.ok || !storesResponse.ok) {
-          throw new Error('Error en la búsqueda');
-        }
-
-        const [productsData, storesData] = await Promise.all([
-          productsResponse.json(),
-          storesResponse.json()
-        ]);
-
-        setSearchResults({
-          products: productsData,
-          stores: storesData
-        });
-      } catch (error) {
-        console.error('Error al buscar:', error);
-        setSearchResults({
-          products: [],
-          stores: []
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      setSearchResults({
-        products: [],
-        stores: []
-      });
-    }
   };
 
   useEffect(() => {
@@ -134,7 +84,7 @@ const Home = () => {
       document.removeEventListener('mousedown', handleClickOutside);
       window.removeEventListener('popstate', preventBack);
     };
-  }, [navigate]); // Close the useEffect hook properly
+  }, [navigate]);
 
   const preventBack = () => {
     window.history.pushState(null, null, window.location.pathname);
@@ -144,7 +94,7 @@ const Home = () => {
     try {
       // Limpiar datos
       setUsername('');
-      setUserPhoto('')
+      setUserPhoto('');
       localStorage.clear(); // Limpia todo el localStorage
 
       // Redirigir y reemplazar la entrada en el historial
@@ -175,62 +125,7 @@ const Home = () => {
         <div className="mobile-header">
           <div className="mobile-nav-toggle">
             <img src={menuImg} id='checkbox' alt="Menú" onClick={toggleMenu}/>
-            <div className="search">
-              <img src={seekerImg} alt="Buscar" />
-              <input
-                type="text"
-                placeholder="Buscar producto o tienda..."
-                value={searchTerm}
-                onChange={handleSearch}
-              />
-              {/* Search Results Container */}
-              {isLoading && (
-                <div className="result">
-                  <p>Buscando...</p>
-                </div>
-              )}
-              {(searchResults.products.length > 0 || searchResults.stores.length > 0) && (
-                <div className="result">
-                  {/* Store Results */}
-                  {searchResults.stores.length > 0 && (
-                    <div className="stores-results">
-                      <h4>Tiendas</h4>
-                      <ul>
-                        {searchResults.stores.map((store) => (
-                          <li key={`store-${store._id}`}>
-                            <Link to={`/store/${store._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-                              {store.foto && (
-                                <img src={store.foto} alt={store.nombre} className="store-thumbnail" />
-                              )}
-                              <span style={{ marginLeft: '50px' }}>{store.nombre}</span>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  
-                  {/* Product Results */}
-                  {searchResults.products.length > 0 && (
-                    <div className="products-results">
-                      <h4>Productos</h4>
-                      <ul>
-                        {searchResults.products.map((item) => (
-                          <li key={`product-${item._id}`}>
-                            <Link to={`/product/${item._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-                              {item.fotos && item.fotos[0] && (
-                                <img src={item.fotos[0]} alt={item.nombre} className="product-thumbnail" />
-                              )}
-                              <span style={{ marginLeft: '50px' }}>{item.nombre} - ${item.precio}</span>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+            <SearchBar /> {/* Aquí usamos el nuevo componente SearchBar */}
           </div>
         </div>
 
@@ -366,23 +261,7 @@ const Home = () => {
         </section>
       </main>
       
-      <footer>
-        <Link to="/Store">
-          <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />
-        </Link>
-        <Link to="/ProductosDescuentos">
-          <img src={couponsImg} alt="ProductosDescuentos" />
-        </Link>
-        <Link to="/Home">
-          <img src={categoriesImg} alt="Categorías" />
-        </Link>
-        <Link to="/Cart">
-          <img src={shoppingCartImg} alt="Carrito de compras" />
-        </Link>
-        <Link to="/Perfil">
-          <img src={generalSettingsImg} alt="Configuración general" />
-        </Link>
-      </footer>
+      <Footer />
     </div>
   );
 }
