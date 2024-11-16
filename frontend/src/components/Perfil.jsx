@@ -1,71 +1,326 @@
-import React, { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { endpoints } from '../apiConfig';
 import '../styles/Perfil.css';
+import Edit from '../storage/img/Group 17.svg';
+import profileImg from '../storage/img/perfile.png';
+import Swal from 'sweetalert2';
 
+// Importar imágenes del header y footer
 import menuImg from '../storage/img/menu.svg';
 import seekerImg from '../storage/img/seeker.svg';
-import favoritesImg from '../storage/img/favorites.svg';
-import shoppingImg from '../storage/img/shopping.svg';
 import workshopsAndCraftsImg from '../storage/img/workshopsAndCrafts.svg';
 import couponsImg from '../storage/img/coupons.svg';
 import categoriesImg from '../storage/img/categories.svg';
 import shoppingCartImg from '../storage/img/shoppingCart.svg';
 import generalSettingsImg from '../storage/img/generalSettings.svg';
-import profileImg from '../storage/img/perfile.png';
+import BaseProfileImg from '../storage/img/R.png';
+import favoritesImg from '../storage/img/favorites.svg';
+import shoppingImg from '../storage/img/shopping.svg';
 import workshopImg from '../storage/img/workshop.svg';
 import redeemCouponsImg from '../storage/img/redeemCoupons.svg';
 import settingsImg from '../storage/img/settings.svg';
 import commentsImg from '../storage/img/comments.svg';
 import customerServiceImg from '../storage/img/customerService.svg';
-import Edit from '../storage/img/Group 17.svg';
-
-
-import { useHomeLogic } from '../data/PerfilLogic';
 
 function Perfil() {
-  const { menuOpen, searchTerm, filteredResults, toggleMenu, handleSearch } = useHomeLogic();
-  const menuRef = useRef(null);
-
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState({
     username: false,
     email: false,
-    Télefono: false,
-    Género: false,
-    dob: false
+    phone: false,
+    address: false
   });
-  const [userData, setUserData] = useState({
-    username: "SaraMartin9",
-    email: "SMBY1996@gmail.com",
-    Télefono: "301155788",
-    gender: "Femenino",
-    dob: "1996-09-15"
-  });
+  const [isDragging, setIsDragging] = useState(false);
+  const dropZoneRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const menuRef = useRef(null);
 
-  const [showPaymentForm, setShowPaymentForm] = useState(false);
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const userDataString = localStorage.getItem('userData');
+        console.log('A. userData en localStorage:', userDataString);
+        
+        const userData = JSON.parse(userDataString);
+        console.log('B. userData parseado:', userData);
 
-  const toggleEditMode = (field) => {
-    setEditMode((prev) => ({ ...prev, [field]: !prev[field] }));
+        if (!userData?.userId) {
+          console.log('C. No hay userId en userData');
+          navigate('/login');
+          return;
+        }
+
+        const url = `${endpoints.getUserById}/${userData.userId}`;
+        console.log('D. URL para obtener usuario:', url);
+
+        const response = await fetch(url, {
+          headers: {
+            'Authorization': `Bearer ${userData.token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        console.log('E. Respuesta del servidor:', response);
+        
+        const data = await response.json();
+        console.log('F. Datos del usuario recibidos:', data);
+        
+        if (response.ok) {
+          setUser(data.usuario);
+          console.log('G. Usuario establecido en el estado:', data.usuario);
+        } else {
+          throw new Error(data.mensaje || 'Error al cargar datos');
+        }
+      } catch (error) {
+        console.error('H. Error completo:', error);
+        console.error('I. Stack del error:', error.stack);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudieron cargar los datos del usuario'
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserData();
+  }, [navigate]);
+
+  // Función para manejar la actualización
+  const handleUpdate = async (field) => {
+    try {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      console.log('1. Datos del usuario en localStorage:', userData);
+      
+      const fieldMapping = {
+        username: 'nombre',
+        email: 'email',
+        phone: 'telefono',
+        address: 'direccion',
+        photo: 'fotoPerfil'
+      };
+
+      const updateData = {
+        [fieldMapping[field]]: user[field]
+      };
+      
+      console.log('2. Campo a actualizar:', field);
+      console.log('3. Nombre del campo en backend:', fieldMapping[field]);
+      console.log('4. Datos a enviar:', updateData);
+
+      const response = await fetch(`${endpoints.updateUser}/${userData.userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userData.token}`
+        },
+        body: JSON.stringify(updateData)
+      });
+
+      const data = await response.json();
+      console.log('8. Datos de la respuesta:', data);
+
+      if (response.ok) {
+        // Actualizar el estado con los datos del usuario actualizados
+        setUser(data.usuario);
+        
+        // Actualizar localStorage
+        if (field === 'username') {
+          const updatedUserData = {
+            ...userData,
+            username: data.usuario.nombre // Usar el nombre actualizado de la respuesta
+          };
+          console.log('9. Actualizando localStorage con:', updatedUserData);
+          localStorage.setItem('userData', JSON.stringify(updatedUserData));
+        }
+
+        // Mostrar notificación de éxito
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "¡Datos actualizados!",
+          showConfirmButton: false,
+          timer: 1500,
+          toast: true
+        });
+
+        // Desactivar modo de edición
+        setEditMode(prev => ({ ...prev, [field]: false }));
+      } else {
+        throw new Error(data.mensaje || 'Error al actualizar');
+      }
+    } catch (error) {
+      console.error('10. Error:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudieron actualizar los datos'
+      });
+    }
   };
 
-  const handleInputChange = (e, field) => {
-    setUserData({ ...userData, [field]: e.target.value });
-  };
-
-  const togglePaymentForm = () => {
-    setShowPaymentForm(!showPaymentForm);
-  };
-
-  const handlePaymentSubmit = (e) => {
+  // Funciones para drag & drop
+  const handleDragEnter = (e) => {
     e.preventDefault();
-    togglePaymentForm();
+    e.stopPropagation();
+    setIsDragging(true);
   };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      handlePhotoUpload(file);
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Por favor, sube solo imágenes'
+      });
+    }
+  };
+
+  const handlePhotoClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handlePhotoUpload = async (file) => {
+    try {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      const formData = new FormData();
+      formData.append('fotoPerfil', file);
+
+      console.log('Subiendo foto para usuario:', userData.userId);
+
+      const response = await fetch(`${endpoints.updateUser}/${userData.userId}/photo`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${userData.token}`
+        },
+        body: formData
+      });
+
+      console.log('Respuesta del servidor:', response);
+      const data = await response.json();
+      console.log('Datos recibidos:', data);
+
+      if (response.ok) {
+        setUser(prev => ({
+          ...prev,
+          photo: data.usuario.photo
+        }));
+
+        const updatedUserData = {
+          ...userData,
+          userPhoto: data.usuario.photo
+        };
+        localStorage.setItem('userData', JSON.stringify(updatedUserData));
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "¡Foto actualizada!",
+          showConfirmButton: false,
+          timer: 1500,
+          toast: true
+        });
+      } else {
+        throw new Error(data.mensaje || 'Error al actualizar la foto');
+      }
+    } catch (error) {
+      console.error('Error completo:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No se pudo actualizar la foto'
+      });
+    }
+  };
+
+  // Función para toggle menu
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
+  // Función para búsqueda
+  const handleSearch = async (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    if (value.trim()) {
+      setIsLoading(true);
+      try {
+        const response = await fetch(endpoints.search(value));
+        if (!response.ok) {
+          throw new Error('Error en la búsqueda');
+        }
+        const data = await response.json();
+        setSearchResults(data);
+      } catch (error) {
+        console.error('Error al buscar:', error);
+        setSearchResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  const handleLogout = () => {
+    try {
+      localStorage.clear();
+      navigate('/', { replace: true });
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  if (loading) return <div>Cargando...</div>;
+  if (!user) return <div>No se encontraron datos del usuario</div>;
 
   return (
-      <div className="main">     
+    <div>
       <header>
         <div className="mobile-header">
-          <div className="mobile-nav-toggle" >
-          <img src={menuImg} id='checkbox' alt="Menú" onClick={toggleMenu}/>
+          <div className="mobile-nav-toggle">
+            <img src={menuImg} id='checkbox' alt="Menú" onClick={toggleMenu}/>
             <div className="search">
               <img src={seekerImg} alt="Buscar" />
               <input
@@ -74,40 +329,192 @@ function Perfil() {
                 value={searchTerm}
                 onChange={handleSearch}
               />
+              {isLoading && (
+                <div className="result">
+                  <p>Buscando...</p>
+                </div>
+              )}
+              {searchResults.length > 0 && (
+                <div className="result">
+                  {/* ... resultados de búsqueda ... */}
+                </div>
+              )}
             </div>
-            {filteredResults.length > 0 && (
-              <div className="result">
-                <ul>
-                  {filteredResults.map((item) => (
-                    <li key={item._id_}>{item.name}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
         </div>
+      </header>
 
-        {/* Menú lateral */}
-        <div className={`navigation ${menuOpen ? 'open' : ''}`} ref={menuRef}>
-          <div className="mobile-top-bar">
-            {/* Botón de cerrar menú */}
-            <span className="mobile-nav-toggle close" onClick={toggleMenu}>
-              <img src={profileImg} alt="Perfil" />
-              <h3>SaraMartin9</h3>
-            </span>
+      {/* Contenido principal del perfil */}
+      <main className="main-perfil">
+        <div className="profile-container">
+          <div className="profile-header">
+            <div 
+              className={`profile-photo-container ${isDragging ? 'dragging' : ''}`}
+              ref={dropZoneRef}
+              onClick={handlePhotoClick}
+              onDragEnter={handleDragEnter}
+              onDragLeave={handleDragLeave}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            >
+              <img 
+                src={user?.photo || '/src/storage/img/R.png'} 
+                alt="Foto de perfil" 
+                className="profile-photo"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = '/src/storage/img/R.png';
+                }}
+              />
+              <div className="photo-overlay">
+                <span>{isDragging ? 'Suelta la imagen' : 'Arrastra una foto o haz clic'}</span>
+              </div>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={(e) => handlePhotoUpload(e.target.files[0])}
+                accept="image/*"
+                style={{ display: 'none' }}
+              />
+            </div>
           </div>
-          
-          {/* Menú de navegación */}
+
+          <div className="profile-info">
+            {/* Username */}
+            <div className="profile-field">
+              <label>Nombre de usuario:</label>
+              <input
+                type="text"
+                value={user?.username || ''}
+                disabled={!editMode.username}
+                onChange={(e) => setUser(prev => ({
+                  ...prev,
+                  username: e.target.value
+                }))}
+              />
+              <button 
+                onClick={() => {
+                  if (editMode.username) {
+                    handleUpdate('username');
+                  }
+                  setEditMode(prev => ({ ...prev, username: !editMode.username }));
+                }}
+              >
+                <img src={Edit} className="Editar" />
+              </button>
+            </div>
+
+            {/* Email */}
+            <div className="profile-field">
+              <label>Email:</label>
+              <input
+                type="email"
+                value={user.email || ''}
+                disabled={!editMode.email}
+                onChange={(e) => setUser({...user, email: e.target.value})}
+              />
+              <button 
+                onClick={() => {
+                  if (editMode.email) {
+                    handleUpdate('email');
+                  }
+                  setEditMode({...editMode, email: !editMode.email});
+                }}
+              >
+                <img src={Edit} className="Editar" />
+              </button>
+            </div>
+
+            {/* Teléfono */}
+            <div className="profile-field">
+              <label>Teléfono:</label>
+              <input
+                type="tel"
+                value={user.phone || ''}
+                disabled={!editMode.phone}
+                onChange={(e) => setUser({...user, phone: e.target.value})}
+              />
+              <button 
+                onClick={() => {
+                  if (editMode.phone) {
+                    handleUpdate('phone');
+                  }
+                  setEditMode({...editMode, phone: !editMode.phone});
+                }}
+              >
+                <img src={Edit} className="Editar" />
+              </button>
+            </div>
+
+            {/* Dirección */}
+            <div className="profile-field">
+              <label>Dirección:</label>
+              <input
+                type="text"
+                value={user.address || ''}
+                disabled={!editMode.address}
+                onChange={(e) => setUser({...user, address: e.target.value})}
+              />
+              <button 
+                onClick={() => {
+                  if (editMode.address) {
+                    handleUpdate('address');
+                  }
+                  setEditMode({...editMode, address: !editMode.address});
+                }}
+              >
+                <img src={Edit} className="Editar" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer>
+        <Link to="/Store">
+          <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />
+        </Link>
+        <Link to="/">
+          <img src={couponsImg} alt="Cupones" />
+        </Link>
+        <Link to="/Home">
+          <img src={categoriesImg} alt="Categorías" />
+        </Link>
+        <Link to="/Cart">
+          <img src={shoppingCartImg} alt="Carrito de compras" />
+        </Link>
+        <Link to="/Perfil">
+          <img src={generalSettingsImg} alt="Configuración general" />
+        </Link>
+      </footer>
+
+      {/* Menú de navegación lateral */}
+      <div className={`navigation ${menuOpen ? 'open' : ''}`} ref={menuRef}>
+        <div className="mobile-top-bar">
+          <span className="mobile-nav-toggle close" onClick={toggleMenu}>
+            <img 
+              src={user?.photo || BaseProfileImg} 
+              alt="Foto de perfil"
+              onError={(e) => {
+                e.target.onerror = null; 
+                e.target.src = BaseProfileImg;
+              }}
+            />
+            <h3>{user?.username || 'Usuario'}</h3>
+          </span>
+        </div>
+        
           <div className="main-navigation">
             <ul className="navigation__option">
               <li>
-                <Link to="/">
+                <Link to="/Home">
                   <img src={favoritesImg} alt="Lista de favoritos" />
                   <strong>Lista de favoritos</strong>
                 </Link>
               </li>
               <li>
-                <Link to="/">
+                <Link to="/Home">
                   <img src={shoppingImg} alt="Compras" />
                   <strong>Compras</strong>
                 </Link>
@@ -147,139 +554,7 @@ function Perfil() {
               </li>
             </ul>
           </div>
-        </div>
-      </header>
-      
-      <main className="profile-container">
-        <div className="profile-header">
-          <h2>Foto de perfil</h2>
-          <img src={profileImg} alt="Foto de perfil" className="profile-photo" />
-        </div>
-
-        <div className="profile-info">
-          {Object.keys(userData).map((field) => {
-            if (field === 'gender' || field === 'dob') {
-              return null;
-            }
-
-            return (
-              <div className="profile-field" key={field}>
-                <label>{field.charAt(0).toUpperCase() + field.slice(1)}:</label>
-                <input
-                  type={field === 'email' ? 'email' : 'text'}
-                  value={userData[field]}
-                  disabled={!editMode[field]}
-                  onChange={(e) => handleInputChange(e, field)}
-                />
-                <img
-                  src={Edit}
-                  alt="edit"
-                  id="editar"
-                  onClick={() => toggleEditMode(field)}
-                />
-              </div>
-            );
-          })}
-
-          {/* Contenedor para el género y la fecha de nacimiento */}
-          <div className="profile-field-group">
-            <div className="profile-field">
-              <label>Género:</label>
-              <select
-                value={userData.gender}
-                disabled={!editMode.gender}
-                onChange={(e) => handleInputChange(e, 'gender')}
-                className={`interactive-select ${!editMode.gender ? 'disabled' : ''}`}
-              >
-                <option value="female">Femenino</option>
-                <option value="male">Masculino</option>
-              </select>
-              <img
-                src={Edit}
-                alt="edit"
-                id="editar"
-                onClick={() => toggleEditMode('gender')}
-              />
-            </div>
-
-            <div className="profile-field">
-              <label>Fecha de nacimiento:</label>
-              <input
-                type="date"
-                value={userData.dob}
-                disabled={!editMode.dob}
-                onChange={(e) => handleInputChange(e, 'dob')}
-                className={`interactive-date ${!editMode.dob ? 'disabled' : ''}`}
-              />
-              <img
-                src={Edit}
-                alt="edit"
-                id="editar"
-                onClick={() => toggleEditMode('dob')}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="payment-methods">
-          <h3>Métodos de pago</h3>
-          <input type="text" value="Visa Mastercard" disabled />
-          <button className="add-payment" onClick={togglePaymentForm}>
-            Añadir método de pago
-          </button>
-
-          {showPaymentForm && (
-            <div className="payment-form-modal-overlay" onClick={togglePaymentForm}>
-              <div className="payment-form-modal" onClick={(e) => e.stopPropagation()}>
-                <form className="payment-form" onSubmit={handlePaymentSubmit}>
-                  <h4>Añadir Método de Pago</h4>
-                  <label>
-                    Tipo de Tarjeta:
-                    <select required>
-                      <option value="visa">Visa</option>
-                      <option value="mastercard">Mastercard</option>
-                    </select>
-                  </label>
-                  <label>
-                    Número de Tarjeta:
-                    <input type="text" placeholder="Número de tarjeta" required />
-                  </label>
-                  <label>
-                    Fecha de Expiración:
-                    <input type="text" placeholder="MM/AA" required />
-                  </label>
-                  <label>
-                    Código de Seguridad:
-                    <input type="text" placeholder="CVC" required />
-                  </label>
-                  <button type="submit">Guardar</button>
-                  <button type="button" onClick={togglePaymentForm}>
-                    Cancelar
-                  </button>
-                </form>
-              </div>
-            </div>
-          )}
-        </div>
-      </main>
-      
-      <footer>
-        <Link to="/Store">
-          <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />
-        </Link>
-        <Link to="/ProductosDescuentos">
-          <img src={couponsImg} alt="Cupones" />
-        </Link>
-        <Link to="/Home">
-          <img src={categoriesImg} alt="Categorías" />
-        </Link>
-        <Link to="/">
-          <img src={shoppingCartImg} alt="Carrito de compras" />
-        </Link>
-        <Link to="/Perfil">
-          <img src={generalSettingsImg} alt="Configuración general" />
-        </Link>
-      </footer>
+      </div>
     </div>
   );
 }

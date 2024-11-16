@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';  
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { endpoints } from '../apiConfig';
 import '../styles/Home.css';
@@ -14,6 +15,7 @@ import categoriesImg from '../storage/img/categories.svg';
 import shoppingCartImg from '../storage/img/shoppingCart.svg';
 import generalSettingsImg from '../storage/img/generalSettings.svg';
 import profileImg from '../storage/img/perfile.png';
+import BaseProfileImg from '../storage/img/R.png';
 import workshopImg from '../storage/img/workshop.svg';
 import redeemCouponsImg from '../storage/img/redeemCoupons.svg';
 import settingsImg from '../storage/img/settings.svg';
@@ -37,16 +39,22 @@ import Pintura from '../storage/img/paintingTraditionalCategory.svg';
 const Home = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState({
+    products: [],
+    stores: []
+  });
   const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState('');
+  const [userPhoto, setUserPhoto] = useState(null);
   const menuRef = useRef(null);
+  const navigate = useNavigate();
 
   // Function to toggle menu
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
-  // Function to perform search
+  // Function to perform combined search
   const handleSearch = async (e) => {
     const value = e.target.value;
     setSearchTerm(value);
@@ -54,42 +62,118 @@ const Home = () => {
     if (value.trim()) {
       setIsLoading(true);
       try {
-        const response = await fetch(endpoints.search(value));
-        if (!response.ok) {
+        // Fetch both products and stores simultaneously
+        const [productsResponse, storesResponse] = await Promise.all([
+          fetch(endpoints.search(value)),
+          fetch(endpoints.searchByStore(value))
+        ]);
+
+        if (!productsResponse.ok || !storesResponse.ok) {
           throw new Error('Error en la búsqueda');
         }
-        const data = await response.json();
-        setSearchResults(data);
+
+        const [productsData, storesData] = await Promise.all([
+          productsResponse.json(),
+          storesResponse.json()
+        ]);
+
+        setSearchResults({
+          products: productsData,
+          stores: storesData
+        });
       } catch (error) {
         console.error('Error al buscar:', error);
-        setSearchResults([]);
+        setSearchResults({
+          products: [],
+          stores: []
+        });
       } finally {
         setIsLoading(false);
       }
     } else {
-      setSearchResults([]);
+      setSearchResults({
+        products: [],
+        stores: []
+      });
     }
   };
 
-  // Close menu when clicking outside
   useEffect(() => {
+    // Obtener datos del usuario del localStorage
+    try {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+
+      if (!userData || !userData.token) {
+        navigate('/', { replace: true });
+        //window.location.href = '/'; // * Descomentar en caso de que no retorne al Login...
+        return;
+      }  
+
+      if (userData) {
+        setUsername(userData.username);
+        setUserPhoto(userData.userPhoto ? userData.userPhoto : BaseProfileImg);
+      }
+    } catch (error) {
+      console.error('Error al parsear datos:', error);
+    }
+    
+    // Close menu when clicking outside
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setMenuOpen(false);
       }
     };
 
+    // Prevenir navegación hacia atrás después del logout
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener('popstate', preventBack);
+
     document.addEventListener('mousedown', handleClickOutside);
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('popstate', preventBack);
     };
-  }, []); // Close the useEffect hook properly
+  }, [navigate]); // Close the useEffect hook properly
+
+  const preventBack = () => {
+    window.history.pushState(null, null, window.location.pathname);
+  };
+
+  const handleLogout = () => {
+    try {
+      // Limpiar datos
+      setUsername('');
+      setUserPhoto('')
+      localStorage.clear(); // Limpia todo el localStorage
+
+      // Redirigir y reemplazar la entrada en el historial
+      navigate('/', { replace: true });
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  };
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    setUserPhoto(userData?.userPhoto || BaseProfileImg);
+
+    // Escuchar cambios en la foto
+    const handlePhotoUpdate = () => {
+      const updatedUserData = JSON.parse(localStorage.getItem('userData'));
+      setUserPhoto(updatedUserData?.userPhoto || BaseProfileImg);
+    };
+
+    window.addEventListener('userPhotoUpdated', handlePhotoUpdate);
+    return () => window.removeEventListener('userPhotoUpdated', handlePhotoUpdate);
+  }, []);
 
   return (
     <div>
       <header>
         <div className="mobile-header">
-          <div className="mobile-nav-toggle" >
+          <div className="mobile-nav-toggle">
             <img src={menuImg} id='checkbox' alt="Menú" onClick={toggleMenu}/>
             <div className="search">
               <img src={seekerImg} alt="Buscar" />
@@ -99,27 +183,51 @@ const Home = () => {
                 value={searchTerm}
                 onChange={handleSearch}
               />
-              {/* Contenedor de resultados */}
+              {/* Search Results Container */}
               {isLoading && (
                 <div className="result">
                   <p>Buscando...</p>
                 </div>
               )}
-              {searchResults.length > 0 && (
+              {(searchResults.products.length > 0 || searchResults.stores.length > 0) && (
                 <div className="result">
-                  <ul>
-                    {searchResults.map((item) => (
-                      <li key={item._id}>
-                        <Link to={`/product/${item._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-                          {/* Mostrar la primera imagen del array de fotos */}
-                          {item.fotos && item.fotos[0] && (
-                            <img src={item.fotos[0]} alt={item.nombre} className="product-thumbnail" />
-                          )}
-                          <span style={{ marginLeft: '50px' }}>{item.nombre} - ${item.precio}</span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Store Results */}
+                  {searchResults.stores.length > 0 && (
+                    <div className="stores-results">
+                      <h4>Tiendas</h4>
+                      <ul>
+                        {searchResults.stores.map((store) => (
+                          <li key={`store-${store._id}`}>
+                            <Link to={`/store/${store._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                              {store.foto && (
+                                <img src={store.foto} alt={store.nombre} className="store-thumbnail" />
+                              )}
+                              <span style={{ marginLeft: '50px' }}>{store.nombre}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  {/* Product Results */}
+                  {searchResults.products.length > 0 && (
+                    <div className="products-results">
+                      <h4>Productos</h4>
+                      <ul>
+                        {searchResults.products.map((item) => (
+                          <li key={`product-${item._id}`}>
+                            <Link to={`/product/${item._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                              {item.fotos && item.fotos[0] && (
+                                <img src={item.fotos[0]} alt={item.nombre} className="product-thumbnail" />
+                              )}
+                              <span style={{ marginLeft: '50px' }}>{item.nombre} - ${item.precio}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -131,8 +239,15 @@ const Home = () => {
           <div className="mobile-top-bar">
             {/* Close menu button */}
             <span className="mobile-nav-toggle close" onClick={toggleMenu}>
-              <img src={profileImg} alt="Perfil" />
-              <h3>SaraMartin9</h3>
+              <img 
+                src={userPhoto} 
+                alt="Foto de perfil"
+                onError={(e) => {
+                  e.target.onerror = null; 
+                  e.target.src = BaseProfileImg;
+                }}
+              />
+              <h3>{username}</h3>
             </span>
           </div>
           
@@ -140,13 +255,13 @@ const Home = () => {
           <div className="main-navigation">
             <ul className="navigation__option">
               <li>
-                <Link to="/">
+                <Link to="/Home">
                   <img src={favoritesImg} alt="Lista de favoritos" />
                   <strong>Lista de favoritos</strong>
                 </Link>
               </li>
               <li>
-                <Link to="/">
+                <Link to="/Home">
                   <img src={shoppingImg} alt="Compras" />
                   <strong>Compras</strong>
                 </Link>

@@ -3,25 +3,60 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
 const Product = require('../models/productModel');
 const Workshop = require('../models/workshopModel'); // Changed 'Taller' to 'Workshop'
+const multer = require('multer');
+const path = require('path');
+
+// Configurar multer para almacenar las fotos
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, 'uploads/profile-photos/');
+  },
+  filename: function(req, file, cb) {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  }
+});
+
+const upload = multer({ 
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB max
+  },
+  fileFilter: (req, file, cb) => {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(new Error('Solo se permiten imágenes'));
+  }
+});
 
 // Update a user
 const updateUser = async (req, res) => {
   try {
     const userId = new mongoose.Types.ObjectId(req.params.id);
-    const { nombre, contraseña, fotoPerfil, direccion, telefono } = req.body;
+    console.log('1. ID recibido:', userId);
+    console.log('2. Datos recibidos:', req.body);
 
-    const updatedData = { nombre, fotoPerfil, direccion, telefono };
+    const updatedData = {};
+    
+    // Validar cada campo antes de añadirlo a updatedData
+    if (req.body.nombre) updatedData.username = req.body.nombre;
+    if (req.body.telefono) updatedData.phone = req.body.telefono;
+    if (req.body.direccion) updatedData.address = req.body.direccion;
+    if (req.body.fotoPerfil) updatedData.photo = req.body.fotoPerfil;
 
-    if (contraseña) {
-      const salt = await bcrypt.genSalt(10);
-      updatedData.contraseña = await bcrypt.hash(contraseña, salt);
-    }
+    console.log('3. Datos a actualizar:', updatedData);
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { $set: updatedData },
       { new: true, runValidators: true }
     );
+
+    console.log('4. Usuario actualizado:', updatedUser);
 
     if (!updatedUser) {
       return res.status(404).json({ mensaje: 'Usuario no encontrado' });
@@ -32,6 +67,7 @@ const updateUser = async (req, res) => {
       usuario: updatedUser,
     });
   } catch (error) {
+    console.error('Error en updateUser:', error);
     res.status(500).json({ mensaje: 'Error al actualizar el usuario', error });
   }
 };
@@ -280,6 +316,38 @@ const removeWorkshop = async (req, res) => {
   }
 };
 
+// Actualizar foto de perfil
+const updateUserPhoto = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ mensaje: 'No se subió ninguna imagen' });
+    }
+
+    const userId = new mongoose.Types.ObjectId(req.params.id);
+    const photoUrl = `http://localhost:5000/uploads/profile-photos/${req.file.filename}`;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: { photo: photoUrl } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    console.log('Usuario actualizado:', updatedUser);
+
+    res.status(200).json({
+      mensaje: 'Foto actualizada correctamente',
+      usuario: updatedUser
+    });
+  } catch (error) {
+    console.error('Error en updateUserPhoto:', error);
+    res.status(500).json({ mensaje: 'Error al actualizar la foto', error });
+  }
+};
+
 module.exports = {
   updateUser,
   getUserById,
@@ -290,4 +358,5 @@ module.exports = {
   removeFavorite,
   addWorkshop,
   removeWorkshop,
+  updateUserPhoto
 };

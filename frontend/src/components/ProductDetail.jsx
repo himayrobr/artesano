@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import { endpoints } from '../apiConfig';
 import '../styles/ProductDetail.css';
 import Return from '../storage/img/arrow_back.svg';
@@ -45,7 +46,7 @@ function ProductDetail() {
     setIsFavorite(!isFavorite);
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!product) return;
 
     try {
@@ -57,10 +58,8 @@ function ProductDetail() {
       const existingItemIndex = currentCart.items.findIndex(item => item._id === product._id);
       
       if (existingItemIndex !== -1) {
-        // Si el producto ya existe, incrementar su cantidad
         currentCart.items[existingItemIndex].cantidad += 1;
       } else {
-        // Si no existe, añadir nuevo producto
         const newProduct = {
           _id: String(product._id),
           nombre: String(product.nombre),
@@ -71,21 +70,47 @@ function ProductDetail() {
         currentCart.items.push(newProduct);
       }
 
-      // Recalcular el total del carrito
+      // Recalcular el total
       currentCart.total = currentCart.items.reduce(
         (sum, item) => sum + (parseFloat(item.precio) * item.cantidad),
         0
       );
 
-      // Guardar el carrito actualizado
+      // Guardar carrito
       localStorage.setItem('cart', JSON.stringify(currentCart));
       
-      console.log('Carrito actualizado:', currentCart);
-      alert('Producto añadido al carrito');
+      // Mostrar notificación con SweetAlert2
+      await Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "¡Producto añadido al carrito!",
+        showConfirmButton: false,
+        timer: 1500,
+        toast: true,
+        background: '#4CAF50',
+        color: '#fff',
+        customClass: {
+          popup: 'colored-toast'
+        }
+      });
+
+      // Navegar al carrito después de la notificación
       navigate('/cart');
     } catch (error) {
       console.error('Error al añadir al carrito:', error);
-      alert('Hubo un error al añadir el producto al carrito');
+      
+      // Mostrar error con SweetAlert2
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Hubo un error al añadir el producto al carrito",
+        toast: true,
+        position: "top-end",
+        timer: 3000,
+        showConfirmButton: false,
+        background: '#f44336',
+        color: '#fff'
+      });
     }
   };
 
