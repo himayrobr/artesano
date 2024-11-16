@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Cart.css';
-import { endpoints } from '../apiConfig';
+import SearchBar from './SearchBar';
+import Footer from './Footer';
 import {
     menuImg,
-    seekerImg,
     profileImg,
-    workshopsAndCraftsImg,
-    couponsImg,
-    categoriesImg,
-    shoppingCartImg,
-    generalSettingsImg
 } from '../storage/img';
 
 const Cart = () => { 
@@ -19,15 +14,7 @@ const Cart = () => {
     total: 0
   });
 
-  const [uiState, setUiState] = useState({
-    searchTerm: '',
-    searchResults: {
-      products: [],
-      stores: []
-    },
-    isLoading: false,
-    menuOpen: false
-  });
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Cargar el carrito al inicio
   useEffect(() => {
@@ -55,10 +42,7 @@ const Cart = () => {
       const navigation = document.querySelector('.navigation');
       if (navigation && !navigation.contains(event.target) && 
           !event.target.closest('#checkbox')) {
-        setUiState(prev => ({
-          ...prev,
-          menuOpen: false
-        }));
+        setMenuOpen(false);
       }
     };
 
@@ -86,10 +70,12 @@ const Cart = () => {
         (sum, item) => sum + (item.precio * item.cantidad), 
         0
       );
-      return {
+      const updatedState = {
         items: updatedItems,
         total: newTotal
       };
+      localStorage.setItem('cart', JSON.stringify(updatedState));
+      return updatedState;
     });
   };
 
@@ -105,74 +91,17 @@ const Cart = () => {
         (sum, item) => sum + (item.precio * item.cantidad), 
         0
       );
-      return {
+      const updatedState = {
         items: updatedItems,
         total: newTotal
       };
+      localStorage.setItem('cart', JSON.stringify(updatedState));
+      return updatedState;
     });
   };
 
-  const handleSearch = async (event) => {
-    const value = event.target.value;
-    setUiState(prev => ({
-      ...prev,
-      searchTerm: value,
-      isLoading: true
-    }));
-
-    if (value.trim()) {
-      try {
-        // Fetch both products and stores simultaneously
-        const [productsResponse, storesResponse] = await Promise.all([
-          fetch(endpoints.search(value)),
-          fetch(endpoints.searchByStore(value))
-        ]);
-
-        if (!productsResponse.ok || !storesResponse.ok) {
-          throw new Error('Error en la búsqueda');
-        }
-
-        const [productsData, storesData] = await Promise.all([
-          productsResponse.json(),
-          storesResponse.json()
-        ]);
-
-        setUiState(prev => ({
-          ...prev,
-          searchResults: {
-            products: productsData,
-            stores: storesData
-          },
-          isLoading: false
-        }));
-      } catch (error) {
-        console.error('Error al buscar:', error);
-        setUiState(prev => ({
-          ...prev,
-          searchResults: {
-            products: [],
-            stores: []
-          },
-          isLoading: false
-        }));
-      }
-    } else {
-      setUiState(prev => ({
-        ...prev,
-        searchResults: {
-          products: [],
-          stores: []
-        },
-        isLoading: false
-      }));
-    }
-  };
-
   const toggleMenu = () => {
-    setUiState(prev => ({
-      ...prev,
-      menuOpen: !prev.menuOpen
-    }));
+    setMenuOpen(!menuOpen);
   };
 
   const handleCheckout = () => {
@@ -180,59 +109,8 @@ const Cart = () => {
     console.log('Total:', cartState.total);
   };
 
-  const renderSearchResults = () => (
-    <>
-      {uiState.isLoading && (
-        <div className="result">
-          <p>Buscando...</p>
-        </div>
-      )}
-      {(uiState.searchResults.products.length > 0 || uiState.searchResults.stores.length > 0) && (
-        <div className="result">
-          {/* Store Results */}
-          {uiState.searchResults.stores.length > 0 && (
-            <div className="stores-results">
-              <h4>Tiendas</h4>
-              <ul>
-                {uiState.searchResults.stores.map((store) => (
-                  <li key={`store-${store._id}`}>
-                    <Link to={`/store/${store._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-                      {store.foto && (
-                        <img src={store.foto} alt={store.nombre} className="store-thumbnail" />
-                      )}
-                      <span style={{ marginLeft: '50px' }}>{store.nombre}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          
-          {/* Product Results */}
-          {uiState.searchResults.products.length > 0 && (
-            <div className="products-results">
-              <h4>Productos</h4>
-              <ul>
-                {uiState.searchResults.products.map((item) => (
-                  <li key={`product-${item._id}`}>
-                    <Link to={`/product/${item._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
-                      {item.fotos && item.fotos[0] && (
-                        <img src={item.fotos[0]} alt={item.nombre} className="product-thumbnail" />
-                      )}
-                      <span style={{ marginLeft: '50px' }}>{item.nombre} - ${item.precio}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
-    </>
-  );
-
   const renderSideMenu = () => (
-    <div className={`navigation ${uiState.menuOpen ? 'open' : ''}`}>
+    <div className={`navigation ${menuOpen ? 'open' : ''}`}>
       <div className="mobile-top-bar">
         <span className="mobile-nav-toggle close" onClick={toggleMenu}>
           <img src={profileImg} alt="Perfil" />
@@ -250,16 +128,7 @@ const Cart = () => {
       <div className="mobile-header">
         <div className="mobile-nav-toggle">
           <img src={menuImg} id='checkbox' alt="Menú" onClick={toggleMenu}/>
-          <div className="search">
-            <img src={seekerImg} alt="Buscar" />
-            <input
-              type="text"
-              placeholder="Buscar producto o tienda..."
-              value={uiState.searchTerm}
-              onChange={handleSearch}
-            />
-            {renderSearchResults()}
-          </div>
+          <SearchBar />
         </div>
       </div>
       {renderSideMenu()}
@@ -359,31 +228,11 @@ const Cart = () => {
     </div>
   );
 
-  const renderFooter = () => (
-    <footer>
-      <Link to="/Store">
-        <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />
-      </Link>
-      <Link to="/ProductosDescuentos">
-        <img src={couponsImg} alt="ProductosDescuentos" />
-      </Link>
-      <Link to="/Home">
-        <img src={categoriesImg} alt="Categorías" />
-      </Link>
-      <Link to="/Cart">
-        <img src={shoppingCartImg} alt="Carrito de compras" />
-      </Link>
-      <Link to="/Perfil">
-        <img src={generalSettingsImg} alt="Configuración general" />
-      </Link>
-    </footer>
-  );
-
   return (
     <div className="cart-container">
       {renderHeader()}
       {renderCartContent()}
-      {renderFooter()}
+      <Footer />
     </div>
   );
 };

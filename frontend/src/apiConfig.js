@@ -13,6 +13,9 @@ export const endpoints = {
   search: (query) => `${API_BASE_URL}products/search?q=${encodeURIComponent(query)}`,
   searchByStore: (query) => `${API_BASE_URL}store/search?q=${encodeURIComponent(query)}`,
   getProductUrl: (productId) => `${API_BASE_URL}products/${productId}`,
+  getTaller: (id) => `http://localhost:5000/store/${id}`,
+  getAllTalleres: () => 'http://localhost:5000/store/',
+  getDiscountedProductsUrl: () => `${API_BASE_URL}/productosDescuentos/${categoria}`,
   getUserById: `${API_BASE_URL}users`,
   updateUser: `${API_BASE_URL}users`,
 };

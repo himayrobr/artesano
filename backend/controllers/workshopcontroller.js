@@ -64,4 +64,18 @@ exports.getAllWorkshops = async (req, res) => {
   }
 };
 
+// Obtener un taller por ID
+exports.getWorkshopById = async (req, res) => {
+  try {
+    const workshop = await Workshop.findById(req.params.id).populate('artesanoId', 'nombre');
+    if (!workshop) {
+      return res.status(404).json({ message: 'Taller no encontrado' });
+    }
+    res.status(200).json(workshop);
+  } catch (error) {
+    console.error('Error al obtener el taller:', error);
+    res.status(500).json({ message: 'Error al obtener el taller', error });
+  }
+};
+
 //

@@ -129,12 +129,13 @@
     pointer-events: none; 
 }
 
-.filter-categorias {
+.filters-categorias {
     position: absolute;
     width: 25px;
     right: 0;
+    top: 13vh;
     cursor: pointer;
-    left: 88vw;
+    left: 90vw;
 }
 
 .categorias1-categoria {

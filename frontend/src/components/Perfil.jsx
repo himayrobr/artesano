@@ -3,12 +3,12 @@ import { useNavigate, Link } from 'react-router-dom';
 import { endpoints } from '../apiConfig';
 import '../styles/Perfil.css';
 import Edit from '../storage/img/Group 17.svg';
-import profileImg from '../storage/img/perfile.png';
+import SearchBar from './SearchBar';
 import Swal from 'sweetalert2';
+import Footer from './Footer';
 
 // Importar imágenes del header y footer
 import menuImg from '../storage/img/menu.svg';
-import seekerImg from '../storage/img/seeker.svg';
 import workshopsAndCraftsImg from '../storage/img/workshopsAndCrafts.svg';
 import couponsImg from '../storage/img/coupons.svg';
 import categoriesImg from '../storage/img/categories.svg';
@@ -37,9 +37,6 @@ function Perfil() {
   const dropZoneRef = useRef(null);
   const fileInputRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -94,11 +91,9 @@ function Perfil() {
     loadUserData();
   }, [navigate]);
 
-  // Función para manejar la actualización
   const handleUpdate = async (field) => {
     try {
       const userData = JSON.parse(localStorage.getItem('userData'));
-      console.log('1. Datos del usuario en localStorage:', userData);
       
       const fieldMapping = {
         username: 'nombre',
@@ -111,10 +106,6 @@ function Perfil() {
       const updateData = {
         [fieldMapping[field]]: user[field]
       };
-      
-      console.log('2. Campo a actualizar:', field);
-      console.log('3. Nombre del campo en backend:', fieldMapping[field]);
-      console.log('4. Datos a enviar:', updateData);
 
       const response = await fetch(`${endpoints.updateUser}/${userData.userId}`, {
         method: 'PUT',
@@ -126,23 +117,18 @@ function Perfil() {
       });
 
       const data = await response.json();
-      console.log('8. Datos de la respuesta:', data);
 
       if (response.ok) {
-        // Actualizar el estado con los datos del usuario actualizados
         setUser(data.usuario);
         
-        // Actualizar localStorage
         if (field === 'username') {
           const updatedUserData = {
             ...userData,
-            username: data.usuario.nombre // Usar el nombre actualizado de la respuesta
+            username: data.usuario.nombre
           };
-          console.log('9. Actualizando localStorage con:', updatedUserData);
           localStorage.setItem('userData', JSON.stringify(updatedUserData));
         }
 
-        // Mostrar notificación de éxito
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -152,13 +138,12 @@ function Perfil() {
           toast: true
         });
 
-        // Desactivar modo de edición
         setEditMode(prev => ({ ...prev, [field]: false }));
       } else {
         throw new Error(data.mensaje || 'Error al actualizar');
       }
     } catch (error) {
-      console.error('10. Error:', error);
+      console.error('Error:', error);
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -167,7 +152,6 @@ function Perfil() {
     }
   };
 
-  // Funciones para drag & drop
   const handleDragEnter = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -259,34 +243,8 @@ function Perfil() {
     }
   };
 
-  // Función para toggle menu
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
-  };
-
-  // Función para búsqueda
-  const handleSearch = async (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-
-    if (value.trim()) {
-      setIsLoading(true);
-      try {
-        const response = await fetch(endpoints.search(value));
-        if (!response.ok) {
-          throw new Error('Error en la búsqueda');
-        }
-        const data = await response.json();
-        setSearchResults(data);
-      } catch (error) {
-        console.error('Error al buscar:', error);
-        setSearchResults([]);
-      } finally {
-        setIsLoading(false);
-      }
-    } else {
-      setSearchResults([]);
-    }
   };
 
   const handleLogout = () => {
@@ -321,25 +279,7 @@ function Perfil() {
         <div className="mobile-header">
           <div className="mobile-nav-toggle">
             <img src={menuImg} id='checkbox' alt="Menú" onClick={toggleMenu}/>
-            <div className="search">
-              <img src={seekerImg} alt="Buscar" />
-              <input
-                type="text"
-                placeholder="Buscar producto o tienda..."
-                value={searchTerm}
-                onChange={handleSearch}
-              />
-              {isLoading && (
-                <div className="result">
-                  <p>Buscando...</p>
-                </div>
-              )}
-              {searchResults.length > 0 && (
-                <div className="result">
-                  {/* ... resultados de búsqueda ... */}
-                </div>
-              )}
-            </div>
+            <SearchBar />
           </div>
         </div>
       </header>
@@ -471,23 +411,7 @@ function Perfil() {
       </main>
 
       {/* Footer */}
-      <footer>
-        <Link to="/Store">
-          <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />
-        </Link>
-        <Link to="/">
-          <img src={couponsImg} alt="Cupones" />
-        </Link>
-        <Link to="/Home">
-          <img src={categoriesImg} alt="Categorías" />
-        </Link>
-        <Link to="/Cart">
-          <img src={shoppingCartImg} alt="Carrito de compras" />
-        </Link>
-        <Link to="/Perfil">
-          <img src={generalSettingsImg} alt="Configuración general" />
-        </Link>
-      </footer>
+      <Footer />
 
       {/* Menú de navegación lateral */}
       <div className={`navigation ${menuOpen ? 'open' : ''}`} ref={menuRef}>
