@@ -432,7 +432,7 @@ function Perfil() {
           <div className="main-navigation">
             <ul className="navigation__option">
               <li>
-                <Link to="/Home">
+                <Link to="/FavoritosArtesanias">
                   <img src={favoritesImg} alt="Lista de favoritos" />
                   <strong>Lista de favoritos</strong>
                 </Link>
