@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { endpoints } from '../apiConfig';
 import seekerImg from '../storage/img/seeker.svg';
 
-
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState({
@@ -11,11 +10,31 @@ const SearchBar = () => {
     stores: []
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [noResults, setNoResults] = useState(false);
+
+  // Function to normalize text for case-insensitive comparison
+  const normalizeText = (text) => {
+    return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
+
+  // Function to filter results based on search term
+  const filterResults = (items, searchValue, type) => {
+    const normalizedSearch = normalizeText(searchValue);
+    
+    return items.filter(item => {
+      const normalizedName = normalizeText(item.nombre);
+      const normalizedDescription = item.descripcion ? normalizeText(item.descripcion) : '';
+      
+      return normalizedName.includes(normalizedSearch) || 
+             normalizedDescription.includes(normalizedSearch);
+    });
+  };
 
   // Function to perform combined search
   const handleSearch = async (e) => {
     const value = e.target.value;
     setSearchTerm(value);
+    setNoResults(false);
 
     if (value.trim()) {
       setIsLoading(true);
@@ -35,16 +54,25 @@ const SearchBar = () => {
           storesResponse.json()
         ]);
 
+        // Filter results based on search term
+        const filteredProducts = filterResults(productsData, value, 'product');
+        const filteredStores = filterResults(storesData, value, 'store');
+
         setSearchResults({
-          products: productsData,
-          stores: storesData
+          products: filteredProducts,
+          stores: filteredStores
         });
+
+        // Set no results state if both arrays are empty
+        setNoResults(filteredProducts.length === 0 && filteredStores.length === 0);
+
       } catch (error) {
         console.error('Error al buscar:', error);
         setSearchResults({
           products: [],
           stores: []
         });
+        setNoResults(true);
       } finally {
         setIsLoading(false);
       }
@@ -53,6 +81,7 @@ const SearchBar = () => {
         products: [],
         stores: []
       });
+      setNoResults(false);
     }
   };
 
@@ -69,6 +98,11 @@ const SearchBar = () => {
       {isLoading && (
         <div className="result">
           <p>Buscando...</p>
+        </div>
+      )}
+      {!isLoading && noResults && searchTerm && (
+        <div className="result">
+          <p>No se encontraron productos ni talleres que coincidan con "{searchTerm}"</p>
         </div>
       )}
       {(searchResults.products.length > 0 || searchResults.stores.length > 0) && (
