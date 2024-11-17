@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   facebookId: { type: String, unique: true, sparse: true },
   email: { type: String, unique: true, sparse: true, default: null },
   phone: { type: String, unique: true, sparse: true },
-  username: { type: String, required: false, unique: true },  // Asegúrate que el username sea único
+  username: { type: String, required: false, unique: true, sparse: true }, // Agregar sparse
   password: { type: String },
   photo: { type: String, required: false, default: null },
   address: { type: String, required: false, default: null },

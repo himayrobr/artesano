@@ -5,26 +5,12 @@ const connect = require("./backend/helpers/connect");
 const cors = require("cors");
 const session = require("express-session");
 const passport = require("./backend/middleware/passportConfig");
-
-const workshopRoutes = require('./backend/routes/workshopRoutes');
-const productRoutes = require('./backend/routes/productRoutes');
-const userRoutes = require('./backend/routes/userRoutes');    
-const orderRoutes = require('./backend/routes/orderRoutes');
-const couponRoutes = require('./backend/routes/couponRoutes'); 
-const storeRoutes = require('./backend/routes/storeRouter');
-const chatRoutes = require("./backend/routes/chatRoutes"); // Importar rutas del chat
 const http = require("http");
 const { Server } = require("socket.io");
-const mongoose = require("mongoose");
+const fs = require("fs");
 
 // Conexión a la base de datos
 connect();
-// mongoose.connect(process.env.MONGO_URI, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// })
-//   .then(() => console.log("Conectado a la base de datos"))
-//   .catch(err => console.log("Error al conectar a la base de datos:", err));
 
 // Inicialización de Express
 const app = express();
@@ -38,7 +24,7 @@ const io = new Server(server, {
   },
 });
 
-// Configuración de headers de seguridad para prevenir problemas con las políticas de permisos
+// Middleware de seguridad
 app.use((req, res, next) => {
   res.setHeader("Permissions-Policy", "interest-cohort=(), otp-credentials=(), shared-storage=()");
   res.setHeader("Origin-Agent-Cluster", "?1");
@@ -55,21 +41,8 @@ app.use(
   })
 );
 
-// Middleware de JSON
+// Middleware para parsear JSON
 app.use(express.json());
-
-// Rutas de la aplicación
-app.use('/store', storeRoutes);
-app.use('/workshops', workshopRoutes);
-app.use('/products', productRoutes);
-app.use('/users', userRoutes);
-app.use('/orders', orderRoutes);
-app.use('/coupons', couponRoutes);
-
-// Rutas de autenticación
-const authRoutes = require("./backend/routes/authRoutes");
-app.use("/auth", authRoutes);
-app.use("/api", chatRoutes); // Ruta del chat configurada como "/api/chat"
 
 // Configuración de sesiones
 app.use(
@@ -79,19 +52,37 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // En desarrollo esto debe ser false
+      secure: process.env.NODE_ENV === "production", // Cambiar en producción
       maxAge: 1000 * 60 * 60 * 24, // 24 horas
     },
   })
 );
 
-// Inicializar Passport y usar sesiones
+// Inicializar Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.set('io', io); 
+// Rutas de la aplicación
+const workshopRoutes = require("./backend/routes/workshopRoutes");
+const productRoutes = require("./backend/routes/productRoutes");
+const userRoutes = require("./backend/routes/userRoutes");
+const orderRoutes = require("./backend/routes/orderRoutes");
+const couponRoutes = require("./backend/routes/couponRoutes");
+const authRoutes = require("./backend/routes/authRoutes");
+const storeRoutes = require("./backend/routes/storeRouter");
+const chatRoutes = require("./backend/routes/chatRoutes");
+
+app.use("/store", storeRoutes);
+app.use("/workshops", workshopRoutes);
+app.use("/products", productRoutes);
+app.use("/users", userRoutes);
+app.use("/orders", orderRoutes);
+app.use("/coupons", couponRoutes);
+app.use("/auth", authRoutes);
+app.use("/api", chatRoutes); // Ruta del chat
 
 // Socket.io para chat en tiempo real
+app.set("io", io);
 io.on("connection", (socket) => {
   socket.on("sendMessage", (message) => {
     console.log("Mensaje recibido:", message);
@@ -103,7 +94,14 @@ io.on("connection", (socket) => {
   });
 });
 
-// Servir archivos estáticos de React en producción
+// Configurar directorio de subida de archivos
+app.use("/uploads", express.static("uploads"));
+const uploadDir = "uploads/profile-photos";
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Servir React en producción
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "dist", "client")));
   app.get("*", (req, res) => {
@@ -111,17 +109,8 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// Configuración del puerto y servidor
+// Configuración del puerto
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Servidor ejecutándose en el puerto ${PORT}`);
 });
-
-app.use('/uploads', express.static('uploads'));
-
-// Crear directorio si no existe
-const fs = require('fs');
-const uploadDir = 'uploads/profile-photos';
-if (!fs.existsSync(uploadDir)){
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
