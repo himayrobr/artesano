@@ -224,13 +224,13 @@ function ProductosDescuentos() {
                     <div className="main-navigation">
                         <ul className="navigation__option">
                             <li>
-                                <Link to="/">
+                                <Link to="/FavoritosArtesanias">
                                     <img src={favoritesImg} alt="Lista de favoritos" />
                                     <strong>Lista de favoritos</strong>
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/">
+                                <Link to="/ComprasRealizadas">
                                     <img src={shoppingImg} alt="Compras" />
                                     <strong>Compras</strong>
                                 </Link>
@@ -273,81 +273,83 @@ function ProductosDescuentos() {
                 </div>
             </header>
 
-            <div className="categorias1-categoria">
-                <div className='contenedor-categoria1'>
-                    <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Textilería' ? 'selected' : ''}`}>
-                        <div className="categoria-rectangulo">Textilería</div>
-                    </Link>
-                    <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Cerámica' ? 'selected' : ''}`}>
-                        <div className="categoria-rectangulo">Cerámica</div>
-                    </Link>
-                    <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Orfebrería' ? 'selected' : ''}`}>
-                        <div className="categoria-rectangulo">Orfebrería</div>
-                    </Link>
-                    <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Talla en piedra' ? 'selected' : ''}`}>
-                        <div className="categoria-rectangulo">T.piedra</div>
-                    </Link>
-                    <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Talla en madera' ? 'selected' : ''}`}>
-                        <div className="categoria-rectangulo">T.madera</div>
-                    </Link>
-                    <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Bordado' ? 'selected' : ''}`}>
-                        <div className="categoria-rectangulo">Bordado</div>
-                    </Link>
-                    <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Joyería' ? 'selected' : ''}`}>
-                        <div className="categoria-rectangulo">Joyería</div>
-                    </Link>
-                    <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Hojalatería' ? 'selected' : ''}`}>
-                        <div className="categoria-rectangulo">Hojalatería</div>
-                    </Link>
-                    <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Estampado' ? 'selected' : ''}`}>
-                        <div className="categoria-rectangulo">Estampado</div>
-                    </Link>
-                    <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Pintura' ? 'selected' : ''}`}>
-                        <div className="categoria-rectangulo">Pintura tradicional</div>
-                    </Link>
-                </div>
-            </div>
-
             <section className="productos-categorias-descuento">
-                <img src={Triangulo} className="Triangulo" />
-                <h2>Descuentos y promociones </h2>
-                <p className='parrafo-h2'>En cientos de artesanias</p>
+    <img src={Triangulo} className="Triangulo" />
+    <h2>Descuentos y promociones </h2>
+    <p className='parrafo-h2'>En cientos de artesanias</p>
 
-                {loading ? (
-                    <div className="loading">
-                        <p>Cargando productos...</p>
-                    </div>
-                ) : error ? (
-                    <div className="error">
-                        <p>{error}</p>
-                    </div>
-                ) : (
-                    <div className="producto-grid-categorias-descuento">
-                        {productos.map((producto) => (
-                            <div key={producto.id} className="productos-card-categorias">
-                                <img src={producto.image} alt={producto.nombre} />
-                                <h3>{producto.nombre}</h3>
-                                {producto.artesano && <p>{producto.artesano}</p>}
-                                <p>S/.{producto.precioActual}</p>
+    {/* Categorías debajo del título */}
+    <div className="categorias1-categoria">
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Textilería' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Textilería</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Cerámica' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Cerámica</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Orfebrería' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Orfebrería</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Talla en piedra' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">T.piedra</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Talla en madera' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">T.madera</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Bordado' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Bordado</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Joyería' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Joyería</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Hojalatería' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Hojalatería</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Estampado' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Estampado</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Pintura' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Pintura tradicional</div>
+        </Link>
+    </div>
+        <div className="linea-negra"></div>
 
-                                {/* Descuento */}
-                                {producto.descuento && (
-                                    <div className="descuento">
-                                        -{producto.descuento}
-                                    </div>
-                                )}
+    {/* Productos o mensajes de estado */}
+    {loading ? (
+        <div className="loading">
+            <p>Cargando productos...</p>
+        </div>
+    ) : error ? (
+        <div className="error">
+            <p>{error}</p>
+        </div>
+    ) : (
+        <div className="producto-grid-categorias-descuento">
+            {productos.map((producto) => (
+                <div key={producto.id} className="productos-card-categorias">
+                    <img src={producto.image} alt={producto.nombre} />
+                    <h3>{producto.nombre}</h3>
+                    {producto.artesano && <p>{producto.artesano}</p>}
+                    <p>S/.{producto.precioActual}</p>
 
-                                {/* Promoción */}
-                                {producto.promocion && (
-                                    <div className="promocion">
-                                        {producto.promocion}
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </section>
+                    {/* Descuento */}
+                    {producto.descuento && (
+                        <div className="descuento">
+                            -{producto.descuento}
+                        </div>
+                    )}
+
+                    {/* Promoción */}
+                    {producto.promocion && (
+                        <div className="promocion">
+                            {producto.promocion}
+                        </div>
+                    )}
+                </div>
+            ))}
+        </div>
+    )}
+</section>
+
         <footer>
         <Link to="/Store">
           <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />

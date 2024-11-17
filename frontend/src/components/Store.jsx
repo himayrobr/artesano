@@ -239,8 +239,8 @@ function Store() {
                 </Link>
               </li>
               <li>
-                <Link to="/Home">
-                  <img src={shoppingImg} alt="Compras" />
+                <Link to="/ComprasRealizadas">
+                  <img src={favoritesImg} alt="Lista de favoritos" />
                   <strong>Compras</strong>
                 </Link>
               </li>
