@@ -114,8 +114,8 @@ function Categoria() {
           )}
         </div>
 
-        <div className="categorias1-categoria">
-          <div className='contenedor-categoria1'>
+        <div className="categorias1-categoria-CA">
+          <div className='contenedor-categoria1-CA'>
             <Link to="/categoria/Textilería" className={`categoria1 ${selectedCategory === 'Textilería' ? 'selected' : ''}`}>
               <img src={TextileriaIcon} alt="Textilería" />
               <p>Textilería</p>

@@ -261,7 +261,23 @@ const Home = () => {
         </section>
       </main>
       
-      <Footer />
+      <footer>
+        <Link to="/Store">
+          <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />
+        </Link>
+        <Link to="/ProductosDescuentos">
+          <img src={couponsImg} alt="ProductosDescuentos" />
+        </Link>
+        <Link to="/Home">
+          <img src={categoriesImg} alt="Categorías" />
+        </Link>
+        <Link to="/Cart">
+          <img src={shoppingCartImg} alt="Carrito de compras" />
+        </Link>
+        <Link to="/Perfil">
+          <img src={generalSettingsImg} alt="Configuración general" />
+        </Link>
+      </footer>
     </div>
   );
 }

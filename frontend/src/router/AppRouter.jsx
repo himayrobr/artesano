@@ -53,7 +53,7 @@ const AppRouter = () => (
     <Route path="/Comentarios" element={<Comentarios /> } />  
     <Route path="/AtencionCliente" element={<AtencionCliente />} />
     <Route path="/Cart" element={<Cart />} />
-    <Route path="/ProductosDescuentos/" element={<ProductosDescuentos />} />
+    <Route path="/ProductosDescuentos" element={<ProductosDescuentos />} />
     <Route path="/CanjearCupon" element={<CanjearCupon />} />
     <Route path="/TallerEducativo" element={<TallerEducativo />} />
     <Route path="/FavoritosArtesanias" element={<FavoritosArtesanias />} />

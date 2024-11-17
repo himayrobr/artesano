@@ -2,18 +2,30 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { endpoints } from '../apiConfig';
 import '../styles/ProductosDescuentos.css';
-import Footer from './Footer';
-import SearchBar from './SearchBar';
+
+import chalinaImg from '../storage/img/Rectangle 14.png';
+import caminoImg from '../storage/img/Rectangle 14.png';
+import malvaImg from '../storage/img/Rectangle 14.png';
+import chulloImg from '../storage/img/Rectangle 14.png';
+import bufandaImg from '../storage/img/Rectangle 14.png';
+import ponchoImg from '../storage/img/Rectangle 14.png';
 
 import menuImg from '../storage/img/menu.svg';
+import seekerImg from '../storage/img/seeker.svg';
 import favoritesImg from '../storage/img/favorites.svg';
 import shoppingImg from '../storage/img/shopping.svg';
+import workshopsAndCraftsImg from '../storage/img/workshopsAndCrafts.svg';
+import couponsImg from '../storage/img/coupons.svg';
+import categoriesImg from '../storage/img/categories.svg';
+import shoppingCartImg from '../storage/img/shoppingCart.svg';
+import generalSettingsImg from '../storage/img/generalSettings.svg';
+import profileImg from '../storage/img/perfile.png';
 import workshopImg from '../storage/img/workshop.svg';
 import redeemCouponsImg from '../storage/img/redeemCoupons.svg';
 import settingsImg from '../storage/img/settings.svg';
 import commentsImg from '../storage/img/comments.svg';
 import customerServiceImg from '../storage/img/customerService.svg';
-import profileImg from '../storage/img/perfile.png';
+
 import Triangulo from '../storage/img/triangulo.svg';
 
 function ProductosDescuentos() {
@@ -21,80 +33,120 @@ function ProductosDescuentos() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const menuRef = useRef(null);
-    const [selectedCategory, setSelectedCategory] = useState('Textilería');
-    const [products, setProducts] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
-    // Categories array
-    const categories = [
-        'Textilería', 'Cerámica', 'Orfebrería', 'Talla en piedra', 'Talla en madera',
-        'Bordado', 'Joyería', 'Hojalatería', 'Estampado', 'Pintura'
-    ];
-
-    // Fetch products by category
-    const fetchProductsByCategory = async (category) => {
-        setLoading(true);
-        setError(null);
-        try {
-            const response = await fetch(endpoints.getCategoryUrl(category));
-            if (!response.ok) {
-                throw new Error('Error al cargar los productos');
-            }
-            const data = await response.json();
-            
-            // Add random discounts to some products (for demonstration)
-            const productsWithDiscounts = data.map(product => {
-                // Randomly decide if product should have a discount (30% chance)
-                if (Math.random() < 0.3) {
-                    const discountPercent = Math.floor(Math.random() * 30) + 10; // 10-40% discount
-                    const originalPrice = product.precio;
-                    const discountedPrice = originalPrice * (1 - discountPercent / 100);
-                    
-                    return {
-                        ...product,
-                        precioAnterior: originalPrice,
-                        precioActual: discountedPrice,
-                        descuento: `${discountPercent}%`
-                    };
-                }
-                // Randomly add promotions to some products without discounts (20% chance)
-                else if (Math.random() < 0.2) {
-                    const promotions = ['2x1', '3x2', 'Envío gratis'];
-                    const randomPromotion = promotions[Math.floor(Math.random() * promotions.length)];
-                    return {
-                        ...product,
-                        precioActual: product.precio,
-                        promocion: randomPromotion
-                    };
-                }
-                
-                return {
-                    ...product,
-                    precioActual: product.precio
-                };
-            });
-
-            setProducts(productsWithDiscounts);
-        } catch (err) {
-            setError('Error al cargar los productos: ' + err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Handle category selection
-    const handleCategoryClick = (category) => {
-        setSelectedCategory(category);
-        fetchProductsByCategory(category);
-    };
-
-    // Initial fetch
-    useEffect(() => {
-        fetchProductsByCategory(selectedCategory);
-    }, []);
+    // Estados actualizados para el buscador
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState({
+        products: [],
+        stores: []
+    });
+    const [isLoading, setIsLoading] = useState(false);
+    const [filteredProducts, setFilteredProducts] = useState([]);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     };
+
+    // Manejador de búsqueda actualizado
+    const handleSearch = async (e) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+
+        if (value.trim()) {
+            setIsLoading(true);
+            try {
+                // Fetch simultáneo de productos y tiendas
+                const [productsResponse, storesResponse] = await Promise.all([
+                    fetch(endpoints.search(value)),
+                    fetch(endpoints.searchByStore(value))
+                ]);
+
+                if (!productsResponse.ok || !storesResponse.ok) {
+                    throw new Error('Error en la búsqueda');
+                }
+
+                const [productsData, storesData] = await Promise.all([
+                    productsResponse.json(),
+                    storesResponse.json()
+                ]);
+
+                setSearchResults({
+                    products: productsData,
+                    stores: storesData
+                });
+            } catch (error) {
+                console.error('Error al buscar:', error);
+                setSearchResults({
+                    products: [],
+                    stores: []
+                });
+            } finally {
+                setIsLoading(false);
+            }
+        } else {
+            setSearchResults({
+                products: [],
+                stores: []
+            });
+        }
+    };
+
+    // Ejemplo de datos de productos
+    const productos = [
+        {
+            id: 1,
+            nombre: 'Chalina Beige con flecos',
+            precioAnterior: 100,
+            precioActual: 65,
+            descuento: '35%',
+            promocion: null,
+            image: chalinaImg,
+            artesano: 'Asoc. de artesanos Tinkuy'
+        },
+        {
+            id: 2,
+            nombre: 'Caminos de mesa',
+            precioActual: 200,
+            promocion: '2x1',
+            image: caminoImg,
+            artesano: 'Cooperativa originarios Ollantaytambo'
+        },
+        {
+            id: 3,
+            nombre: 'Dueño de la malva',
+            precioAnterior: 200,
+            precioActual: 170,
+            descuento: '15%',
+            promocion: null,
+            image: malvaImg,
+            artesano: 'Lastenia Canayo'
+        },
+        {
+            id: 4,
+            nombre: 'Chullo II',
+            precioActual: 250,
+            promocion: '2x1',
+            image: chulloImg,
+            artesano: 'Nación ero'
+        },
+        {
+            id: 5,
+            nombre: 'Bufanda tradicional',
+            precioActual: 50,
+            promocion: '3x2',
+            image: bufandaImg,
+            artesano: 'Artesanos locales'
+        },
+        {
+            id: 6,
+            nombre: 'Poncho andino',
+            precioActual: 300,
+            envioGratis: true,
+            image: ponchoImg,
+            artesano: 'Taller Tahuantinsuyo'
+        }
+    ];
 
     return (
         <div className='contenedor-productos-decuentos'>
@@ -102,7 +154,62 @@ function ProductosDescuentos() {
                 <div className="mobile-header">
                     <div className="mobile-nav-toggle">
                         <img src={menuImg} id='checkbox' alt="Menú" onClick={toggleMenu} />
-                        <SearchBar />
+                        <div className="search">
+                            <img src={seekerImg} alt="Buscar" />
+                            <input
+                                type="text"
+                                placeholder="Buscar producto o tienda..."
+                                value={searchTerm}
+                                onChange={handleSearch}
+                            />
+                            {/* Contenedor de resultados actualizado */}
+                            {isLoading && (
+                                <div className="result">
+                                    <p>Buscando...</p>
+                                </div>
+                            )}
+                            {(searchResults.products.length > 0 || searchResults.stores.length > 0) && (
+                                <div className="result">
+                                    {/* Resultados de tiendas */}
+                                    {searchResults.stores.length > 0 && (
+                                        <div className="stores-results">
+                                            <h4>Tiendas</h4>
+                                            <ul>
+                                                {searchResults.stores.map((store) => (
+                                                    <li key={`store-${store._id}`}>
+                                                        <Link to={`/store/${store._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                                                            {store.foto && (
+                                                                <img src={store.foto} alt={store.nombre} className="store-thumbnail" />
+                                                            )}
+                                                            <span style={{ marginLeft: '50px' }}>{store.nombre}</span>
+                                                        </Link>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
+                                    {/* Resultados de productos */}
+                                    {searchResults.products.length > 0 && (
+                                        <div className="products-results">
+                                            <h4>Productos</h4>
+                                            <ul>
+                                                {searchResults.products.map((item) => (
+                                                    <li key={`product-${item._id}`}>
+                                                        <Link to={`/product/${item._id}`} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+                                                            {item.fotos && item.fotos[0] && (
+                                                                <img src={item.fotos[0]} alt={item.nombre} className="product-thumbnail" />
+                                                            )}
+                                                            <span style={{ marginLeft: '50px' }}>{item.nombre} - ${item.precio}</span>
+                                                        </Link>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
