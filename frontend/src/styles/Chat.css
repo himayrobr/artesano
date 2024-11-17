@@ -1,138 +1,118 @@
-/* Contenedor principal del chat */
+/* Contenedor principal */
 .chat-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    height: 80vh;
-    background-color: #fdfdfd; /* Fondo blanco suave */
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    font-family: 'Bellota', sans-serif;
-    font-weight: bold;
-    overflow: hidden;
+    height: 100vh;
+    width: 100%;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
 }
 
-/* Cabecera del chat con el texto "Chat en Vivo" */
+/* Encabezado del chat */
 .chat-header {
-    padding: 15px;
-    text-align: center;
-    background-color: #600020; /* Color vinotinto oscuro */
-    color: #fdfdfd; /* Blanco suave */
-    font-size: 1.1em;
-    letter-spacing: 0.5px;
+    background-color: #e5e5e5;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.chat-header .back-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.chat-header .back-button span {
+    margin-right: 5px;
 }
 
 /* Contenedor de mensajes */
 .chat-messages {
     flex: 1;
+    padding: 10px;
     overflow-y: auto;
-    padding: 15px 10px;
-    background-color: #f8f4f4; /* Fondo blanco muy suave */
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
+    background-color: #fff;
 }
 
-/* Estilo base para cada mensaje */
 .chat-message {
-    max-width: 80%;
-    padding: 10px 14px;
-    font-size: 0.95em;
-    border-radius: 18px;
-    line-height: 1.4;
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 15px;
+    font-size: 14px;
+    line-height: 1.5;
     word-wrap: break-word;
 }
 
-/* Mensajes del usuario (al lado derecho) */
-.chat-message.user {
-    background-color: #8a1c3a; /* Vinotinto claro para el usuario */
-    color: #fdfdfd;
+.user-message {
     align-self: flex-end;
-    text-align: left;
-    border-bottom-right-radius: 0;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+    background-color: #000;
+    color: #fff;
 }
 
-/* Mensajes de otros (al lado izquierdo) */
-.chat-message.other {
-    background-color: #fdfdfd; /* Fondo blanco para mensajes de otros */
-    color: #600020; /* Texto en vinotinto */
+.other-message {
     align-self: flex-start;
-    text-align: left;
-    border-bottom-left-radius: 0;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+    background-color: #e5e5e5;
+    color: #333;
 }
 
-/* Contenedor del campo de texto y el botón de envío */
+/* Contenedor del input */
 .chat-input-container {
     display: flex;
     padding: 10px;
-    background-color: #fdfdfd;
-    border-top: 1px solid #ddd;
-    gap: 8px;
-    align-items: center;
+    border-top: 1px solid #ccc;
+    background-color: #f9f9f9;
 }
 
-/* Campo de entrada de texto */
 .chat-input {
     flex: 1;
-    padding: 8px 12px;
-    font-size: 0.95em;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
     border-radius: 20px;
-    border: 1px solid #a8324c; /* Borde vinotinto */
-    background-color: #f9f9f9;
     outline: none;
-    transition: box-shadow 0.2s ease;
 }
 
-.chat-input:focus {
-    box-shadow: 0 0 5px rgba(168, 50, 76, 0.3); /* Resaltado vinotinto suave */
-}
-
-/* Botón de envío con estilo minimalista */
-.chat-send-button {
-    padding: 8px;
+.send-button {
+    background: none;
     border: none;
-    background-color: transparent;
-    color: #600020;
-    font-size: 1.2em;
+    font-size: 20px;
+    margin-left: 10px;
     cursor: pointer;
-    transition: color 0.2s ease;
+    color: #000;
+}
+.back-buttonCHAT {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+.return-iconCHAT{
+    width: 50px;
+    height: 90px;
+    object-fit: contain;
 }
 
-.chat-send-button:hover {
-    color: #8a1c3a; /* Vinotinto claro */
+.back-buttonCHAT {
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    background: none;
+    border: none;
+    cursor: pointer;
 }
-
-/* MEDIA QUERY PARA PANTALLAS PEQUEÑAS (CELULARES) */
-@media (max-width: 600px) {
-    .chat-container {
-        max-width: 100%;
-        height: 90vh; /* Ajuste de altura para pantallas más pequeñas */
-        margin: 10px; /* Un poco de margen en los laterales */
-    }
-
-    .chat-header {
-        font-size: 1em; /* Tamaño de fuente más pequeño para pantallas pequeñas */
-        padding: 12px;
-    }
-
-    .chat-messages {
-        padding: 12px 8px;
-    }
-
-    .chat-message {
-        font-size: 0.9em; /* Reducir el tamaño de la fuente para mayor legibilidad */
-    }
-
-    .chat-input {
-        font-size: 0.9em; /* Hacer más pequeño el tamaño de la fuente del input */
-        padding: 8px 10px; /* Ajustar el padding */
-    }
-
-    .chat-send-button {
-        font-size: 1.1em; /* Reducir el tamaño del botón */
-    }
+.back-buttonCHAT span {
+    font-size: 1.5rem; 
+    margin-left: 0; 
+    transform: none; 
+    color: #333; 
+    white-space: nowrap; 
 }
