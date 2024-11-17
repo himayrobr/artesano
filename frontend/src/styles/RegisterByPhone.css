@@ -1,39 +1,95 @@
-/* RegisterByPhone.css */
+@import url(../styles/variables.css);
 
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 .register-phone-container {
-    padding: 1rem;
-  }
-  
-  .back-button {
-    font-size: 1.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .form-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 320px;
-    margin: 0 auto;
-  }
-  
-  input {
-    padding: 0.8rem;
-    margin: 0.5rem 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-  }
-  
-  .submit-button {
-    padding: 0.8rem;
-    margin-top: 1rem;
-    background-color: #000;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Bellota-Bold', sans-serif;
+  background-color: white;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+.back-buttonP {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.back-buttonP {
+  width: 30px;
+  height: 70px;
+}
+.form-containerr {
+  display: flex;
+  flex-direction: column;
+  width: 85%;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: -90px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+input::placeholder {
+  font-size: 12px;
+}
+
+.phone-input {
+  display: flex;
+  gap: 5px;
+}
+
+.phone-input select {
+  width: 20%;
+}
+
+.phone-input input {
+  width: 80%;
+}
+
+.small {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  margin-top: 5px;
+}
+
+.submit-button {
+  width: 40%;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.submit-button:hover {
+  background: #0056b3;
+}

@@ -1,55 +1,95 @@
-/* Registro.css */
+@import url(../styles/variables.css);
+
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 .registro-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-image: url('ruta-de-imagen-de-fondo.jpg');
-    background-size: cover;
-    color: #333;
-  }
-  
-  .form-container {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 2rem;
-    border-radius: 8px;
-    text-align: center;
-    width: 300px;
-  }
-  
-  .title {
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-  }
-  
-  .auth-button {
-    width: 100%;
-    padding: 0.8rem;
-    margin: 0.5rem 0;
-    font-size: 1rem;
-    color: #333;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
-  
-  .auth-button:hover {
-    background-color: #eee;
-  }
-  
-  .login-link {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-  }
-  
-  .login-link a {
-    color: #333;
-    text-decoration: underline;
-    cursor: pointer;
-  }
-  
+  background-color: #ccc;
+  background-image: url('../storage/img/Group130.png'); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #000;
+  filter: grayscale(100%);
+}
+
+.form-container {
+  background-color: #06060600;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+.form-container h2{
+  font-size: 1.5rem;
+}
+
+.auth-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-button i {
+  font-size: 1.8rem;
+}
+
+.auth-button.facebook {
+  background-color: #ffff;
+  color: #101010;
+}
+
+.auth-button.discord {
+  background-color: #ffff;
+  color: #101010;
+}
+
+.auth-button.gmail {
+  background-color: #ffff;
+  color: #101010;
+}
+
+.auth-button.email {
+  background-color: #ffff;
+  color: #101010;
+}
+
+.auth-button.phone {
+  background-color: #ffff;
+  color: #101010;
+}
+
+.auth-button:hover {
+  opacity: 0.9;
+}
+
+.login-link {
+  margin-top: 20px;
+  font-size: 1.5rem;
+  color: #000;
+}
+
+.login-link span {
+  font-weight: bold;
+  cursor: pointer;
+  color: #000;
+  text-decoration: none;
+}

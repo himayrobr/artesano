@@ -1,44 +1,85 @@
-/* Login.css */
+@import url(../styles/variables.css);
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-image: url('../assets/image\ 1.png');
-    background-size: cover;
-    color: #333;
-  }
+  background-color: #ccc;
+  background-image: url('../storage/img/Group130.png'); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #000;
+  filter: grayscale(100%);
+}
   
-  .form-container {
-    background-color: rgba(255, 255, 255, 0.9);
+  .form-containerLO {
+    background-color: rgba(255, 255, 255, 0);
     padding: 2rem;
     border-radius: 8px;
     text-align: center;
     width: 300px;
   }
   
-  .title {
+  .form-containerLO h2 {
     font-size: 1.4rem;
     margin-bottom: 1rem;
+    text-align: center;
   }
   
-  .auth-button {
-    width: 100%;
-    padding: 0.8rem;
-    margin: 0.5rem 0;
-    font-size: 1rem;
-    color: #333;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    cursor: pointer;
+  .auth-buttonLO {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .auth-buttonLO i {
+    font-size: 1.8rem;
+  }
+  
+  .auth-buttonLO.facebook {
+    background-color: #ffff;
+    color: #101010;
+  }
+  
+  .auth-buttonLO.discord {
+    background-color: #ffff;
+    color: #101010;
+  }
+  
+  .auth-buttonLO.gmail {
+    background-color: #ffff;
+    color: #101010;
   }
   
   .auth-button:hover {
-    background-color: #eee;
+    opacity: 0.9;
+  }
+  
+  .login-link {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    color: #000;
+  }
+  
+  .login-link span {
+    font-weight: bold;
+    cursor: pointer;
+    color: #000;
+    text-decoration: none;
   }
   
