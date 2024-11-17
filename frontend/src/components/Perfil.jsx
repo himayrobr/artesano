@@ -44,31 +44,31 @@ function Perfil() {
       try {
         const userDataString = localStorage.getItem('userData');
         console.log('A. userData en localStorage:', userDataString);
-        
+      
         const userData = JSON.parse(userDataString);
         console.log('B. userData parseado:', userData);
-
+      
         if (!userData?.userId) {
           console.log('C. No hay userId en userData');
           navigate('/login');
           return;
         }
-
+      
         const url = `${endpoints.getUserById}/${userData.userId}`;
         console.log('D. URL para obtener usuario:', url);
-
+      
         const response = await fetch(url, {
           headers: {
             'Authorization': `Bearer ${userData.token}`,
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         });
-        
+      
         console.log('E. Respuesta del servidor:', response);
-        
+      
         const data = await response.json();
         console.log('F. Datos del usuario recibidos:', data);
-        
+      
         if (response.ok) {
           setUser(data.usuario);
           console.log('G. Usuario establecido en el estado:', data.usuario);
@@ -78,16 +78,21 @@ function Perfil() {
       } catch (error) {
         console.error('H. Error completo:', error);
         console.error('I. Stack del error:', error.stack);
+      
+        // Mostrar el Swal con un botón que activa la redirección al cerrarse
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'No se pudieron cargar los datos del usuario'
+          text: 'No se pudieron cargar los datos del usuario',
+          confirmButtonText: 'Aceptar',
+        }).then(() => {
+          window.location.href = '/Home'; // Redirigir después de que se presiona el botón
         });
       } finally {
-        setLoading(false);
+        setLoading(false); // Esto siempre se ejecuta, pero no incluye la redirección ahora
       }
+      
     };
-
     loadUserData();
   }, [navigate]);
 
@@ -432,7 +437,7 @@ function Perfil() {
           <div className="main-navigation">
             <ul className="navigation__option">
               <li>
-                <Link to="/Home">
+                <Link to="/FavoritosArtesanias">
                   <img src={favoritesImg} alt="Lista de favoritos" />
                   <strong>Lista de favoritos</strong>
                 </Link>

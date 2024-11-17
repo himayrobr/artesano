@@ -150,14 +150,14 @@ const Home = () => {
           <div className="main-navigation">
             <ul className="navigation__option">
               <li>
-                <Link to="/Home">
+                <Link to="/FavoritosArtesanias">
                   <img src={favoritesImg} alt="Lista de favoritos" />
                   <strong>Lista de favoritos</strong>
                 </Link>
               </li>
               <li>
-                <Link to="/Home">
-                  <img src={shoppingImg} alt="Compras" />
+                <Link to="/ComprasRealizadas">
+                  <img src={favoritesImg} alt="Lista de favoritos" />
                   <strong>Compras</strong>
                 </Link>
               </li>

@@ -23,6 +23,8 @@ import Chat from '../components/Chat.jsx'
 import ProductosDescuentos from '../components/ProductosDescuentos.jsx';
 import CanjearCupon from '../components/CanjearCupon.jsx';
 import TallerEducativo from '../components/TallerEducativo.jsx';
+import FavoritosArtesanias from '../components/FavoritosArtesanias.jsx';
+import ComprasRealizadas from '../components/ComprasRealizadas.jsx';
 
 // Puedes agregar un componente de inicio aquí si lo deseas
 const AppRouter = () => (
@@ -54,7 +56,8 @@ const AppRouter = () => (
     <Route path="/ProductosDescuentos/" element={<ProductosDescuentos />} />
     <Route path="/CanjearCupon" element={<CanjearCupon />} />
     <Route path="/TallerEducativo" element={<TallerEducativo />} />
-
+    <Route path="/FavoritosArtesanias" element={<FavoritosArtesanias />} />
+    <Route path="/ComprasRealizadas" element={<ComprasRealizadas />} />
 
     {/* Ruta por defecto */}
     <Route path="*" element={<Navigate to="/" />} />

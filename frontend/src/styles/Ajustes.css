@@ -10,8 +10,9 @@
 .ajustes-container {
     width: 100%;
     font-family: 'Bellota-Bold';
-    background-color: white;
-    min-height: 100vh;
+    background-color: rgb(255, 255, 255);
+    height: 100vh;
+    overflow-y: scroll;
 }
 
 .ajustes-header {

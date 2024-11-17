@@ -1,0 +1,222 @@
+/* General */
+@import url(../styles/variables.css);
+
+.scroll-section * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Bellota-Regular";
+}
+.scroll-container {
+    height: 100vh; 
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column; 
+}
+
+/* Estructura principal */
+.favoritos-artesanias {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    background-color: whitesmoke;
+    overflow-y: auto;
+}
+.contenedor-artesaniasFA {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex-grow: 1; 
+}
+.header-artesaniasFA {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 80px;
+    width: 100%;
+    position: relative;
+    z-index: 1000;
+}
+.img-return {
+    height: 80px;
+    width: auto; 
+    cursor: pointer;
+    border: none;
+}
+.RomboFA {
+    width: 90px;
+    top: 10%;
+    position: absolute;
+    left: 47%;
+    z-index: 0;
+}
+.tituloFA {
+    position: absolute;
+    top: 100%;
+    left: 47%;
+    text-align: center;
+    font-size: 15px;
+    color: rgb(14, 14, 14);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* Contenedores y Productos */
+.contenedor-categorias-FA {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+.contenedor-categoria-especificaFA {
+    display: flex;
+    width: 100vw; 
+    flex-direction: row;
+    justify-content: flex-start; 
+    overflow-x: auto; 
+    padding: 0 10px;
+    scrollbar-width: thin; 
+    overflow: -moz-scrollbars-none;
+    scrollbar-width: none; 
+}
+
+.linea-negra {
+    width: 100%;
+    height: 5px;
+    background-color: black;
+}
+
+.productos-categoriasFA h2 {
+    margin-left: 20px;
+    margin-top: 20px !important;
+}
+.producto-grid-categoriasFA {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.producto-card-categoriasFA {
+    display: flex;
+    flex-direction: column;
+    background-color: #101010;
+    color: white;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.producto-card-categoriasFA:hover {
+    cursor: pointer;
+    background-color: #3D3D3D;
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.4);
+}
+.producto-card-categoriasFA h3 {
+    font-size: 1.1rem;
+    color: white;
+    text-decoration: none;
+}
+.producto-card-categoriasFA p {
+    font-size: 1.1rem;
+    color: white;
+    text-decoration: none;
+}
+/* Imágenes */
+.imagen-container-categoriasFA {
+    width: 100%;
+    background-color: white;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; 
+    padding: 16px;
+}
+.imagen-container-categoriasFA img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+.producto-card-categoriasFA:hover .imagen-container-categoriasFA img {
+    transform: scale(1.05);
+}
+.contenedor-x{
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+}
+.contenedor-x img {
+    width: 20px;
+    position: relative;
+}
+
+
+/* Media Queries */
+@media (max-width: 992px) {
+    .producto-grid-categoriasFA {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .producto-grid-categoriasFA {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        padding: 15px;
+    }
+    .producto-card-categoriasFA {
+        height: 350px;
+    }
+    .imagen-container-categoriasFA {
+        height: 250px;
+    }
+    .contenedor-categorias-FA {
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .producto-grid-categoriasFA {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 10px;
+    }
+    .producto-card-categoriasFA {
+        height: 280px;
+    }
+    .imagen-container-categoriasFA {
+        height: 200px;
+    }
+    .RomboFA {
+        width: 90px;
+        top: 4%;
+        position: absolute;
+        left: 40%;
+        z-index: 0;
+    }
+    .tituloFA {
+        position: absolute;
+        top: 90%;
+        left: 40%;
+        text-align: center;
+        font-size: 15px;
+        color: rgb(14, 14, 14);
+        border-radius: 10px;
+        cursor: pointer;
+    }
+}
+
+/* Scrollbar personalizado */
+.contenedor-categoria-especificaFA::-webkit-scrollbar {
+    display: none;
+}
