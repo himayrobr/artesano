@@ -38,7 +38,7 @@ const Register = () => {
   return (
     <div className="registro-container">
       <div className="form-container">
-        <h2 className="title">Regístrate ahora y obtén las mejores promociones en artesanías peruanas</h2>
+        <h2>Regístrate ahora y obtén <br />las mejores promociones <br /> en artesanías peruanas</h2>
         <button className="auth-button facebook" onClick={() => handleAuth('facebook')}>
           <i className="fab fa-facebook"></i> Regístrate con Facebook
         </button>

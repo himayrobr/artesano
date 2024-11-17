@@ -52,19 +52,19 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <div className="form-container">
-        <h2 className="title">Inicia sesión y continúa viendo tus artesanías favoritas</h2>
+      <div className="form-containerLO">
+        <h2>Inicia sesión y continúa viendo tus artesanías favoritas</h2>
 
-        <button className="auth-button facebook" onClick={() => handleAuth('facebook')}>
+        <button className="auth-buttonLO facebook" onClick={() => handleAuth('facebook')}>
           <i className="fab fa-facebook"></i> Inicia sesión con Facebook
         </button>
-        <button className="auth-button gmail" onClick={() => handleAuth('google')}>
+        <button className="auth-buttonLO gmail" onClick={() => handleAuth('google')}>
           <i className="fab fa-google"></i> Inicia sesión con Gmail
         </button>
-        <button className="auth-button discord" onClick={() => handleAuth('discord')}>
+        <button className="auth-buttonLO discord" onClick={() => handleAuth('discord')}>
           <i className="fab fa-discord"></i> Inicia sesión con Discord
         </button>
-        <button className="auth-button rurak-maki" onClick={handleRuraqLoginClick}>
+        <button className="auth-buttonLO rurak-maki" onClick={handleRuraqLoginClick}>
           <i className="fas fa-user"></i> Inicia sesión con tu cuenta de Ruraq Maki
         </button>
 

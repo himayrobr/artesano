@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { endpoints } from '../apiConfig';  // Asegúrate de que endpoints esté correctamente configurado
 import '../styles/PrivacyPolicy.css';
 
+
+
+import Return from '../storage/img/arrow_back.svg';
 const PolicyPrivacy = () => {
   const navigate = useNavigate();
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -75,7 +78,9 @@ const PolicyPrivacy = () => {
 
   return (
     <div className="privacy-policy-container">
-      <button onClick={() => navigate(-1)} className="back-button">←</button>
+      <button onClick={() => navigate(-1)} className="back-button">
+        <img src={Return} className="return-iconPRIVATE" />
+      </button>
       <div className="form-container">
         <h2>Política de Privacidad</h2>
         <p>Aquí va el contenido de la política de privacidad...</p>
