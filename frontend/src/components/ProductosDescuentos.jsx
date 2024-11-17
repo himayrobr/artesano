@@ -117,13 +117,13 @@ function ProductosDescuentos() {
                     <div className="main-navigation">
                         <ul className="navigation__option">
                             <li>
-                                <Link to="/">
+                                <Link to="/FavoritosArtesanias">
                                     <img src={favoritesImg} alt="Lista de favoritos" />
                                     <strong>Lista de favoritos</strong>
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/">
+                                <Link to="/ComprasRealizadas">
                                     <img src={shoppingImg} alt="Compras" />
                                     <strong>Compras</strong>
                                 </Link>
@@ -166,77 +166,100 @@ function ProductosDescuentos() {
                 </div>
             </header>
 
-            <div className="categorias1-categoria">
-                <div className='contenedor-categoria1'>
-                    {categories.map((category) => (
-                        <div
-                            key={category}
-                            onClick={() => handleCategoryClick(category)}
-                            className={`categoria1 ${selectedCategory === category ? 'selected' : ''}`}
-                        >
-                            <div className="categoria-rectangulo">{category}</div>
+            <section className="productos-categorias-descuento">
+    <img src={Triangulo} className="Triangulo" />
+    <h2>Descuentos y promociones </h2>
+    <p className='parrafo-h2'>En cientos de artesanias</p>
+
+    {/* Categorías debajo del título */}
+    <div className="categorias1-categoria">
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Textilería' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Textilería</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Cerámica' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Cerámica</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Orfebrería' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Orfebrería</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Talla en piedra' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">T.piedra</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Talla en madera' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">T.madera</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Bordado' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Bordado</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Joyería' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Joyería</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Hojalatería' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Hojalatería</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Estampado' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Estampado</div>
+        </Link>
+        <Link to="/ProductosDescuentos" className={`categoria1 ${selectedCategory === 'Pintura' ? 'selected' : ''}`}>
+            <div className="categoria-rectangulo">Pintura tradicional</div>
+        </Link>
+    </div>
+        <div className="linea-negra"></div>
+
+    {/* Productos o mensajes de estado */}
+    {loading ? (
+        <div className="loading">
+            <p>Cargando productos...</p>
+        </div>
+    ) : error ? (
+        <div className="error">
+            <p>{error}</p>
+        </div>
+    ) : (
+        <div className="producto-grid-categorias-descuento">
+            {productos.map((producto) => (
+                <div key={producto.id} className="productos-card-categorias">
+                    <img src={producto.image} alt={producto.nombre} />
+                    <h3>{producto.nombre}</h3>
+                    {producto.artesano && <p>{producto.artesano}</p>}
+                    <p>S/.{producto.precioActual}</p>
+
+                    {/* Descuento */}
+                    {producto.descuento && (
+                        <div className="descuento">
+                            -{producto.descuento}
                         </div>
-                    ))}
+                    )}
+
+                    {/* Promoción */}
+                    {producto.promocion && (
+                        <div className="promocion">
+                            {producto.promocion}
+                        </div>
+                    )}
                 </div>
-            </div>
+            ))}
+        </div>
+    )}
+</section>
 
-            <section className="productos-categorias">
-                <img src={Triangulo} className="Triangulo" alt="Triangulo" />
-                <h2 className='titulo-productos-categorias'>Descuentos y promociones</h2>
-                <p className='parrafo-h2'>En cientos de artesanias</p>
-
-                {loading ? (
-                    <div className="loading">
-                        <p>Cargando productos...</p>
-                    </div>
-                ) : error ? (
-                    <div className="error">
-                        <p>{error}</p>
-                    </div>
-                ) : (
-                    <div className="products-grid"> 
-                        {products.map((producto) => ( 
-                            <div key={producto._id} className="products-card"> 
-                                <Link to={`/product/${producto._id}`}> 
-                                    <div className="image-container"> 
-                                        <img 
-                                            src={producto.fotos?.[0] || productoPlaceholder} 
-                                            alt={producto.nombre} 
-                                            onError={(e) => {
-                                                e.target.src = productoPlaceholder;
-                                            }} 
-                                        />
-                                        {producto.descuento && (
-                                            <div className="discount-tag">
-                                                -{producto.descuento}
-                                            </div>
-                                        )}
-                                        {producto.promocion && (
-                                            <div className="promo-tag">
-                                                {producto.promocion}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="product-info">
-                                        <h3>{producto.nombre}</h3>
-                                        {producto.artesano && 
-                                            <p className="artist">{producto.artesano}</p>
-                                        }
-                                        <div className="price-box">
-                                            <p className="price-now">S/.{producto.precioActual.toFixed(2)}</p>
-                                            {producto.precioAnterior && (
-                                                <p className="price-before">S/.{producto.precioAnterior.toFixed(2)}</p>
-                                            )}
-                                        </div>
-                                    </div>
-                                </Link>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </section>
-
-            <Footer />
+        <footer>
+        <Link to="/Store">
+          <img src={workshopsAndCraftsImg} alt="Talleres y Artesanías" />
+        </Link>
+        <Link to="/ProductosDescuentos">
+          <img src={couponsImg} alt="ProductosDescuentos" />
+        </Link>
+        <Link to="/Home">
+          <img src={categoriesImg} alt="Categorías" />
+        </Link>
+        <Link to="/Cart">
+          <img src={shoppingCartImg} alt="Carrito de compras" />
+        </Link>
+        <Link to="/Perfil">
+          <img src={generalSettingsImg} alt="Configuración general" />
+        </Link>
+      </footer>
         </div>
     );
 }
