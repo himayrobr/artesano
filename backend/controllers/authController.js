@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Controlador de autenticación y gestión de usuarios
+ * @requires passport, jwt, User model
+ */
+
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
@@ -6,35 +11,38 @@ const DiscordStrategy = require("passport-discord").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
 const cookieParser = require("cookie-parser");
 
-// Genera un token JWT
+// * Utilidades de Autenticación
+// ? Genera un token JWT con la información del usuario
 const generateToken = (user) => {
   return jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "1h", // ! Considera ajustar el tiempo de expiración según necesidades
   });
 };
 
-// Registro con correo electrónico
+// * Registro de Usuarios
+// ? Registro mediante correo electrónico
 exports.registerByEmail = async (req, res) => {
   const { username, email, password, photo, address, phone, type, favorites, workshopsEnrolled } = req.body;
   console.log("Datos de registro recibidos:", req.body);
 
   try {
-    // Verificar si el correo ya está registrado
+    // ! Validación de usuario existente
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ message: "El correo ya está registrado." });
     }
 
-    // Validación mínima de la contraseña
+    // ! Validación de seguridad de contraseña
     if (password.length < 8) {
       return res.status(400).json({ message: "La contraseña debe tener al menos 8 caracteres." });
     }
 
-    // Crear nuevo usuario (sin encriptar la contraseña)
+    // ? Creación de nuevo usuario
+    // TODO: Implementar encriptación de contraseña
     user = new User({
       username,
       email,
-      password,  // Contraseña en texto plano
+      password,  // ! ADVERTENCIA: Contraseña en texto plano
       photo,
       address,
       phone,
@@ -44,11 +52,12 @@ exports.registerByEmail = async (req, res) => {
     });
     await user.save();
 
-    // Generar token
+    // * Generación y configuración de token
     const token = generateToken(user);
-
-    // Configurar cookie con el token (expira en 1 hora)
-    res.cookie("token", token, { httpOnly: true, maxAge: 3600000 }); // 1 hora
+    res.cookie("token", token, { 
+      httpOnly: true, // ! Previene XSS
+      maxAge: 3600000 // ? 1 hora
+    });
 
     res.status(201).json({ message: "Usuario registrado exitosamente.", token });
   } catch (error) {
@@ -57,28 +66,29 @@ exports.registerByEmail = async (req, res) => {
   }
 };
 
-// Registro con número de teléfono
+// ? Registro mediante número de teléfono
 exports.registerByPhone = async (req, res) => {
   const { username, phone, password, email, photo, address, type, favorites, workshopsEnrolled } = req.body;
   console.log("Datos de registro por teléfono recibidos:", req.body);
 
   try {
-    // Verificar si el número de teléfono ya está registrado
+    // ! Validación de usuario existente
     let user = await User.findOne({ phone });
     if (user) {
       return res.status(400).json({ message: "El número de teléfono ya está registrado." });
     }
 
-    // Validación mínima de la contraseña
+    // ! Validación de seguridad de contraseña
     if (password.length < 8) {
       return res.status(400).json({ message: "La contraseña debe tener al menos 8 caracteres." });
     }
 
-    // Crear nuevo usuario (sin encriptar la contraseña)
+    // ? Creación de nuevo usuario
+    // TODO: Implementar encriptación de contraseña y validación de número de teléfono
     user = new User({
       username,
       phone,
-      password,  // Contraseña en texto plano
+      password,  // ! ADVERTENCIA: Contraseña en texto plano
       email,
       photo,
       address,
@@ -88,11 +98,12 @@ exports.registerByPhone = async (req, res) => {
     });
     await user.save();
 
-    // Generar token
+    // * Generación y configuración de token
     const token = generateToken(user);
-
-    // Configurar cookie con el token (expira en 1 hora)
-    res.cookie("token", token, { httpOnly: true, maxAge: 3600000 }); // 1 hora
+    res.cookie("token", token, { 
+      httpOnly: true,
+      maxAge: 3600000 
+    });
 
     res.status(201).json({ message: "Usuario registrado exitosamente.", token });
   } catch (error) {
@@ -101,14 +112,15 @@ exports.registerByPhone = async (req, res) => {
   }
 };
 
-// Login con correo electrónico, teléfono o nombre de usuario
+// * Login de Usuarios
+// ? Login con email, teléfono o username
 exports.login = async (req, res) => {
   const { emailOrPhone, password } = req.body;
 
   try {
     console.log("Buscando usuario con email, teléfono o nombre de usuario:", emailOrPhone);
 
-    // Buscar usuario por correo, teléfono o nombre de usuario
+    // ? Búsqueda flexible de usuario
     const user = await User.findOne({
       $or: [{ email: emailOrPhone }, { phone: emailOrPhone }, { username: emailOrPhone }]
     });
@@ -118,123 +130,144 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'Credenciales incorrectas.' });
     }
 
-    // Comparar la contraseña en texto plano
+    // ! ADVERTENCIA: Comparación de contraseña en texto plano
+    // TODO: Implementar comparación de contraseñas encriptadas
     if (user.password !== password) {
       console.log("Contraseña incorrecta");
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
 
-    // Generar token JWT si la contraseña es válida
+    // * Generación de token y respuesta
     const token = generateToken(user);
-    console.log("Inicio de sesión exitoso para el usuario:", user._id);
+    res.cookie("token", token, { 
+      httpOnly: true,
+      maxAge: 3600000 
+    });
 
-    // Configurar cookie con el token (expira en 1 hora)
-    res.cookie("token", token, { httpOnly: true, maxAge: 3600000 }); // 1 hora
-
-    res.status(200).json({ userId: user.id, username: user.username, userPhoto: user.photo, token });
+    res.status(200).json({ 
+      userId: user.id, 
+      username: user.username, 
+      userPhoto: user.photo, 
+      token 
+    });
   } catch (error) {
     console.error("Error en el proceso de inicio de sesión:", error);
-    res.status(500);
+    res.status(500).json({ message: "Error en el servidor" });
   }
 };
 
-// Configuración de Google Strategy
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/callback",
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        let user = await User.findOne({ googleId: profile.id });
-        if (!user) {
-          user = await User.create({
-            googleId: profile.id,
-            email: profile.emails[0].value,
-            displayName: profile.displayName,
-          });
-        }
-        return done(null, user);
-      } catch (error) {
-        return done(error, null);
-      }
-    }
-  )
-);
-
-// Configuración de Discord Strategy
-passport.use(
-  new DiscordStrategy(
-    {
-      clientID: process.env.DISCORD_CLIENT_ID,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET,
-      callbackURL: "/auth/discord/callback",
-      scope: ["identify", "email"],
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        let user = await User.findOne({ discordId: profile.id });
-        if (!user) {
-          user = await User.create({
-            discordId: profile.id,
-            email: profile.email,
-            displayName: profile.username,
-          });
-        }
-        return done(null, user);
-      } catch (error) {
-        return done(error, null);
-      }
-    }
-  )
-);
-
-// Configuración de Facebook Strategy
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: process.env.FACEBOOK_CLIENT_ID,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-      callbackURL: "/auth/facebook/callback",
-      profileFields: ["id", "displayName", "photos", "email"],
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        let user = await User.findOne({ facebookId: profile.id });
-
-        if (!user) {
-          user = await User.create({
-            facebookId: profile.id,
-            email: profile.emails && profile.emails[0] ? profile.emails[0].value : null,
-            displayName: profile.displayName,
-          });
-        }
-
-        return done(null, user);
-      } catch (error) {
-        return done(error, null);
-      }
-    }
-  )
-);
-
-// Serialización y deserialización del usuario
-passport.serializeUser((user, done) => {
-  done(null, { id: user.id, displayName: user.displayName });
-});
-
-passport.deserializeUser(async (id, done) => {
+// * Autenticación Social
+// ? Callbacks para autenticación con Google
+exports.googleCallback = (req, res) => {
   try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (error) {
-    done(error, null);
-  }
-});
+    // ? Verifica si existe usuario y token
+    if (!req.user || !req.user.token) {
+      return res.redirect('/login?error=auth_failed');
+    }
 
-// Métodos para handlers en authRoutes.js
-exports.loginWithGoogle = passport.authenticate("google", { scope: ["profile", "email"] });
-exports.loginWithDiscord = passport.authenticate("discord");
-exports.loginWithFacebook = passport.authenticate("facebook");
+    // * Configuración de cookie y redirección
+    res.cookie('token', req.user.token, {
+      httpOnly: true,
+      maxAge: 3600000
+    });
+    
+    res.redirect(`${process.env.FRONTEND_URL}/auth/success`);
+  } catch (error) {
+    console.error("Error en Google callback:", error);
+    res.redirect('/login?error=server_error');
+  }
+};
+
+// ? Callbacks para autenticación con Discord
+exports.discordCallback = (req, res) => {
+  try {
+    // ? Verifica si existe usuario y token
+    if (!req.user || !req.user.token) {
+      return res.redirect('/login?error=auth_failed');
+    }
+
+    // * Configuración de cookie y redirección
+    res.cookie('token', req.user.token, {
+      httpOnly: true,
+      maxAge: 3600000
+    });
+
+    res.redirect(`${process.env.FRONTEND_URL}/auth/success`);
+  } catch (error) {
+    console.error("Error en Discord callback:", error);
+    res.redirect('/login?error=server_error');
+  }
+};
+
+// ? Callbacks para autenticación con Facebook
+exports.facebookCallback = (req, res) => {
+  try {
+    // ? Verifica si existe usuario y token
+    if (!req.user || !req.user.token) {
+      return res.redirect('/login?error=auth_failed');
+    }
+
+    // * Configuración de cookie y redirección
+    res.cookie('token', req.user.token, {
+      httpOnly: true,
+      maxAge: 3600000
+    });
+
+    res.redirect(`${process.env.FRONTEND_URL}/auth/success`);
+  } catch (error) {
+    console.error("Error en Facebook callback:", error);
+    res.redirect('/login?error=server_error');
+  }
+};
+
+// * Cierre de Sesión
+exports.logout = (req, res) => {
+  try {
+    // ? Limpia la sesión y las cookies
+    req.logout();
+    res.clearCookie('token');
+    
+    // * Redirección después del logout
+    res.status(200).json({ message: 'Sesión cerrada exitosamente' });
+  } catch (error) {
+    console.error("Error en logout:", error);
+    res.status(500).json({ message: 'Error al cerrar sesión' });
+  }
+};
+
+// * Verificación de Estado de Autenticación
+// ? Endpoint para verificar si el usuario está autenticado
+exports.checkAuthStatus = (req, res) => {
+  try {
+    // ! Verifica el token en las cookies
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({ 
+        isAuthenticated: false,
+        message: 'No se encontró token de autenticación' 
+      });
+    }
+
+    // ? Verifica y decodifica el token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    res.status(200).json({ 
+      isAuthenticated: true,
+      userId: decoded.id 
+    });
+  } catch (error) {
+    console.error("Error en verificación de autenticación:", error);
+    res.status(401).json({ 
+      isAuthenticated: false,
+      message: 'Token inválido o expirado' 
+    });
+  }
+};
+
+/**
+ * @description Leyenda de Better Comments:
+ * ! Advertencias y aspectos críticos de seguridad
+ * ? Explicaciones de procesos importantes
+ * * Secciones principales de configuración
+ * TODO: Mejoras pendientes o consideraciones futuras
+ */

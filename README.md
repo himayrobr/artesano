@@ -1,21 +1,43 @@
-### **Aplicación de Compra y Venta de Artesanías**
+# Ruraq Maki - Plataforma de Artesanías
 
-### **Descripción del Proyecto**
+## Descripción
+Ruraq Maki es una plataforma que conecta artesanos de Bucaramanga con compradores interesados en productos artesanales únicos. La aplicación permite la gestión de productos artesanales, talleres educativos y un sistema de chat para comunicación directa.
 
-El proyecto consiste en el desarrollo de una **Aplicación de Compra y Venta de Artesanías**. Esta aplicación tiene como objetivo conectar a artesanos de **Bucaramanga** con compradores interesados en productos artesanales únicos y auténticos. La plataforma será solicitada y gestionada por **Campuslands**, una empresa comprometida con la promoción y comercialización de productos locales, artesanales y tecnológicos.
+## Características Principales
+- Autenticación social (Google, Facebook, Discord)
+- Registro y login con email/teléfono
+- Gestión de productos artesanales
+- Sistema de talleres educativos
+- Chat en tiempo real
+- Sistema de favoritos
+- Carrito de compras
+- Gestión de cupones
 
-**Problema:**
+## Requisitos Previos
+- Node.js (v14 o superior)
+- MongoDB
+- npm o yarn
 
-A pesar de la rica tradición artesanal en Bucaramanga, los artesanos locales enfrentan dificultades significativas para comercializar sus productos de manera efectiva. Entre los principales problemas se encuentran:
+## Instalación
 
-1. **Limitada Visibilidad y Alcance**: Los artesanos suelen operar en mercados locales limitados y tienen pocas oportunidades para exponer sus productos a un público más amplio. La falta de visibilidad impide que sus artesanías lleguen a compradores fuera de su área geográfica inmediata.
-2. **Dificultades en la Gestión de Ventas**: La venta de artesanías a menudo requiere una gestión compleja de inventarios, precios y pedidos. Los artesanos a menudo carecen de las herramientas necesarias para manejar estas tareas de manera eficiente, lo que puede llevar a errores en el stock y pérdidas de ventas.
-3. **Falta de Acceso a Recursos de Comercialización**: Los artesanos no siempre tienen acceso a recursos o plataformas que les permitan promocionar sus productos adecuadamente. Esto incluye la falta de una presencia en línea efectiva y la incapacidad de ofrecer descuentos o promociones a sus clientes.
-4. **Comunicación Ineficiente con Compradores**: Los compradores interesados en artesanías a menudo encuentran difícil comunicarse directamente con los artesanos para obtener información adicional o resolver dudas sobre los productos. Esto puede llevar a una experiencia de compra frustrante y a la pérdida de ventas potenciales.
+1. Clonar el repositorio:
+```bash
+git clone https://github.com/himayrobr/artesano
+cd artesano
+```
 
-### **Variables de entorno**
+2. Instalar dependencias:
+```bash
+npm install
+```
 
-```json
+3. Crear archivo .env en la raíz del proyecto:
+```env
+# Servidor
+EXPRESS_HOST="localhost"
+EXPRESS_PORT=5000
+
+# Base de datos
 EXPRESS_HOST="localhost"
 EXPRESS_PORT=5000
 MONGO_URI="mongodb+srv://topetusam:campus2023@mongo-learn-101.ij8au6n.mongodb.net/"
@@ -31,272 +53,340 @@ FACEBOOK_CLIENT_ID=894385772785638
 FACEBOOK_CLIENT_SECRET=01358c2b25722e0c4865ab6c68870a93
 
 SESSION_SECRET=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-MONGO_URI=mongodb+srv://topetusam:campus2023@mongo-learn-101.ij8au6n.mongodb.net/artesanias
 MONGO_DB="artesanias"
 JWT_SECRET=P7kR9RynmAN2J8P-7UWj-xukQjbo8Hga5lEEanWVCnY
 ```
 
-### **Instalacion**
-
-```json
-npm i
-```
-
-
-
-### **Inicialización del Proyecto**
-
-```json
+4. Iniciar el proyecto:
+```bash
 npm run dev
 ```
 
-## Endpoints que deben desarrollarse
+## Guía Completa de APIs (Thunder Client)
 
+### Configuración de Variables Globales en Thunder Client
+```json
+{
+  "baseUrl": "http://localhost:5000",
+  "token": "tu_token_jwt",
+  "userId": "id_del_usuario",
+  "productId": "id_del_producto",
+  "workshopId": "id_del_taller"
+}
+```
 
+### 1. Autenticación
 
-| **Funcionalidad**               | **Método HTTP** | **Endpoint**                         | **Descripción**                                             |
-| ------------------------------- | --------------- | ------------------------------------ | ----------------------------------------------------------- |
-| **Usuarios**                    |                 |                                      |                                                             |
-| Crear Usuario                   | POST            | `/users/register`                    | Registra un nuevo usuario.                                  |
-| Iniciar Sesión                  | POST            | `/users/login`                       | Permite a un usuario iniciar sesión y obtener un token JWT. |
-| Actualizar Usuario              | PUT             | `/users/{id}`                        | Actualiza la información del usuario específico.            |
-| Obtener Usuario                 | GET             | `/users/{id}`                        | Obtiene los detalles de un usuario específico.              |
-| Eliminar Usuario                | DELETE          | `/users/{id}`                        | Elimina un usuario específico.                              |
-| Agregar Favorito                | POST            | `/users/{id}/favorites/{productId}`  | Agrega un producto a los favoritos del usuario.             |
-| Eliminar Favorito               | DELETE          | `/users/{id}/favorites/{productId}`  | Elimina un producto de los favoritos del usuario.           |
-| Agregar Taller                  | POST            | `/users/{id}/workshops/{workshopId}` | Asocia un taller al usuario.                                |
-| Eliminar Taller                 | DELETE          | `/users/{id}/workshops/{workshopId}` | Desasocia un taller del usuario.                            |
-| **Notas** (o talleres)          |                 |                                      |                                                             |
-| Crear Taller                    | POST            | `/workshops/orders`                  | Crea un nuevo taller.                                       |
-| Actualizar Taller               | PUT             | `/workshops/{id}`                    | Actualiza un taller específico.                             |
-| Eliminar Taller                 | DELETE          | `/workshops/{id}`                    | Elimina un taller específico.                               |
-| Buscar Talleres                 | GET             | `/workshops/search`                  | Busca talleres por criterios específicos.                   |
-| Obtener Todos los Talleres      | GET             | `/workshops`                         | Obtiene una lista de todos los talleres disponibles.        |
-| **Productos**                   |                 |                                      |                                                             |
-| Crear Producto                  | POST            | `/products`                          | Crea un nuevo producto.                                     |
-| Obtener Producto por ID         | GET             | `/products/{id}`                     | Obtiene los detalles de un producto específico.             |
-| Buscar Productos                | GET             | `/products/search`                   | Busca productos por título o descripción.                   |
-| Obtener Todos los Productos     | GET             | `/products`                          | Obtiene una lista de todos los productos.                   |
-| Obtener Productos por Categoría | GET             | `/products/categoria/{categoria}`    | Obtiene productos filtrados por categoría.                  |
-| Actualizar Producto             | PUT             | `/products/{id}`                     | Actualiza un producto existente.                            |
-| Eliminar Producto               | DELETE          | `/products/{id}`                     | Elimina un producto específico.                             |
-| **Pedidos**                     |                 |                                      |                                                             |
-| Crear Pedido                    | POST            | `/orders/create`                     | Crea un nuevo pedido.                                       |
-| Obtener Todos los Pedidos       | GET             | `/orders`                            | Obtiene una lista de todos los pedidos.                     |
-| Obtener Pedido por ID           | GET             | `/orders/{id}`                       | Obtiene los detalles de un pedido específico.               |
-| Actualizar Pedido               | PUT             | `/orders/{id}`                       | Actualiza un pedido existente.                              |
-| Eliminar Pedido                 | DELETE          | `/orders/{id}`                       | Elimina un pedido específico.                               |
-| **Cupones**                     |                 |                                      |                                                             |
-| Crear Cupón                     | POST            | `/coupons`                           | Crea un nuevo cupón.                                        |
-| Obtener Todos los Cupones       | GET             | `/coupons`                           | Obtiene una lista de todos los cupones.                     |
-| Obtener Cupón por Código        | GET             | `/coupons/{codigo}`                  | Obtiene los detalles de un cupón específico.                |
-| Validar Cupón                   | GET             | `/coupons/validate/{codigo}`         | Valida la disponibilidad de un cupón.                       |
-| Aplicar Cupón al Carrito        | POST            | `/coupons/apply`                     | Aplica un cupón al carrito actual.                          |
-| Actualizar Cupón                | PUT             | `/coupons/{codigo}`                  | Actualiza un cupón existente.                               |
-| Eliminar Cupón                  | DELETE          | `/coupons/{codigo}`                  | Elimina un cupón específico.                                |
-| **Carrito**                     |                 |                                      |                                                             |
-| Agregar Producto al Carrito     | POST            | `/cart/add`                          | Agrega un producto al carrito del usuario.                  |
-| Eliminar Producto del Carrito   | POST            | `/cart/remove`                       | Elimina un producto del carrito del usuario.                |
-| Aplicar Cupón al Carrito        | POST            | `/cart/apply-coupon`                 | Aplica un cupón al carrito del usuario.                     |
+#### Registro por Email
+```http
+POST http://localhost:5000/auth/register/email
+Content-Type: application/json
 
-### **Características Principales**
+{
+  "email": "usuario@ejemplo.com",
+  "password": "contraseña123",
+  "username": "usuario1",
+  "phone": "3001234567"
+}
+```
 
-1. **Gestión de Usuarios**
-- **Registro e Inicio de Sesión**: Los usuarios (artesanos y compradores) pueden registrarse y acceder a sus cuentas.
-  
-- **Perfiles de Usuario (Compradores):**
-   - **Actualización de Información**: Los compradores pueden actualizar su información personal, como nombre, dirección, y correo electrónico.
-   
-   - **Actualización de Foto de Perfil**: Los compradores pueden cambiar su foto de perfil.
-   
-   - Lista de Favoritos:
-   
-     - **Favoritos de Artesanías**: Los compradores pueden marcar productos artesanales como favoritos y ver una lista de estos productos en su perfil.
-    - **Favoritos de Talleres**: Los compradores pueden marcar talleres como favoritos y ver una lista de estos talleres en su perfil.
-     
-  - **Historial de Compras**: Los compradores pueden revisar su historial de compras, incluyendo detalles de cada pedido.
-  
-  - **Talleres Inscritos**: Los compradores pueden ver los talleres en los que están inscritos.
-    
-   - **Lista de Cupones**: Los compradores pueden ver y gestionar los cupones que tienen disponibles para canjear.
-  
-   - **Chat con Artesanos**: Los compradores pueden iniciar y mantener un chat con artesanos relacionados con los talleres a los que están inscritos, facilitando la comunicación sobre productos y talleres.
+#### Registro por Teléfono
+```http
+POST http://localhost:5000/auth/register/phone
+Content-Type: application/json
 
-2. **Gestión de Productos**
+{
+  "phone": "3001234567",
+  "password": "contraseña123",
+  "username": "usuario1"
+}
+```
 
-   - **Listado de Productos**: La información de los productos será cargada manualmente en la base de datos por el administrador del sistema. Cada producto incluye nombre, descripción, precio, categoría, fotos y stock disponible.
-   - **Visualización de Productos**: Los compradores pueden ver los productos listados con detalles y fotos.
-   - **Cupones de Descuento**: Los artesanos pueden crear cupones que ofrecen descuentos para los productos.
+#### Login Manual
+```http
+POST http://localhost:5000/auth/login
+Content-Type: application/json
 
-3. **Búsqueda y Filtrado**
+{
+  "email": "usuario@ejemplo.com",
+  "password": "contraseña123"
+}
+```
 
-   - **Búsqueda de Productos**: Permite buscar productos por nombre o descripción.
+#### Login Social (Google)
+```http
+GET http://localhost:5000/auth/google
+```
 
-   - **Filtrado de Productos:**
-     - **Por Categorías**: Filtra productos por categorías definidas (por ejemplo, cerámica, textiles, joyería).
-     
-   - **Filtrado de Talleres**: Permite buscar y filtrar talleres artesanales por ubicación, tipo de artesanía, modalidad, y otros criterios relevantes.
-   
-4. **Carrito y Proceso de Compra**
+#### Login Social (Facebook)
+```http
+GET http://localhost:5000/auth/facebook
+```
 
-   - **Carrito de Compras**: Los compradores pueden añadir productos al carrito y revisar los detalles antes de proceder al pago.
+#### Login Social (Discord)
+```http
+GET http://localhost:5000/auth/discord
+```
 
-   - **Aplicación de Cupones:**
-   - **Cupones Asignados**: Los compradores pueden ingresar códigos de cupones que han sido asignados a su perfil (por ejemplo, cupones promocionales específicos para ellos).
-     - **Cupones Generales**: También pueden ingresar códigos de cupones generales disponibles para todos los compradores (por ejemplo, cupones para descuentos en talleres).
+#### Logout
+```http
+POST http://localhost:5000/auth/logout
+Authorization: Bearer {{token}}
+```
 
-   - **Proceso de Pago**: Integración opcional con una pasarela de pago para completar las transacciones de forma segura.
-   
-5. **Comunicación**
-   - **Mensajes Directos**: Los compradores y artesanos pueden intercambiar mensajes para resolver dudas o discutir detalles sobre los productos.
-   
-6. **Talleres Artesanales**
+### 7. Ejemplos de Respuestas
 
-   - **Perfil de Talleres:**
-     - **Modalidades:** Los talleres pueden ser presenciales o virtuales. La información específica de cada modalidad se detallará, incluyendo:
-     - **Modalidad Presencial**: Información sobre la ubicación, fecha y hora, y requisitos para asistir en persona.
-       - **Modalidad Virtual**: Enlace para la participación en línea, plataforma utilizada, y requisitos tecnológicos.
-     
-     - **Fechas:**
-     - **Fecha de Inicio y Fin**: Las fechas en las que el taller comenzará y terminará.
-       - **Duración**: La duración total del taller (por ejemplo, número de sesiones o duración en horas).
-     
-     - **Materiales:**
-     - **Materiales Proporcionados**: Lista de materiales que el taller proporcionará a los participantes.
-       - **Materiales Necesarios**: Lista de materiales que los participantes deberán traer o tener disponibles para el taller.
+#### Respuesta de Login Exitoso
+```json
+{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "_id": "65f9d8c2e852a1234567890",
+    "username": "usuario1",
+    "email": "usuario@ejemplo.com",
+    "type": "comprador",
+    "photo": "http://localhost:5000/uploads/profile-photos/default.jpg"
+  }
+}
+```
 
-     - **Documental sobre Talleres**: Ofrece un enlace o integración para ver un documental que muestre el proceso artesanal, la historia del taller, o entrevistas con los artesanos.
+#### Respuesta de Obtener Usuario
+```json
+{
+  "success": true,
+  "usuario": {
+    "_id": "65f9d8c2e852a1234567890",
+    "username": "usuario1",
+    "email": "usuario@ejemplo.com",
+    "phone": "3001234567",
+    "address": "Calle 123",
+    "type": "comprador",
+    "favorites": ["65f9d8c2e852a1234567891", "65f9d8c2e852a1234567892"],
+    "workshopsEnrolled": ["65f9d8c2e852a1234567893"]
+  }
+}
+```
 
-### **Estructura de Datos**
+#### Respuesta de Error
+```json
+{
+  "error": "Mensaje de error específico",
+  "status": 400
+}
+```
 
-- Usuarios
-  - `_id` (ObjectId) - Identificador único del usuario.
-  - `nombre` (String) - Nombre del usuario.
-  - `correo` (String) - Correo electrónico del usuario (único).
-  - `contraseña` (String) - Contraseña del usuario (hash).
-  - `fotoPerfil` (String) - URL de la foto de perfil del usuario.
-  - `direccion` (String) - Dirección del usuario.
-  - `telefono` (String) - Número de teléfono del usuario.
-  - `tipo` (String) - Tipo de usuario (comprador, artesano).
-  - `favoritos` (Array de ObjectIds) - Lista de productos y talleres favoritos (referencias a `Productos` y `Talleres`).
-  - `compras` (Array de ObjectIds) - Lista de identificadores de compras realizadas (referencias a `Pedidos`).
-  - `talleresInscritos` (Array de ObjectIds) - Lista de identificadores de talleres en los que está inscrito (referencias a `Talleres`).
-  - `cupones` (Array de ObjectIds) - Lista de cupones asignados al perfil del usuario (referencias a `Cupones`).
+### 8. Códigos de Estado HTTP
 
-- Productos
-  - `_id` (ObjectId) - Identificador único del producto.
-  - `nombre` (String) - Nombre del producto.
-  - `descripcion` (String) - Descripción del producto.
-  - `precio` (Decimal) - Precio del producto.
-  - `categoria` (String) - Categoría del producto.
-  - `fotos` (Array de Strings) - URLs de las fotos del producto.
-  - `stock` (Integer) - Cantidad disponible del producto.
-  - `artesanoId` (ObjectId) - Identificador del artesano que vende el producto (referencia a `Usuarios`).
+- 200: OK - Petición exitosa
+- 201: Created - Recurso creado exitosamente
+- 400: Bad Request - Error en la petición
+- 401: Unauthorized - No autorizado
+- 403: Forbidden - Acceso prohibido
+- 404: Not Found - Recurso no encontrado
+- 500: Internal Server Error - Error del servidor
 
-- Pedidos
+### 9. Estructura del Proyecto
+```
+/
+├── backend/
+│   ├── controllers/
+│   │   ├── userController.js
+│   │   ├── chatController.js
+│   │   └── ...
+│   ├── models/
+│   │   ├── User.js
+│   │   ├── Chat.js
+│   │   └── ...
+│   ├── routes/
+│   │   ├── userRoutes.js
+│   │   ├── chatRoutes.js
+│   │   └── ...
+│   ├── middleware/
+│   │   ├── passportConfig.js
+│   │   └── ...
+│   └── helpers/
+│       └── connect.js
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Login.jsx
+│   │   │   ├── Chat.jsx
+│   │   │   └── ...
+│   │   ├── styles/
+│   │   │   └── *.css
+│   │   ├── router/
+│   │   │   └── AppRouter.jsx
+│   │   └── apiConfig.js
+│   └── vite.config.js
+├── uploads/
+│   └── profile-photos/
+├── app.js
+├── package.json
+└── .env
+```
 
-  - `_id` (ObjectId) - Identificador único del pedido.
+### 10. Scripts Disponibles
 
-  - `usuarioId` (ObjectId) - Identificador del usuario que realizó el pedido (referencia a `Usuarios`).
+```bash
+# Desarrollo
+npm run dev          # Inicia frontend y backend en modo desarrollo
+npm run client      # Inicia solo el frontend
+npm run server      # Inicia solo el backend
 
-  - `productos` (Array de Objetos) - Lista de productos en el pedido.
-  - `productoId` (ObjectId) - Identificador del producto (referencia a `Productos`).
-     - `cantidad` (Integer) - Cantidad del producto.
-  - `precio` (Decimal) - Precio del producto al momento de la compra.
-    
-  - `total` (Decimal) - Total del pedido.
-  
-- `fecha` (Date) - Fecha del pedido.
-  
-- `estado` (String) - Estado del pedido (pendiente, enviado, entregado).
+# Producción
+npm run build       # Construye el frontend
+npm start          # Inicia la aplicación en producción
 
-- Talleres
-  - `_id` (ObjectId) - Identificador único del taller.
-  - `nombre` (String) - Nombre del taller.
-  - `descripcion` (String) - Descripción del taller.
-  - `modalidad` (String) - Modalidad del taller (presencial, virtual).
-  - `fechaInicio` (Date) - Fecha de inicio del taller.
-  - `fechaFin` (Date) - Fecha de fin del taller.
-  - `duracion` (String) - Duración del taller.
-  - `materialesProporcionados` (Array de Strings) - Materiales que el taller proporciona.
-  - `materialesRequeridos` (Array de Strings) - Materiales que los participantes deben traer.
-  - `documental` (String) - URL del documental sobre el taller (opcional).
-  - `artesanoId` (ObjectId) - Identificador del artesano que organiza el taller (referencia a `Usuarios`).
+# Otros
+npm run lint       # Ejecuta el linter
+npm run preview    # Vista previa de producción
+```
 
-- Cupones
-  - `_id` (ObjectId) - Identificador único del cupón.
-  - `codigo` (String) - Código del cupón.
-  - `descuento` (Decimal) - Valor del descuento del cupón.
-  - `tipo` (String) - Tipo de cupón (general, asignado a usuario).
-  - `fechaExpiracion` (Date) - Fecha de expiración del cupón.
-  - `usuarioId` (ObjectId) - Identificador del usuario al que está asignado el cupón (opcional, referencia a `Usuarios`).
+### 11. Dependencias Principales
 
-- Mensajes
-  - `_id` (ObjectId) - Identificador único del mensaje.
-  - `remitenteId` (ObjectId) - Identificador del usuario que envió el mensaje (referencia a `Usuarios`).
-  - `receptorId` (ObjectId) - Identificador del usuario que recibe el mensaje (referencia a `Usuarios`).
-  - `contenido` (String) - Contenido del mensaje.
-  - `fecha` (Date) - Fecha y hora del mensaje.
-  - 
+#### Backend
+- express: Framework web
+- mongoose: ODM para MongoDB
+- passport: Autenticación
+- socket.io: Comunicación en tiempo real
+- multer: Manejo de archivos
+- jsonwebtoken: Autenticación JWT
 
-### **Tecnologías y Herramientas**
+#### Frontend
+- react: Biblioteca UI
+- vite: Bundler
+- react-router-dom: Enrutamiento
+- socket.io-client: Cliente WebSocket
+- zustand: Gestión de estado
 
-- **Backend**: Express.js para manejar las rutas y la lógica del servidor.
+### 12. Configuración de Desarrollo
 
-- **Base de Datos**: MongoDB para almacenar datos de usuarios, productos, pedidos, talleres, cupones y mensajes.
+#### Variables de Entorno para Desarrollo
+```env
+# Copia este contenido en un archivo .env.development
+EXPRESS_HOST="localhost"
+EXPRESS_PORT=5000
+MONGO_URI="mongodb://localhost:27017/"
+MONGO_DB="artesanias_dev"
+NODE_ENV="development"
+```
 
-- Frontend:
+#### Configuración de Base de Datos Local
+1. Iniciar MongoDB:
+```bash
+mongod --dbpath /ruta/a/tu/data/directory
+```
 
-  - **Opcional**: Frameworks como React.js, Vue.js, o Angular para construir la interfaz de usuario.
-  - **Alternativa**: HTML, CSS y JavaScript puro si se prefiere una implementación más sencilla.
-  
-- Autenticación:
+2. Crear índices necesarios:
+```javascript
+db.users.createIndex({ "email": 1 }, { unique: true, sparse: true })
+db.users.createIndex({ "phone": 1 }, { unique: true, sparse: true })
+```
 
-  - **Passport.js**: Se utilizará `Passport.js` para la autenticación de usuarios mediante Facebook, Discord, y Google. Se implementará la lógica necesaria para manejar las sesiones de autenticación social.
-  - **JSON Web Tokens (JWT)**: Para el registro manual de usuarios, se generarán tokens JWT utilizando `jsonwebtoken`. Estos tokens se almacenarán en la base de datos MongoDB para permitir la autenticación y autorización de usuarios.
-  - **express-session**: Se utilizará `express-session` para gestionar la sesión del usuario, estableciendo un tiempo de expiración para las sesiones. Cada vista deberá verificar si la sesión sigue activa; de lo contrario, el usuario será redirigido a la vista de inicio de sesión.
-  
-- **Pagos**: Integración opcional con una pasarela de pago como Stripe o PayPal para manejar transacciones de forma segura.
+### 13. Solución de Problemas Comunes
 
-- **Almacenamiento de Archivos**: Opcionalmente, usar AWS S3, Cloudinary o similar para almacenar y servir imágenes de productos; puede ser reemplazado por almacenamiento local si se prefiere.
+#### Error de CORS
+Si encuentras errores de CORS, verifica:
+1. El origen está permitido en la configuración del servidor
+2. Las credenciales están configuradas correctamente
+```javascript
+// En frontend/src/apiConfig.js
+const config = {
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+};
+```
 
-- **Documental**: YouTube, Vimeo o cualquier plataforma de video para alojar los documentales, con integración mediante enlaces o reproductores embebidos.
+#### Problemas de Autenticación
+1. Verifica que el token JWT sea válido
+2. Asegúrate de que las cookies estén habilitadas
+3. Comprueba las variables de entorno de autenticación social
 
-### **Pasos para Implementar el Proyecto**
+#### Errores de Socket.io
+Si el chat no funciona:
+1. Verifica la conexión del WebSocket
+2. Comprueba los eventos del socket en la consola
+3. Asegúrate de que el puerto del socket esté abierto
 
-1. **Configuración del Entorno**
-   - Configura un nuevo proyecto de Express y MongoDB.
-   - Establece el esquema de la base de datos y crea modelos para usuarios, productos, pedidos, talleres, cupones y mensajes.
-2. **Desarrollo del Backend**
-   - Implementa las rutas y controladores para gestionar usuarios, productos, pedidos, talleres, cupones y mensajes.
-   - Configura la autenticación de usuarios utilizando `Passport.js` para la autenticación social (Facebook, Discord, Google) y `jsonwebtoken` para generar tokens JWT para el registro manual. Implementa `express-session` para gestionar las sesiones y asegurar que cada vista verifique la validez de la sesión.
-   - Implementa la lógica para la creación, aplicación y validación de cupones en el carrito y el proceso de pago.
-   - Implementa la lógica para el filtrado de productos por categorías.
-   - Implementa la integración con la pasarela de pago (opcional).
-3. **Desarrollo del Frontend**
-   - Diseña la interfaz de usuario utilizando los diseños proporcionados en el [archivo de Figma](https://www.figma.com/community/file/1268395877483237972).
-   - Crea páginas para la visualización de productos, perfiles de usuario (compradores), carrito de compras, proceso de pago, perfil de talleres y aplicación de cupones.
-   - Implementa funcionalidades para ingresar y aplicar cupones en el carrito de compras.
-   - Implementa filtros para productos por categoría.
-   - Implementa funcionalidades de búsqueda y visualización de documentales.
-   - Implementa la lista de favoritos para artesanías y talleres.
-   - Integra con el backend para mostrar datos dinámicos y manejar interacciones del usuario.
-4. **Integración de Funcionalidades**
-   - Integra el almacenamiento de imágenes para productos (opcional).
-   - Configura el sistema de mensajería para la comunicación entre compradores y artesanos.
-   - Implementa el perfil de talleres con detalles sobre modalidades, fechas, duración y materiales.
-   - Implementa la funcionalidad para crear, gestionar y canjear cupones.
-   - Implementa la lista de favoritos para artesanías y talleres.
-5. **Pruebas y Despliegue**
-   - Realiza pruebas funcionales y de integración para asegurar que todas las funcionalidades trabajan como se espera.
-   - Despliega la aplicación en un servidor o en la nube (como Heroku, AWS, o DigitalOcean) si se desea. (Opcional)
-6. **Mantenimiento y Mejoras**
-   - Monitorea el rendimiento de la aplicación y recopila retroalimentación de los usuarios.
-   - Realiza actualizaciones y mejoras continuas basadas en la retroalimentación y en las necesidades cambiantes.
+### 14. Guía de Contribución
 
-### **Posibles Mejoras Futuras**
+#### Flujo de Trabajo
+1. Fork del repositorio
+2. Crear una rama para tu feature: `git checkout -b feature/nueva-funcionalidad`
+3. Commit de cambios: `git commit -m 'Añade nueva funcionalidad'`
+4. Push a la rama: `git push origin feature/nueva-funcionalidad`
+5. Crear Pull Request
 
-- **Integración con Redes Sociales**: Permitir compartir productos y documentales en plataformas sociales.
-- **Sistema de Recompensas**: Implementar un sistema de recompensas o fidelización para compradores frecuentes.
-- **Promociones y Ofertas Especiales**: Implementar promociones temporales y ofertas especiales adicionales.
+#### Estándares de Código
+- Usar ESLint con la configuración del proyecto
+- Seguir el estilo de código existente
+- Documentar nuevas funciones y componentes
+- Escribir mensajes de commit descriptivos
 
+### 15. Seguridad
+
+#### Mejores Prácticas Implementadas
+- Sanitización de entradas de usuario
+- Validación de datos en backend
+- Encriptación de contraseñas con bcrypt
+- Protección contra inyección SQL
+- Rate limiting en endpoints sensibles
+
+#### Configuración de Seguridad
+```javascript
+// Ejemplo de configuración de seguridad en app.js
+app.use(helmet());
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 100 // límite de solicitudes por ventana
+}));
+```
+
+### 16. Despliegue
+
+#### Preparación para Producción
+1. Construir el frontend:
+```bash
+npm run build
+```
+
+2. Configurar variables de entorno de producción:
+```env
+NODE_ENV="production"
+MONGO_URI="tu_uri_de_mongodb_produccion"
+```
+
+3. Iniciar en modo producción:
+```bash
+npm start
+```
+
+#### Recomendaciones de Hosting
+- Frontend: Vercel, Netlify
+- Backend: Railway, Heroku
+- Base de datos: MongoDB Atlas
+
+### 17. Licencia
+Este proyecto está bajo la Licencia ISC. Ver el archivo `LICENSE` para más detalles.
+
+### 18. Contacto y Soporte
+
+#### Equipo de Desarrollo
+- Frontend: [Nombre del desarrollador]
+- Backend: [Nombre del desarrollador]
+- UX/UI: [Nombre del diseñador]
+
+#### Reportar Problemas
+- Usar el sistema de Issues de GitHub
+- Incluir pasos para reproducir el problema
+- Adjuntar capturas de pantalla si es necesario
+
+---
+
+## Notas de Versión
+- v1.0.0 - Lanzamiento inicial
+- v1.1.0 - Añadido sistema de chat
+- v1.2.0 - Integración con pasarelas de pago

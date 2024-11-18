@@ -21,6 +21,7 @@ import redeemCouponsImg from '../storage/img/redeemCoupons.svg';
 import settingsImg from '../storage/img/settings.svg';
 import commentsImg from '../storage/img/comments.svg';
 import customerServiceImg from '../storage/img/customerService.svg';
+import logoutImg from '../storage/img/logout.svg';
 
 import Location from '../storage/img/location.svg'
 import Taller from '../storage/img/Vector(2).png';
@@ -192,6 +193,12 @@ const Home = () => {
                 <Link to="/AtencionCliente">
                   <img src={customerServiceImg} alt="Atención al cliente" />
                   <strong>Atención al cliente</strong>
+                </Link>
+              </li>
+              <li>
+                <Link onClick={handleLogout}>
+                  <img src={logoutImg} alt="Cerrar sesión" />
+                  <strong>Cerrar sesión</strong>
                 </Link>
               </li>
             </ul>

@@ -143,7 +143,7 @@ const Cart = () => {
         {cartState.items.length === 0 ? (
           <div className="empty-cart">
             <p>Tu carrito está vacío</p>
-            <Link to="/store" className="continue-shopping">
+            <Link to="/Home" className="continue-shopping">
               Continuar comprando
             </Link>
           </div>

@@ -22,6 +22,7 @@ import redeemCouponsImg from '../storage/img/redeemCoupons.svg';
 import settingsImg from '../storage/img/settings.svg';
 import commentsImg from '../storage/img/comments.svg';
 import customerServiceImg from '../storage/img/customerService.svg';
+import logoutImg from '../storage/img/logout.svg';
 
 function Perfil() {
   const navigate = useNavigate();
@@ -31,7 +32,9 @@ function Perfil() {
     username: false,
     email: false,
     phone: false,
-    address: false
+    address: false,
+    gender: false,
+    birthdate: false
   });
   const [isDragging, setIsDragging] = useState(false);
   const dropZoneRef = useRef(null);
@@ -105,7 +108,9 @@ function Perfil() {
         email: 'email',
         phone: 'telefono',
         address: 'direccion',
-        photo: 'fotoPerfil'
+        photo: 'fotoPerfil',
+        gender: 'sexo',
+        birthdate: 'fechaNac'
       };
 
       const updateData = {
@@ -254,6 +259,7 @@ function Perfil() {
 
   const handleLogout = () => {
     try {
+      setUser(null);
       localStorage.clear();
       navigate('/', { replace: true });
       window.location.href = '/';
@@ -411,6 +417,50 @@ function Perfil() {
                 <img src={Edit} className="Editar" />
               </button>
             </div>
+
+            <div className="profile-field">
+              <label>Sexo:</label>
+              <select
+                value={user?.gender || ''}
+                disabled={!editMode.gender}
+                onChange={(e) => setUser({...user, gender: e.target.value})}
+              >
+                <option value="">Seleccionar</option>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+                <option value="O">Otro</option>
+              </select>
+              <button 
+                onClick={() => {
+                  if (editMode.gender) {
+                    handleUpdate('gender');
+                  }
+                  setEditMode({...editMode, gender: !editMode.gender});
+                }}
+              >
+                <img src={Edit} className="Editar" />
+              </button>
+            </div>
+
+            <div className="profile-field">
+              <label>Fecha de nacimiento:</label>
+              <input
+                type="date"
+                value={user?.birthdate || ''}
+                disabled={!editMode.birthdate}
+                onChange={(e) => setUser({...user, birthdate: e.target.value})}
+              />
+              <button 
+                onClick={() => {
+                  if (editMode.birthdate) {
+                    handleUpdate('birthdate');
+                  }
+                  setEditMode({...editMode, birthdate: !editMode.birthdate});
+                }}
+              >
+                <img src={Edit} className="Editar" />
+              </button>
+            </div>
           </div>
         </div>
       </main>
@@ -434,55 +484,61 @@ function Perfil() {
           </span>
         </div>
         
-          <div className="main-navigation">
-            <ul className="navigation__option">
-              <li>
-                <Link to="/FavoritosArtesanias">
-                  <img src={favoritesImg} alt="Lista de favoritos" />
-                  <strong>Lista de favoritos</strong>
-                </Link>
-              </li>
-              <li>
-                <Link to="/Home">
-                  <img src={shoppingImg} alt="Compras" />
-                  <strong>Compras</strong>
-                </Link>
-              </li>
-              <li>
-                <Link to="/TallerEducativo">
-                  <img src={workshopImg} alt="Talleres" />
-                  <strong>Talleres</strong>
-                </Link>
-              </li>
-              <li>
-                <Link to="/CanjearCupon">
-                  <img src={redeemCouponsImg} alt="Canjear cupón" />
-                  <strong>Canjear cupón</strong>
-                </Link>
-              </li>
-            </ul>
-            <div className="navigation__division"></div>
-            <ul className="navigation__option">
-              <li>
-                <Link to="/Ajustes">
-                  <img src={settingsImg} alt="Ajustes" />
-                  <strong>Ajustes</strong>
-                </Link>
-              </li>
-              <li>
-                <Link to="/Comentarios">
-                  <img src={commentsImg} alt="Comentarios" />
-                  <strong>Comentarios</strong>
-                </Link>
-              </li>
-              <li>
-                <Link to="/AtencionCliente">
-                  <img src={customerServiceImg} alt="Atención al cliente" />
-                  <strong>Atención al cliente</strong>
-                </Link>
-              </li>
-            </ul>
-          </div>
+        <div className="main-navigation">
+          <ul className="navigation__option">
+            <li>
+              <Link to="/FavoritosArtesanias">
+                <img src={favoritesImg} alt="Lista de favoritos" />
+                <strong>Lista de favoritos</strong>
+              </Link>
+            </li>
+            <li>
+              <Link to="/Home">
+                <img src={shoppingImg} alt="Compras" />
+                <strong>Compras</strong>
+              </Link>
+            </li>
+            <li>
+              <Link to="/TallerEducativo">
+                <img src={workshopImg} alt="Talleres" />
+                <strong>Talleres</strong>
+              </Link>
+            </li>
+            <li>
+              <Link to="/CanjearCupon">
+                <img src={redeemCouponsImg} alt="Canjear cupón" />
+                <strong>Canjear cupón</strong>
+              </Link>
+            </li>
+          </ul>
+          <div className="navigation__division"></div>
+          <ul className="navigation__option">
+            <li>
+              <Link to="/Ajustes">
+                <img src={settingsImg} alt="Ajustes" />
+                <strong>Ajustes</strong>
+              </Link>
+            </li>
+            <li>
+              <Link to="/Comentarios">
+                <img src={commentsImg} alt="Comentarios" />
+                <strong>Comentarios</strong>
+              </Link>
+            </li>
+            <li>
+              <Link to="/AtencionCliente">
+                <img src={customerServiceImg} alt="Atención al cliente" />
+                <strong>Atención al cliente</strong>
+              </Link>
+            </li>
+            <li>
+              <Link onClick={handleLogout}>
+                <img src={logoutImg} alt="Cerrar sesión" />
+                <strong>Cerrar sesión</strong>
+              </Link>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );

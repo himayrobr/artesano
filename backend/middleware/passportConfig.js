@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Configuración de Passport.js para autenticación social
+ * @requires passport, jwt, User model
+ */
+
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const DiscordStrategy = require("passport-discord").Strategy;
@@ -5,12 +10,14 @@ const FacebookStrategy = require("passport-facebook").Strategy;
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-// Serialización y deserialización del usuario
+// * Configuración de Serialización
+// ? Determina qué datos del usuario se guardan en la sesión
 passport.serializeUser((user, done) => {
   console.log("Serializando usuario:", user);
   done(null, user.id);
 });
 
+// ? Recupera el usuario completo basado en los datos serializados
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);
@@ -21,7 +28,8 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-// Configuración de la estrategia de Google
+// * Estrategia de Autenticación con Google
+// ! Asegúrate de tener las variables de entorno GOOGLE_CLIENT_ID y GOOGLE_CLIENT_SECRET configuradas
 passport.use(
   new GoogleStrategy(
     {
@@ -33,6 +41,7 @@ passport.use(
       try {
         console.log("Google Profile:", profile);
 
+        // ? Buscar usuario existente o crear uno nuevo
         let user = await User.findOne({ googleId: profile.id });
         if (!user) {
           user = await User.create({
@@ -41,24 +50,15 @@ passport.use(
             displayName: profile.displayName,
           });
           console.log("Nuevo usuario creado con Google:", user);
-        } else {
-          console.log("Usuario existente con Google:", user);
         }
 
-        // Generar el JWT
+        // * Generación de JWT
+        // ! El token expira en 1 hora - Considera ajustar según necesidades de seguridad
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-          expiresIn: "1h", // Expiración del token (1 hora en este ejemplo)
+          expiresIn: "1h",
         });
 
-        // Log del token generado
-        console.log("Token generado para Google:", token);
-
-        // Añadir el token al objeto del usuario
         user.token = token;
-
-        // Confirmamos que el token se ha añadido correctamente
-        console.log("Token asignado al usuario:", user.token);
-
         return done(null, user);
       } catch (error) {
         console.error("Error en Google Strategy:", error);
@@ -68,7 +68,8 @@ passport.use(
   )
 );
 
-// Configuración de la estrategia de Discord
+// * Estrategia de Autenticación con Discord
+// ! Asegúrate de tener las variables de entorno DISCORD_CLIENT_ID y DISCORD_CLIENT_SECRET configuradas
 passport.use(
   new DiscordStrategy(
     {
@@ -79,8 +80,7 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        console.log("Discord Profile:", profile);
-
+        // ? Proceso similar a Google Strategy
         let user = await User.findOne({ discordId: profile.id });
         if (!user) {
           user = await User.create({
@@ -88,25 +88,13 @@ passport.use(
             email: profile.email,
             displayName: profile.username,
           });
-          console.log("Nuevo usuario creado con Discord:", user);
-        } else {
-          console.log("Usuario existente con Discord:", user);
         }
 
-        // Generar el JWT
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-          expiresIn: "1h", // Expiración del token (1 hora en este ejemplo)
+          expiresIn: "1h",
         });
 
-        // Log del token generado
-        console.log("Token generado para Discord:", token);
-
-        // Añadir el token al objeto del usuario
         user.token = token;
-
-        // Confirmamos que el token se ha añadido correctamente
-        console.log("Token asignado al usuario:", user.token);
-
         return done(null, user);
       } catch (error) {
         console.error("Error en Discord Strategy:", error);
@@ -116,7 +104,8 @@ passport.use(
   )
 );
 
-// Configuración de la estrategia de Facebook
+// * Estrategia de Autenticación con Facebook
+// ! Asegúrate de tener las variables de entorno FACEBOOK_CLIENT_ID y FACEBOOK_CLIENT_SECRET configuradas
 passport.use(
   new FacebookStrategy(
     {
@@ -127,34 +116,21 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        console.log("Facebook Profile:", profile);
-
+        // ? Proceso similar a las otras estrategias
         let user = await User.findOne({ facebookId: profile.id });
         if (!user) {
           user = await User.create({
             facebookId: profile.id,
-            email: profile.emails && profile.emails[0] ? profile.emails[0].value : null,
+            email: profile.emails?.[0]?.value || null,
             displayName: profile.displayName,
           });
-          console.log("Nuevo usuario creado con Facebook:", user);
-        } else {
-          console.log("Usuario existente con Facebook:", user);
         }
 
-        // Generar el JWT
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-          expiresIn: "1h", // Expiración del token (1 hora en este ejemplo)
+          expiresIn: "1h",
         });
 
-        // Log del token generado
-        console.log("Token generado para Facebook:", token);
-
-        // Añadir el token al objeto del usuario
         user.token = token;
-
-        // Confirmamos que el token se ha añadido correctamente
-        console.log("Token asignado al usuario:", user.token);
-
         return done(null, user);
       } catch (error) {
         console.error("Error en Facebook Strategy:", error);
@@ -165,3 +141,11 @@ passport.use(
 );
 
 module.exports = passport;
+
+/**
+ * @description Leyenda de Better Comments:
+ * ! Advertencias y aspectos críticos de seguridad
+ * ? Explicaciones de procesos importantes
+ * * Secciones principales de configuración
+ * TODO: Mejoras pendientes o consideraciones futuras
+ */
